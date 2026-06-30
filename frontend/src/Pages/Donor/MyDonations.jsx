@@ -133,7 +133,7 @@ export const MyDonations = () => {
                     {currentFoods.length > 0 ? (
                         <div className="row g-4 mb-5">
                             {currentFoods.map((donor) => (
-                                <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={donor._id}>
+                                <div className="col-6 col-md-4 col-lg-3" key={donor._id}>
                                     <div className="card shadow-sm border-0 h-100">
                                         <img
                                             src={donor?.image?.url}

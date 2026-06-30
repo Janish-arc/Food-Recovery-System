@@ -26,7 +26,7 @@ export const Navbar = () => {
   return (
     <>
       {open && (
-        <div className="w-25 shadow px-3 py-3 position-fixed bg-white overflow-y auto"  style={{zIndex: 2, top: 0, left: 0, height: "100vh", overflowY: "auto", scrollbarWidth:"none"}}>
+        <div className="shadow px-3 py-3 position-fixed bg-white overflow-y auto"  style={{zIndex: 2, top: 0, left: 0, height: "100vh", overflowY: "auto", scrollbarWidth:"none", width: window.innerWidth < 768 ? "300px" : "350px"}}>
           <div className='d-flex'>
             <h4 className="fw-bold"><img src={logo} style={{width:"30px"}}/> RecuPy</h4>
             <div className="ms-auto me-4" style={{fontSize:"20px"}} type="button" onClick={() => setOpen(false)}><i className="bi bi-x-circle-fill"></i></div>
@@ -80,19 +80,19 @@ export const Navbar = () => {
               </div>}
 
               {isAuthenticated && user.role === "admin" &&
-<div className='d-flex flex-column gap-2 shadow-sm py-2 ps-3 rounded'>
-    <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/admin")}>📊 Dashboard</li>
-    <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/allusers")}>👥 User Management</li>
-    <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/alldonors")}>🍴 Donor Management</li>
-    <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/allngos")}>🏢 NGO Management</li>
-    <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/allvolunteers")}>🚚 Volunteer Management</li>
-    <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/allfoods")}>🍱 Food Management</li>
-    <li className="list-group-item" style={{cursor:"pointer"}}>📈 Reports</li>
-    <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/myprofile")}>🙍 Profile</li>
-    <li className="list-group-item" style={{cursor:"pointer"}}>⚙️ Settings</li>
-    <li className="list-group-item" style={{cursor:"pointer"}} onClick={logoutUser}>🔓 Logout</li>
-</div>
-}
+              <div className='d-flex flex-column gap-2 shadow-sm py-2 ps-3 rounded'>
+                  <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/admin")}>📊 Dashboard</li>
+                  <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/allusers")}>👥 User Management</li>
+                  <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/alldonors")}>🍴 Donor Management</li>
+                  <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/allngos")}>🏢 NGO Management</li>
+                  <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/allvolunteers")}>🚚 Volunteer Management</li>
+                  <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/allfoods")}>🍱 Food Management</li>
+                  <li className="list-group-item" style={{cursor:"pointer"}}>📈 Reports</li>
+                  <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/myprofile")}>🙍 Profile</li>
+                  <li className="list-group-item" style={{cursor:"pointer"}}>⚙️ Settings</li>
+                  <li className="list-group-item" style={{cursor:"pointer"}} onClick={logoutUser}>🔓 Logout</li>
+              </div>
+              }
 
             {/* Roles */}
             <h6 className="text-muted mb-3 mt-4">Get Started</h6>
@@ -134,29 +134,27 @@ export const Navbar = () => {
 
       <div className='d-flex shadow align-items-center px-3 sticky-top bg-white' style={{height:"60px", zIndex:'1'}}>
         <div onClick={() => setOpen(true)}><i className="bi bi-list shadow rounded me-3 px-1" style={{fontSize:"30px", fontWeight:"700"}}></i></div>
-        <div className='d-flex gap-2'>
+        <div className='d-flex gap-2 mt-2'>
             <img src={logo} className='rounded-circle' style={{width: "40px", height:"40px", objectFit: "cover"}}/>
             <h3><b>RECUPY</b></h3>  
         </div>
         {isAuthenticated && 
-        <div className='d-flex gap-3 ms-auto mt-2'>
+        <div  className="d-flex ms-auto flex-wrap justify-content-end align-items-center gap-1 mt-2">
           {user?.role === "donor" && 
-          <h6 className='btn button rounded-pill' onClick={() => navigate("/mydonations")}>MY DONATIONS</h6>
+          <h6 className='btn btn-primary rounded-pill' style={{fontSize: window.innerWidth < 768 ? "13px" : "16px", padding: window.innerWidth < 768 ? "4px 8px" : "8px 16px"}} onClick={() => navigate("/mydonations")}>MY DONATIONS</h6>
           }
           {user?.role === "ngo" && 
-          <h6 className='btn button rounded-pill' onClick={() => navigate("/ngo")}>NGO DASHBOARD</h6>
+          <h6 className='btn btn-primary rounded-pill' style={{fontSize: window.innerWidth < 768 ? "13px" : "16px", padding: window.innerWidth < 768 ? "4px 8px" : "8px 16px"}} onClick={() => navigate("/ngo")}>NGO DASHBOARD</h6>
           }
           {user?.role === "volunteer" && 
-          <h6 className='btn button rounded-pill' onClick={() => navigate("/volunteer")}>VOLUNTEER TASKS</h6>
+          <h6 className='btn btn-primary' style={{fontSize: window.innerWidth < 768 ? "13px" : "16px", padding: window.innerWidth < 768 ? "4px 8px" : "8px 16px"}} onClick={() => navigate("/volunteer")}>VOLUNTEER TASKS</h6>
           }
-          <h6 className='btn button rounded-pill' onClick={() => navigate("/myprofile")}>PROFILE</h6>
-          <h6 className='btn button rounded-pill bg-danger' onClick={logoutUser}>LOGOUT</h6>
-        </div>
+          </div>
         }
         {!isAuthenticated && 
         <div className='d-flex gap-3 ms-auto mt-2'>
-            <h6 className='btn button' onClick={() => navigate("/login")}>LOGIN</h6>
-            <h6 className='btn button' onClick={() => navigate("/register")}>REGISTER</h6>   
+            <h6 className='btn btn-primary'  style={{fontSize: window.innerWidth < 768 ? "13px" : "16px", padding: window.innerWidth < 768 ? "4px 8px" : "8px 16px"}} onClick={() => navigate("/login")}>LOGIN</h6>
+            <h6 className='btn btn-primary'  style={{fontSize: window.innerWidth < 768 ? "13px" : "16px", padding: window.innerWidth < 768 ? "4px 8px" : "8px 16px"}} onClick={() => navigate("/register")}>REGISTER</h6>   
         </div>
         }
       </div>

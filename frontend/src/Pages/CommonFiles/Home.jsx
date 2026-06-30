@@ -99,7 +99,7 @@ export const Home = () => {
             {/* How it Works */}
             <div className='d-flex flex-column align-items-center text-center mt-5'>
                 <h3 className='text-danger'><b>How it Works!</b></h3>
-                <div className='shadow-lg p-4 w-50 rounded-pill card mt-2' style={{backgroundColor:"#1DB954"}}>
+                <div className='shadow-lg p-4 w-50 rounded card mt-2' style={{backgroundColor:"#1DB954"}}>
                     <div className='d-flex gap-2 justify-content-center text-white'>
                         <div className='bg-black px-1 rounded'><FaUtensils size={20}/></div>
                         <h5>Post Food</h5>
@@ -107,12 +107,12 @@ export const Home = () => {
                     <i className="bi bi-arrow-down text-black"  style={{fontSize:"25px", fontWeight:700}}></i>
                     <div className='d-flex gap-2 justify-content-center text-white'>
                         <div className='bg-black px-1 rounded'><FaBuildingNgo size={20}/></div>
-                        <h5>NGO Accepts</h5>
+                        <h5>Accepted</h5>
                     </div>
                     <i className="bi bi-arrow-down text-black"  style={{fontSize:"25px", fontWeight:700}}></i>
                     <div className='d-flex gap-2 justify-content-center text-white'>
                         <div className='bg-black px-1 rounded'><FaTruck  size={20}/></div>
-                        <h5>Volunteer Picks Up</h5>
+                        <h5>Picked Up</h5>
                     </div>
                     <i className="bi bi-arrow-down text-black" style={{fontSize:"25px", fontWeight:700}}></i>
                     <div className='d-flex gap-2 justify-content-center text-white'>
@@ -124,7 +124,7 @@ export const Home = () => {
 
             {/* Stats */}
             <div className='d-flex justify-content-center'>
-                <div className="row text-center mt-5 text-white rounded-pill py-3 w-75 shadow-lg cards" style={{backgroundColor:"#1DB954"}}>
+                <div className="row text-center mt-5 text-dark py-3 w-75 shadow-lg cards" style={{backgroundColor:"#1DB954", borderRadius:"17px"}}>
                     <div className="col-md-3">
                         <h2>500+</h2>
                         <p>Meals Donated</p>

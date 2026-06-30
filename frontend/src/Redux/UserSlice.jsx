@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit"
-import axios from 'axios'
+import api from "../api";
 
 export const UserRegistration =createAsyncThunk("user/register", async(userData, {rejectWithValue}) => {
     try {
@@ -8,7 +8,7 @@ export const UserRegistration =createAsyncThunk("user/register", async(userData,
                 "Content-Type": "multipart/form-data"
             }
         }
-        const {data} = await axios.post("/api/v1/user/register", userData, config)
+        const {data} = await api.post("/api/v1/user/register", userData, config)
         return data
     } catch (error) {
         return rejectWithValue(error.response?.data || "Registration failed, Please try again later")
@@ -22,7 +22,7 @@ export const UserLogin = createAsyncThunk("user/login", async(userData, {rejectW
                 "Content-Type" : "application/json"
             }
         }
-        const {data} = await axios.post("/api/v1/user/login", userData, config, { withCredentials: true })
+        const {data} = await api.post("/api/v1/user/login", userData, config)
         return data
     } catch (error) {
         return rejectWithValue(error.response?.data || "Email or Password cannot be empty")
@@ -31,7 +31,7 @@ export const UserLogin = createAsyncThunk("user/login", async(userData, {rejectW
 
 export const MyProfile = createAsyncThunk("user/profile", async(_, {rejectWithValue}) => {
     try {
-        const {data} = await axios.get("/api/v1/user/myprofile", {withCredentials: true})
+        const {data} = await api.get("/api/v1/user/myprofile", {withCredentials: true})
         return data   
     } catch (error) {
         return rejectWithValue(error.response?.data || "User not found")
@@ -45,7 +45,7 @@ export const UpdateProfile =createAsyncThunk("user/updateprofile", async(userDat
                 "Content-Type": "multipart/form-data"
             }
         }
-        const {data} = await axios.put("/api/v1/user/updateprofile", userData, config)
+        const {data} = await api.put("/api/v1/user/updateprofile", userData, config)
         return data
     } catch (error) {
         return rejectWithValue(error.response?.data || "Registration failed, Please try again later")
@@ -55,7 +55,7 @@ export const UpdateProfile =createAsyncThunk("user/updateprofile", async(userDat
 
 export const GetAllUsers = createAsyncThunk("user/allusers", async(_, {rejectWithValue}) => {
     try {
-        const {data} = await axios.get("/api/v1/user/getallusers", {withCredentials: true})
+        const {data} = await api.get("/api/v1/user/getallusers", {withCredentials: true})
         return data
     } catch (error) {
         return rejectWithValue(error.response?.data)
@@ -64,7 +64,7 @@ export const GetAllUsers = createAsyncThunk("user/allusers", async(_, {rejectWit
 
 export const GetSingleUser = createAsyncThunk("user/singleuser", async(id, {rejectWithValue}) => {
     try {
-        const {data} = await axios.get(`/api/v1/user/getsingleuser/${id}`)
+        const {data} = await api.get(`/api/v1/user/getsingleuser/${id}`)
         return data
     } catch (error) {
         return rejectWithValue(error.response?.data)
@@ -73,7 +73,7 @@ export const GetSingleUser = createAsyncThunk("user/singleuser", async(id, {reje
 
 export const DeleteUser = createAsyncThunk("user/delete", async(id, {rejectWithValue}) => {
     try {
-        const {data} = await axios.delete(`/api/v1/user/deleteuser/${id}`)
+        const {data} = await api.delete(`/api/v1/user/deleteuser/${id}`)
         return data   
     } catch (error) {
         return rejectWithValue(error.response?.data || "User not found")
@@ -87,7 +87,7 @@ export const ForgotPassword = createAsyncThunk("user/ForgotPassword", async (ema
                     "Content-Type": "application/json"
                 }
             };
-            const { data } = await axios.post("/api/v1/user/forgotpassword", emailData, config);
+            const { data } = await api.post("/api/v1/user/forgotpassword", emailData, config);
             return data;
         } catch (error) {
             return rejectWithValue(error.response.data.message);
@@ -102,10 +102,10 @@ export const ResetPassword = createAsyncThunk("user/ResetPassword", async ({ tok
                     "Content-Type": "application/json"
                 }
             };
-            const { data } = await axios.put(`/api/v1/user/password/reset/${token}`,{password, confirmPassword}, config);
+            const { data } = await api.put(`/api/v1/user/password/reset/${token}`,{password, confirmPassword}, config);
             return data;
         } catch (error) {
-            return thunkAPI.rejectWithValue( error.response.data.message);
+            return rejectWithValue( error.response.data.message);
         }
     }
 );

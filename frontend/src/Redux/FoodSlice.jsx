@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import axios from "axios";
+import api from "../api";
 
 export const DonateFood = createAsyncThunk("food/donate", async(foodData, {rejectWithValue}) => {
     try {
@@ -8,7 +8,7 @@ export const DonateFood = createAsyncThunk("food/donate", async(foodData, {rejec
                 "Content-Type": "multipart/form-data"
             }
         }
-        const {data} = await axios.post("/api/v1/food/donorfood", foodData, config)
+        const {data} = await api.post("/api/v1/food/donorfood", foodData, config)
         console.log(data);
         return data
     } catch (error) {
@@ -18,7 +18,7 @@ export const DonateFood = createAsyncThunk("food/donate", async(foodData, {rejec
 
 export const GetDonorFoods = createAsyncThunk("get/foods", async(_, {rejectWithValue}) => {
     try {
-        const {data} = await axios.get("/api/v1/food/getsingledonorfood", {withCredentials: true})
+        const {data} = await api.get("/api/v1/food/getsingledonorfood", {withCredentials: true})
         return data
     } catch (error) {
         return rejectWithValue(error.response?.data)
@@ -27,7 +27,7 @@ export const GetDonorFoods = createAsyncThunk("get/foods", async(_, {rejectWithV
 
 export const GetAllFoods = createAsyncThunk("get/allfoods", async(_, {rejectWithValue}) => {
     try {
-        const {data} = await axios.get("/api/v1/food/getallfoods", {withCredentials: true})
+        const {data} = await api.get("/api/v1/food/getallfoods", {withCredentials: true})
         return data
     } catch (error) {
         return rejectWithValue(error.response?.data)
@@ -36,7 +36,7 @@ export const GetAllFoods = createAsyncThunk("get/allfoods", async(_, {rejectWith
 
 export const GetSingleFood = createAsyncThunk("get/singlefood", async(id, {rejectWithValue}) => {
     try {
-        const {data} = await axios.get(`/api/v1/food/getsinglefood/${id}`, {withCredentials: true})
+        const {data} = await api.get(`/api/v1/food/getsinglefood/${id}`, {withCredentials: true})
         console.log(data); 
         return data
     } catch (error) {
@@ -46,7 +46,7 @@ export const GetSingleFood = createAsyncThunk("get/singlefood", async(id, {rejec
 
 export const GetSingleNgoFood = createAsyncThunk("get/singlengofood", async(_, {rejectWithValue}) => {
     try {
-        const {data} = await axios.get("/api/v1/food/getsingleNgofoods", {withCredentials: true})
+        const {data} = await api.get("/api/v1/food/getsingleNgofoods", {withCredentials: true})
         console.log(data); 
         return data
     } catch (error) {
@@ -56,7 +56,7 @@ export const GetSingleNgoFood = createAsyncThunk("get/singlengofood", async(_, {
 
 export const AcceptsFood = createAsyncThunk("food/acceptsfood", async(id, {rejectWithValue}) => {
     try {
-        const {data} = await axios.put(`/api/v1/food/acceptsfood/${id}`)
+        const {data} = await api.put(`/api/v1/food/acceptsfood/${id}`)
         return data
     } catch (error) {
         return rejectWithValue(error.response?.data)
@@ -65,7 +65,7 @@ export const AcceptsFood = createAsyncThunk("food/acceptsfood", async(id, {rejec
 
 export const GetAcceptedFood = createAsyncThunk("food/acceptedfood", async(_, {rejectWithValue}) => {
     try {
-        const {data} = await axios.get("/api/v1/food/getacceptedfood", {withCredentials: true})
+        const {data} = await api.get("/api/v1/food/getacceptedfood", {withCredentials: true})
         return data
     } catch (error) {
         return rejectWithValue(error.response?.data)
@@ -74,7 +74,7 @@ export const GetAcceptedFood = createAsyncThunk("food/acceptedfood", async(_, {r
 
 export const CancelFood = createAsyncThunk("food/cancelsfood", async(id, {rejectWithValue}) => {
     try {
-        const {data} = await axios.put(`/api/v1/food/cancelorder/${id}`)
+        const {data} = await api.put(`/api/v1/food/cancelorder/${id}`)
         return data
     } catch (error) {
         return rejectWithValue(error.response?.data)
@@ -83,7 +83,7 @@ export const CancelFood = createAsyncThunk("food/cancelsfood", async(id, {reject
 
 export const PickupFood = createAsyncThunk("food/pickupfood",async(id, {rejectWithValue}) => {
         try{
-            const {data} = await axios.put(`/api/v1/food/status/picked/${id}`)
+            const {data} = await api.put(`/api/v1/food/status/picked/${id}`)
             return data
         }
         catch(error){
@@ -94,7 +94,7 @@ export const PickupFood = createAsyncThunk("food/pickupfood",async(id, {rejectWi
 
 export const AssignedFood = createAsyncThunk("food/assignfood",async(id, {rejectWithValue}) => {
         try{
-            const {data} = await axios.put(`/api/v1/food/status/assigned/${id}`)
+            const {data} = await api.put(`/api/v1/food/status/assigned/${id}`)
             return data
         }
         catch(error){
@@ -105,7 +105,7 @@ export const AssignedFood = createAsyncThunk("food/assignfood",async(id, {reject
 
 export const MyDelivery = createAsyncThunk("/food/mydeliveries", async(_, {rejectWithValue}) => {
     try {
-        const {data} = await axios.get("/api/v1/food/mydeliveries", {withCredentials: true})
+        const {data} = await api.get("/api/v1/food/mydeliveries", {withCredentials: true})
         return data
     } catch (error) {
         return rejectWithValue(error.response?.data)
@@ -114,7 +114,7 @@ export const MyDelivery = createAsyncThunk("/food/mydeliveries", async(_, {rejec
 
 export const DeliveredFood = createAsyncThunk("food/deliveredfood",async(id, {rejectWithValue}) => {
         try{
-            const {data} = await axios.put(`/api/v1/food/status/delivered/${id}`)
+            const {data} = await api.put(`/api/v1/food/status/delivered/${id}`)
             return data
         }
         catch(error){
@@ -125,7 +125,7 @@ export const DeliveredFood = createAsyncThunk("food/deliveredfood",async(id, {re
 
 export const DeleteFood = createAsyncThunk("food/deletefood", async(id, {rejectWithValue}) => {
     try {
-        const {data} = await axios.delete(`/api/v1/food/deletefood/${id}`)
+        const {data} = await api.delete(`/api/v1/food/deletefood/${id}`)
         return data
     } catch (error) {
         return rejectWithValue(error.response?.data)

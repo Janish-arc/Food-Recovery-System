@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import logo from '../assets/image.avif'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import axios from 'axios'
 import { logout } from '../Redux/UserSlice'
+import api from '../api'
 
 
 export const Navbar = () => {
@@ -14,7 +14,7 @@ export const Navbar = () => {
   const {isAuthenticated, user} = useSelector((state) => state.user)
   const logoutUser = async() => {
       try {
-          await axios.post("/api/v1/user/logout", {}, { withCredentials: true })
+          await api.post("/api/v1/user/logout", {}, { withCredentials: true })
           dispatch(logout())
           navigate('/')
       } catch (error){

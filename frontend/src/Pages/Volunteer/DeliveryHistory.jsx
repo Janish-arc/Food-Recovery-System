@@ -105,7 +105,7 @@ export const DeliveryHistory = () => {
                         <td>{item.ngoId?.name}</td>
                         <td>{item.quantity}</td>
                         <td>{new Date(item.deliveredDate).toLocaleDateString()}</td>
-                        <td><button className='btn button' onClick={(e) => {e.stopPropagation(); setSelectedFood(item); setPop(true)}}>View Details</button></td>
+                        <td><button className='btn btn-primary' onClick={(e) => {e.stopPropagation(); setSelectedFood(item); setPop(true)}}>View Details</button></td>
                     </tr> 
                     ))
                 ) : (
@@ -253,7 +253,7 @@ export const DeliveryHistory = () => {
                 <div className="d-flex gap-2 col-12 pe-2">
                   {selectedFood.status === "Assigned" && (
                     <button
-                      className="btn button col-6"
+                      className="btn btn-primary col-6"
                       onClick={() => {PickedUp(selectedFood._id); setPop(false)}}
                     >
                       Out for Delivery
@@ -262,7 +262,7 @@ export const DeliveryHistory = () => {
 
                   {selectedFood.status === "Out for Delivery" && (
                     <button
-                      className="btn button col-6"
+                      className="btn btn-primary col-6"
                       onClick={() => {Delivered(selectedFood._id); setPop(false)}}
                     >
                       Delivered

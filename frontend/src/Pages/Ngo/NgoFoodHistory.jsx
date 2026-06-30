@@ -100,7 +100,7 @@ export const NgoFoodHistory = () => {
 
                         <td>
                           <button
-                            className="btn button"
+                            className="btn btn-primary"
                             onClick={(e) => {
                               e.stopPropagation();
                               setSelectedFood(item);

@@ -141,13 +141,13 @@ export const Navbar = () => {
         {isAuthenticated && 
         <div  className="d-flex ms-auto flex-wrap justify-content-end align-items-center gap-1 mt-2">
           {user?.role === "donor" && 
-          <h6 className='btn btn-primary rounded-pill' style={{fontSize: window.innerWidth < 768 ? "13px" : "16px", padding: window.innerWidth < 768 ? "4px 8px" : "8px 16px"}} onClick={() => navigate("/mydonations")}>MY DONATIONS</h6>
+          <h6 className='btn btn-primary rounded-pill' style={{fontSize: window.innerWidth < 768 ? "14px" : "16px", padding: window.innerWidth < 768 ? "4px 8px" : "8px 16px"}} onClick={() => navigate("/mydonations")}>MY DONATIONS</h6>
           }
           {user?.role === "ngo" && 
-          <h6 className='btn btn-primary rounded-pill' style={{fontSize: window.innerWidth < 768 ? "13px" : "16px", padding: window.innerWidth < 768 ? "4px 8px" : "8px 16px"}} onClick={() => navigate("/ngo")}>NGO DASHBOARD</h6>
+          <h6 className='btn btn-primary rounded-pill' style={{fontSize: window.innerWidth < 768 ? "14px" : "16px", padding: window.innerWidth < 768 ? "4px 8px" : "8px 16px"}} onClick={() => navigate("/ngo")}>NGO DASHBOARD</h6>
           }
           {user?.role === "volunteer" && 
-          <h6 className='btn btn-primary' style={{fontSize: window.innerWidth < 768 ? "13px" : "16px", padding: window.innerWidth < 768 ? "4px 8px" : "8px 16px"}} onClick={() => navigate("/volunteer")}>VOLUNTEER TASKS</h6>
+          <h6 className='btn btn-primary' style={{fontSize: window.innerWidth < 768 ? "14px" : "16px", padding: window.innerWidth < 768 ? "4px 8px" : "8px 16px"}} onClick={() => navigate("/volunteer")}>VOLUNTEER TASKS</h6>
           }
           </div>
         }

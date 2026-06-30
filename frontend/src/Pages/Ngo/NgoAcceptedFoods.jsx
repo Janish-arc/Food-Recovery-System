@@ -158,7 +158,7 @@ export const NgoAcceptedFoods = () => {
                     {donor.status === "Accepted" && (
                       <td>
                         <button
-                          className="btn button btn-sm"
+                          className="btn btn-danger btn-sm"
                           onClick={() => FoodCancel(donor._id)}
                         >
                           Cancel

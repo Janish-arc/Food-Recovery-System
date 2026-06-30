@@ -76,71 +76,83 @@ export const Ngo = () => {
     <div>
         <Navbar/>
         {isAuthenticated ? (
-        <div className="col-md-9 col-lg-10 mt-4 mb-5 container overflow-y-auto" style={{scrollbarWidth: "none"}}>
-          <div className='d-flex flex-column align-items-center'>
-            <h2>Welcome {user?.name} 👋</h2>
-            <p>Help reduce food waste and feed those in need.</p>
+        <div className="container-fluid container-lg mt-4 mb-5 px-3 px-md-4" style={{ overflowY: "auto", scrollbarWidth: "none" }}>
+          <div className="text-center mb-4">
+            <h2 className="fw-bold fs-2 fs-md-1">Welcome {user?.name} 👋</h2>
+            <p className="text-muted px-3">Help reduce food waste and feed those in need.</p>
           </div> 
 
-          <div className=" my-5 col-12 d-flex gap-2 pe-2">
-            <div className="card shadow border-0 col-8">
+          <div className="row my-1 g-3"> 
+            <div className="col-12 col-lg-8">
+            <div className=" h-100">
                 <h3 className="text-center mb-4">🌍 Impact So Far</h3>
 
-                <div className="row text-center">
-                  <div className="col-md-3">
-                    <h2 className="fw-bold text-success">{mealsdistributed}</h2>
-                    <p>Meals Distributed</p>
+                <div className="row text-center px-2 g-3">
+                  <div className="col-6 col-md-3">
+                    <div className="card shadow text-center p-3 border-0">
+                      <h2 className="fw-bold text-success">{mealsdistributed}</h2>
+                      <p>Meals Distributed</p>
+                    </div>
                   </div>
 
-                  <div className="col-md-3">
-                    <h2 className="fw-bold text-warning">{receivedFoods.length}</h2>
-                    <p>Total Donations Recieved</p>
+                  <div className="col-6 col-md-3">
+                    <div className="card shadow text-center p-3 border-0">
+                      <h2 className="fw-bold text-warning">{receivedFoods.length}</h2>
+                      <p>Total Donations Recieved</p>
+                    </div>
                   </div>
 
-                  <div className="col-md-3">
-                    <h2 className="fw-bold text-primary">{donors}</h2>
-                    <p>Donors Connected</p>
+                  <div className="col-6 col-md-3">
+                    <div className="card shadow text-center p-3 border-0">
+                      <h2 className="fw-bold text-primary">{donors}</h2>
+                      <p>Donors Connected</p>
+                    </div>
                   </div>
 
-                  <div className="col-md-3">
-                    <h2 className="fw-bold text-danger">{volunteersAvailable}</h2>
-                    <p>Volunteers Active</p>
+                  <div className="col-6 col-md-3">
+                    <div className="card shadow text-center p-3 border-0">
+                      <h2 className="fw-bold text-danger">{volunteersAvailable}</h2>
+                      <p>Volunteers Active</p>
+                    </div>
                   </div>
                 </div>
               </div>
+              </div>
 
-            <div className='card shadow border-0 col-4'>
+            <div className="col-12 col-lg-4"> 
+            <div className="card shadow border-0 h-100 p-3">
               <h3 className='text-center'>📈 Food Insights</h3>
-              <div className='d-flex justify-content-between w-100 mt-2' style={{fontSize:"17px", fontWeight:"600"}}>
-              <div className='ms-3 w-75'>
+              <div className="row mt-3" style={{fontSize:"17px", fontWeight:"600"}}>
+              <div className="col-9">
                 <div className='mb-1'>🥗Veg Foods Received</div>
                 <div className='mb-1'>🍗Non-Veg Foods Received</div>
                 <div>🍪Snacks Received</div>
               </div>
-              <div className='me-2 w-25'>
+              <div className="col-3 text-end">
                 <div>{receivedFoods.filter((item) => item.category === "Veg").length}</div>
                 <div>{receivedFoods.filter((item) => item.category === "NonVeg").length}</div>
                 <div>{receivedFoods.filter((item) => item.category === "Snacks").length}</div>
               </div>
               </div>
             </div>  
+            </div>
           </div>
 
-          <div className='d-flex flex-column align-items-center mt-5'>
+          <div className="text-center mt-5 px-2">
             <h2>🤝Our Mission</h2>
             <p>To reduce food waste and ensure surplus food reaches people in need through efficient coordination between donors and volunteers.</p>
           </div>
 
           <div className="row g-3 mb-3">
-          <div className="col-12 col-sm-6 col-lg-3">
-            <div className="card shadow text-center p-3 border-0">
+          <div className="col-6 col-md-6 col-lg-3">
+            <div className="card shadow text-center p-3 h-100 border-0">
               <h6>Available Foods</h6>
               <h3>{foodList.filter(item => item.status === "Available").length}</h3>           
             </div>
           </div>
 
-          <div className="col-12 col-sm-6 col-lg-3">
-            <div className="card shadow text-center p-3 border-0" onClick={() => navigate("/ngo/acceptedfood")}>
+          <div className="col-6 col-md-6 col-lg-3">
+            <div className="card shadow text-center p-3 h-100 border-0" onClick={() => navigate("/ngo/acceptedfood")}>
               <h6>Accepted Foods</h6>
               <h3>
               {
@@ -155,15 +167,15 @@ export const Ngo = () => {
             </div>
           </div>
 
-          <div className="col-12 col-sm-6 col-lg-3">
-            <div className="card shadow text-center p-3 border-0">
+          <div className="col-6 col-md-6 col-lg-3">
+            <div className="card shadow text-center p-3 h-100 border-0">
               <h6>Foods In Transit</h6>
               <h3>{foodList.filter(item => item.status === "Out for Delivery" && item.ngoId._id === user._id).length}</h3>
             </div>
           </div>
 
-          <div className="col-12 col-sm-6 col-lg-3">
-            <div className="card shadow text-center p-3 border-0" onClick={() => navigate("/receivedfoodhistory")}>
+          <div className="col-6 col-md-6 col-lg-3">
+            <div className="card shadow text-center p-3 h-100 border-0" onClick={() => navigate("/receivedfoodhistory")}>
               <h6>Received Foods</h6>
               <h3>{receivedFoods.length}</h3>
             </div>
@@ -184,7 +196,8 @@ export const Ngo = () => {
                 ⚠ Expiring Within 24 Hours
               </div>
 
-              <table className="table table-sm mb-0">
+              <div className='table-responsive'>
+              <table className="table table-sm ">
                 <tbody>
                   {urgentFoods
                     .filter((food) => food.status === "Available")
@@ -193,12 +206,13 @@ export const Ngo = () => {
                         <td className='ps-3'>{food.name}</td>
                         <td >{new Date(food.expiryDate).toLocaleDateString()}</td>
                         <td className="text-end">
-                          <button className="btn button me-4" onClick={(e) => {e.stopPropagation(); setSelectedFood(food); setPop(true);}}>Accept</button>
+                          <button className="btn btn-primary me-4" onClick={(e) => {e.stopPropagation(); setSelectedFood(food); setPop(true);}}>Accept</button>
                         </td>
                       </tr>
                     ))}
                 </tbody>
               </table>
+              </div>
             </div>
             </>
           )}
@@ -233,7 +247,7 @@ export const Ngo = () => {
                   <td>{item?.status}</td>
                   <td>{new Date(item?.expiryDate).toLocaleDateString()}</td>
                   <td>{item?.donorId?.phoneNo}</td>
-                  <td><button className='btn button' onClick={(e) =>{e.stopPropagation(); setSelectedFood(item); setPop(true)}}>Accept</button></td>
+                  <td><button className='btn btn-primary' onClick={(e) =>{e.stopPropagation(); setSelectedFood(item); setPop(true)}}>Accept</button></td>
                   
                 </tr>
                 )) : (
@@ -251,7 +265,7 @@ export const Ngo = () => {
           <div className='vh-100 d-flex flex-column align-items-center gap-2' style={{marginTop:"15%"}}>
             <div className='d-flex flex-column align-items-center shadow p-5 rounded'>
               <h2>Please Login to Access</h2>
-              <button className='btn button' onClick={() => navigate("/login")}>LOGIN</button>
+              <button className='btn btn-primary' onClick={() => navigate("/login")}>LOGIN</button>
             </div>
           </div>
         )}
@@ -266,7 +280,7 @@ export const Ngo = () => {
           >
             <div
               className="bg-white rounded shadow-lg p-4"
-              style={{ width: "500px", maxWidth: "90%" }}
+              style={{width:"95%", maxWidth:"520px"}}
             >
               <div className="text-center mb-4">
                 <h3>🍱 Accept Food Donation?</h3>
@@ -321,7 +335,8 @@ export const Ngo = () => {
                 </div>
               </div>
 
-              <div className="d-flex gap-2">
+              <div className="row g-2">
+                <div className="col-12 col-md-6">
                 <button
                   className="btn btn-success w-50"
                   onClick={() => {
@@ -331,13 +346,16 @@ export const Ngo = () => {
                 >
                   ✅ Accept
                 </button>
+                </div>
 
+                <div className="col-12 col-md-6">
                 <button
                   className="btn btn-danger w-50"
                   onClick={() => setPop(false)}
                 >
                   ↩️ Cancel
                 </button>
+                </div>
               </div>
             </div>
           </div>

@@ -192,7 +192,7 @@ export const Volunteer = () => {
                       <td>{item.status}</td>
                       <td>{new Date(item?.expiryDate).toLocaleDateString()}</td>
                       <td>{item?.donorId?.phoneNo}</td>
-                      <td><button className='btn button' onClick={(e) => {e.stopPropagation(); setSelectedFood(item); setPop(true)}}>Take Delivery</button></td>
+                      <td><button className='btn btn-primary' onClick={(e) => {e.stopPropagation(); setSelectedFood(item); setPop(true)}}>Take Delivery</button></td>
                     </tr>
                   )):(
                     <tr>
@@ -210,7 +210,7 @@ export const Volunteer = () => {
           <div className='vh-100 d-flex flex-column align-items-center gap-2' style={{marginTop:"15%"}}>
             <div className='d-flex flex-column align-items-center shadow p-5 rounded'>
               <h2>Please Login to Access</h2>
-              <button className='btn button' onClick={() => navigate("/login")}>LOGIN</button>
+              <button className='btn btn-primary' onClick={() => navigate("/login")}>LOGIN</button>
             </div>
           </div>
           )

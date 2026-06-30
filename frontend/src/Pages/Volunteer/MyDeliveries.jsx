@@ -218,7 +218,7 @@ export const MyDeliveries = () => {
 
                                   {item.status === "Assigned" && (
                                     <button
-                                      className="btn button w-100"
+                                      className="btn btn-primary w-100"
                                       onClick={(e) => {
                                         e.stopPropagation();
                                         setSelectedFood(item);
@@ -231,7 +231,7 @@ export const MyDeliveries = () => {
 
                                   {item.status === "Out for Delivery" && (
                                     <button
-                                      className="btn button w-100"
+                                      className="btn btn-primary w-100"
                                       onClick={(e) => {
                                         e.stopPropagation();
                                         setSelectedFood(item);
@@ -402,7 +402,7 @@ export const MyDeliveries = () => {
                 <div className="d-flex gap-2 col-12 pe-2">
                   {selectedFood.status === "Assigned" && (
                     <button
-                      className="btn button col-6"
+                      className="btn btn-primary col-6"
                       onClick={() => {PickedUp(selectedFood._id); setPop(false)}}
                     >
                       Out for Delivery
@@ -411,7 +411,7 @@ export const MyDeliveries = () => {
 
                   {selectedFood.status === "Out for Delivery" && (
                     <button
-                      className="btn button col-6"
+                      className="btn btn-primary col-6"
                       onClick={() => {Delivered(selectedFood._id); setPop(false)}}
                     >
                       Delivered

@@ -14,12 +14,13 @@ export const Navbar = () => {
   const {isAuthenticated, user} = useSelector((state) => state.user)
   const logoutUser = async() => {
       try {
-          await api.post("/api/v1/user/logout", {}, { withCredentials: true })
-          dispatch(logout())
-          navigate('/')
-      } catch (error){
-          console.log(error)
+          await api.post("/api/v1/user/logout", {}, { withCredentials: true });
+      } catch (err) {
+          console.log("Logout API failed:", err);
       }
+
+      dispatch(logout());
+      navigate("/");
   }
 
   return (

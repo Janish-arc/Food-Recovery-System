@@ -27,3 +27,36 @@
 .urgent-food {
   background-color: #fff4f4 !important;
 }
+.food-details-img {
+  width: 100%;
+  max-width: 430px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+@media (min-width: 768px) {
+  .food-details-img {
+    max-width: 450px;
+  }
+}
+
+@media (min-width: 992px) {
+  .food-details-img {
+    max-width: 420px;
+    aspect-ratio: 4 / 5;
+  }
+}
+
+@media (min-width: 1200px) {
+  .food-details-img {
+    max-width: 450px;
+    aspect-ratio: 4 / 5;
+  }
+}
+
+@media (max-width: 767px) {
+  .food-details-img {
+    max-width: 320px;
+    aspect-ratio: 1 / 1;
+  }
+}

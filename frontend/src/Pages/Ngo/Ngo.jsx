@@ -202,7 +202,7 @@ export const Ngo = () => {
                   {urgentFoods
                     .filter((food) => food.status === "Available")
                     .map((food) => (
-                      <tr key={food._id} onClick={() => navigate(`/ngo/fooddetails/${food._id}`)} style={{ cursor: "pointer" }}>
+                      <tr key={food._id} onClick={() => navigate(`/fooddetails/${food._id}`)} style={{ cursor: "pointer" }}>
                         <td className='ps-3'>{food.name}</td>
                         <td >{new Date(food.expiryDate).toLocaleDateString()}</td>
                         <td className="text-end">
@@ -238,7 +238,7 @@ export const Ngo = () => {
                 {currentFoods.length > 0 ? (
                 currentFoods.map((item) => 
                 
-                <tr key={item._id} className={`align-middle ${getUrgencyColor(item.expiryDate)}`} onClick={() => navigate(`/ngo/fooddetails/${item._id}`)}>
+                <tr key={item._id} className={`align-middle ${getUrgencyColor(item.expiryDate)}`} onClick={() => navigate(`/fooddetails/${item._id}`)}>
                   <td style={{width:"100px"}}><img src={item?.image?.url} style={{width:"70px", height:"70px", objectFit:"cover", borderRadius:"50%"}}/></td>
                   <td ><strong>{item.name}</strong></td>
                   <td>{item.organization}</td>

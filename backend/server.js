@@ -7,6 +7,9 @@ import cookieParser from "cookie-parser";
 import user from "./routes/UserRoutes.js";
 import error from "./helper/error.js"
 import cors from "cors";
+import restaurant from "./routes/RestaurantRoute.js";
+import category from "./routes/CategoryRoute.js";
+import cart from "./routes/CartRoute.js";
 
 dotenv.config({ path: "./config/.env" });
 
@@ -31,7 +34,10 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api/v1/food", food);
-app.use("/api/v1/user", user)
+app.use("/api/v1/user", user);
+app.use("/api/v1/restaurant", restaurant)
+app.use("/api/v1/category", category)
+app.use("/api/v1/cart", cart)
 
 app.use(error);
 // Test Route

@@ -9,36 +9,12 @@ import sendEmail from "../helper/sendEmail.js";
 import crypto from "crypto";
 
 //Register User
-// export const register = async(req, res, next) => {
-//     try{
-//         const {name, email, password, image, phoneNo, role} = req.body
-//         if(!name || !email || !password){
-//             return res.status(400).json({success: false, message:"Please fill out all the fields"})
-//         }
-//         const existingUser = await User.findOne({email})
-//         if(existingUser){
-//             return res.status(400).json({success: false, message:"User already exists"})
-//         }
-//         const myCloud = await cloudinary.uploader.upload(image, {
-//                 folder: "ECOM_AVATAR",
-//                 width: 150,
-//                 crop: "scale"
-//             })
-//         const user = await User.create({
-//             name, email, password, role, phoneNo, image: {public_id: myCloud.public_id, url: myCloud.secure_url}
-//         })
-//         sendToken(user, 201, res);
-//     }catch(error){
-//         res.status(400).json({
-//             success:false,
-//             message:error.message
-//         });
-//     }
-// }
 
 export const register = async (req, res, next) => {
+   console.log("Body:", req.body);
+    console.log("File:", req.file);
   try {
-    const { name, email, password, phoneNo, role, address, country, pincode } = req.body;
+    const { name, email, password, phoneNo, address, state, country, pincode } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({
@@ -79,10 +55,10 @@ export const register = async (req, res, next) => {
       name,
       email,
       password,
-      role,
       phoneNo,
       image: imageData,
       address, 
+      state,
       country,
       pincode
     });

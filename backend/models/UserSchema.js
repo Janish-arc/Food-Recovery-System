@@ -14,8 +14,7 @@ const UserSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        required: true,
-        enum: ["donor", "ngo", "volunteer", "admin"]
+        default: "customer"
     },
     email: {
         type: String,
@@ -37,6 +36,10 @@ const UserSchema = new mongoose.Schema({
         }
     },
     address: {
+        type: String,
+        required: true
+    },
+    state:{
         type: String,
         required: true
     },

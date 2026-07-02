@@ -1,32 +1,25 @@
 import mongoose from "mongoose";
 
 const FoodSchema = new mongoose.Schema({
+    restaurant: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Restaurant",
+        required: true
+    },
     name: {
         type: String,
         required: true
     },
     category: {
-        type: String,
-        enum: ["Veg", "NonVeg", "Snacks"],
-        required: true
-    },
-    quantity: {
-        type: Number,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Category",
         required: true
     },
     description: {
         type: String
     },
-    expiryDate: {
-        type: Date,
-        required: true
-    },
-    deliveredDate: {
-        type: Date,
-        default: null
-    },
-    pickUpAddress: {
-        type: String,
+    price:{
+        type: Number,
         required: true
     },
     image: {
@@ -39,27 +32,22 @@ const FoodSchema = new mongoose.Schema({
             required: true
         }
     },
-    status: {
-        type: String,
-        default: "Available",
-        enum: ["Available", "Accepted", "Assigned", "Out for Delivery", "Delivered"]
+    isAvailable: {
+        type: Boolean,
+        default: true
     },
-    organization:{
-        type: String,
+    preparedTime:{
+        type: Number,
         required: true
     },
-    donorId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+    rating:{
+        type: Number,
+        default: 0
     },
-    volunteerId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+    totalReviews:{
+        type: Number,
+        default: 0
     },
-    ngoId :{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-    }
 },{timestamps: true})
 
 export const Food = mongoose.model("Food", FoodSchema)

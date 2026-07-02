@@ -11,7 +11,7 @@ restaurant.route("/restaurant/create").post(upload.single("logo"), isAuthenticat
 restaurant.route("/restaurant/get/mine").get(isAuthenticated, roleBasedAccess("restaurant"), GetMyRestaurant)
 restaurant.route("/restaurant/update/:id").put(upload.single("logo"), isAuthenticated, roleBasedAccess("restaurant"), UpdateRestaurant)
 restaurant.route("/restaurant/delete/:id").delete(isAuthenticated, roleBasedAccess("restaurant"), DeleteRestaurant)
-restaurant.route("/restaurant/get/allrestaurant").get(isAuthenticated, roleBasedAccess("restaurant"), GetRestaurants)
-restaurant.route("/restaurant/get/:id").get(isAuthenticated, roleBasedAccess("restaurant"), GetRestaurant)
+restaurant.route("/restaurant/get/allrestaurant").get(isAuthenticated, roleBasedAccess("customer"), GetRestaurants)
+restaurant.route("/restaurant/get/:id").get(isAuthenticated, roleBasedAccess("customer"), GetRestaurant)
 
 export default restaurant

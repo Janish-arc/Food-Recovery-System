@@ -1,6 +1,6 @@
 
 .home{
-    background-color: #f5fff0;
+    background:radial-gradient(circle at top left, rgba(201,162,39,.18), transparent 45%), linear-gradient(135deg,#FFFFFF,#FAF7F2,#F2E8D8)
 }
 .card {
     transition: all 0.3s ease;
@@ -59,4 +59,11 @@
     max-width: 320px;
     aspect-ratio: 1 / 1;
   }
+}
+
+
+.category-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 20px;
 }

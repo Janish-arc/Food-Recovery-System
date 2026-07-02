@@ -138,19 +138,7 @@ export const Navbar = () => {
             <img src={logo} className='rounded-circle' style={{width: "40px", height:"40px", objectFit: "cover"}}/>
             <h3><b>RECUPY</b></h3>  
         </div>
-        {isAuthenticated && 
-        <div  className="d-flex ms-auto flex-wrap justify-content-end align-items-center gap-1 mt-2">
-          {user?.role === "donor" && 
-          <h6 className='btn btn-primary rounded-pill' style={{fontSize: window.innerWidth < 768 ? "14px" : "16px", padding: window.innerWidth < 768 ? "4px 8px" : "8px 16px"}} onClick={() => navigate("/mydonations")}>MY DONATIONS</h6>
-          }
-          {user?.role === "ngo" && 
-          <h6 className='btn btn-primary rounded-pill' style={{fontSize: window.innerWidth < 768 ? "14px" : "16px", padding: window.innerWidth < 768 ? "4px 8px" : "8px 16px"}} onClick={() => navigate("/ngo")}>NGO DASHBOARD</h6>
-          }
-          {user?.role === "volunteer" && 
-          <h6 className='btn btn-primary' style={{fontSize: window.innerWidth < 768 ? "14px" : "16px", padding: window.innerWidth < 768 ? "4px 8px" : "8px 16px"}} onClick={() => navigate("/volunteer")}>VOLUNTEER TASKS</h6>
-          }
-          </div>
-        }
+
         {!isAuthenticated && 
         <div className='d-flex gap-3 ms-auto mt-2'>
             <h6 className='btn btn-primary'  style={{fontSize: window.innerWidth < 768 ? "13px" : "16px", padding: window.innerWidth < 768 ? "4px 8px" : "8px 16px"}} onClick={() => navigate("/login")}>LOGIN</h6>
@@ -158,83 +146,6 @@ export const Navbar = () => {
         </div>
         }
       </div>
-
-      {/* <div
-        className="d-flex align-items-center px-4 shadow-sm sticky-top bg-white"
-        style={{ height: "70px", zIndex: 1 }}
-      >
-
-        <div
-          onClick={() => setOpen(true)}
-          className="p-2 rounded-circle"
-          style={{
-            cursor: "pointer",
-            backgroundColor: "#f8f9fa",
-          }}
-        >
-          <i className="bi bi-list fs-3"></i>
-        </div>
-
-        <div className="d-flex align-items-center gap-2 ms-3">
-          <img
-            src={logo}
-            className="rounded-circle border"
-            style={{
-              width: "45px",
-              height: "45px",
-              objectFit: "cover",
-            }}
-          />
-
-          <div>
-            <h4 className="fw-bold text-success mb-0">RecuPy</h4>
-            <small className="text-muted">Food Recovery System</small>
-          </div>
-        </div>
-
-        <div className="ms-auto d-flex gap-2">
-          {isAuthenticated ? (
-            <>
-              <button
-                className="btn btn-outline-success rounded-pill"
-                onClick={() => navigate("/mydonations")}
-              >
-                My Donations
-              </button>
-
-              <button
-                className="btn btn-outline-primary rounded-pill"
-                onClick={() => navigate("/profile")}
-              >
-                Profile
-              </button>
-
-              <button
-                className="btn btn-danger rounded-pill"
-                onClick={logoutUser}
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                className="btn btn-outline-success rounded-pill"
-                onClick={() => navigate("/login")}
-              >
-                Login
-              </button>
-
-              <button
-                className="btn btn-success rounded-pill"
-                onClick={() => navigate("/register")}
-              >
-                Register
-              </button>
-            </>
-          )}
-        </div>
-      </div> */}
 
     </>
   )

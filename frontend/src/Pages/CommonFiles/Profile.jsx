@@ -20,10 +20,9 @@ export const Profile = () => {
     const [showPassword, setShowPassword] = useState(false)
     const [preview, setPreview] = useState("https://cdn-icons-png.flaticon.com/512/3135/3135715.png");
     const [userdata, setUser] = useState({
-        name:"", email:"", password:"", phoneNo:"", role:"", address:"", country:"", pincode:""
+        name:"", email:"", password:"", phoneNo:"", state:"", address:"", country:"", pincode:""
       })
-    const {name, email, password, phoneNo, address, country, pincode} = userdata
-    const [role, setRole] = useState("donor")
+    const {name, email, password, phoneNo, address, state, country, pincode} = userdata
     const [image, setImage] = useState(preview)
 
     useEffect(() => {
@@ -39,11 +38,10 @@ export const Profile = () => {
             email: user?.email || "",
             phoneNo: user?.phoneNo || "",
             address: user?.address || "",
+            state: user?.state || "",
             country: user?.country || "",
             pincode: user?.pincode || ""
         });
-
-        setRole(user.role || "");
         setPreview(
             user.image?.url ||
             "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
@@ -60,9 +58,9 @@ export const Profile = () => {
     
     myform.set("name", name);
     myform.set("email", email);
-    myform.set("role", role);
     myform.set("phoneNo", phoneNo);
     myform.set("address", address);
+    myform.set("state", state);
     myform.set("country", country);
     myform.set("pincode", pincode);
     if(image){
@@ -119,12 +117,6 @@ export const Profile = () => {
             <div style={{ flex: 1 }}>
                 <p style={{ color: 'rgba(255,255,255,0.7)', marginBottom: 4 }}>Welcome back,</p>
                 <h3 style={{ fontWeight: 500, color: 'white', marginBottom: 4 }}>{profileData?.name}</h3>
-                <span className='rounded-pill' style={{
-                fontSize: 15, background: 'rgba(255,255,255,0.18)', color: 'white',
-                padding: '3px 12px'
-                }}>
-                {profileData?.role === "donor" ? "Donor" :  profileData?.role === "ngo" ? "Ngo" : profileData?.role === "volunteer" ? "Volunteer" : profileData?.role === "admin" ? "Admin" : ""}
-                </span>
                 <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap', marginTop:8 }}>
                 <span style={{ color: 'rgba(255, 255, 255, 0.83)'}}><b>Email: </b> {profileData?.email}</span>
                 <span style={{ color: 'rgba(255, 255, 255, 0.83)'}}><b>Phone No:</b> +91 {profileData?.phoneNo}</span>
@@ -148,9 +140,9 @@ export const Profile = () => {
                 <div style={{ background: '#f8fafc', borderRadius: 8, padding: '1rem' }}>
                     {[
                         { label: 'Name',    value: profileData?.name },
-                        { label: 'Role',    value: profileData?.role === "donor" ? "Donor" :  profileData?.role === "ngo" ? "Ngo" : profileData?.role === "volunteer" ? "Volunteer" : profileData?.role === "admin" ? "Admin" : ""},
                         { label: 'Joined',  value: profileData?.createdAt ? new Date(profileData?.createdAt).toLocaleDateString() : '—' },
                         { label: 'Address', value: profileData?.address },
+                        { label: 'State', value: profileData?.state },
                         { label: 'Country', value: profileData?.country },
                         { label: 'Pincode', value: profileData?.pincode },
                     ].map(({ label, value }) => (
@@ -167,117 +159,6 @@ export const Profile = () => {
                 </div>
 
                 {/* Donation overview */}
-                {profileData?.role === "donor" && 
-                <div>
-                    <h4 style={{ fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.75rem' }}>
-                    Donation overview
-                    </h4>
-
-                    {/* Total bar */}
-                    <div style={{
-                    background: '#6c63ff', borderRadius: 8, padding: '1rem 1.25rem',
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem',
-                    }}>
-                    <div>
-                        <h4 style={{ color: 'rgba(255,255,255,0.8)' }}>Total donations</h4>
-                        <p style={{ color: 'rgba(255,255,255,0.6)' }}>All time contributions</p>
-                    </div>
-                    <p style={{ fontSize: 26, fontWeight: 500, color: 'white' }}>{(food.filter((item) => item.donorId?._id === profileData._id)).length}</p>
-                    </div>
-
-                    {/* Breakdown grid */}
-                    <div className='col-12 d-flex gap-2 pe-4'>
-                        <div className='col-3 shadow rounded d-flex flex-column align-items-center'>
-                            <p style={{fontSize:"17px", fontWeight:600}}>Available</p>
-                            <p className="mt-0" style={{fontSize:"20px", fontWeight:600}}>{(food.filter((item) => item?.status === "Available" && item?.donorId?._id === profileData._id)).length}</p>
-                        </div>
-                        <div className='col-3 shadow rounded d-flex flex-column align-items-center'>
-                            <p style={{fontSize:"20px", fontWeight:600}}>Accepted</p>
-                            <p style={{fontSize:"20px", fontWeight:600}}>{(food.filter((item) => item.status === "Accepted" && item?.donorId?._id === profileData._id)).length}</p>
-                        </div>
-                        <div className='col-3 shadow rounded d-flex flex-column align-items-center'>
-                            <p style={{fontSize:"20px", fontWeight:600}}>Out for Delivery</p>
-                            <p style={{fontSize:"20px", fontWeight:600}}>{(food.filter((item) => item.status === "Out for Delivery" && item?.donorId?._id === profileData._id)).length}</p>
-                        </div>
-                        <div className='col-3 shadow rounded d-flex flex-column align-items-center'>
-                            <p style={{fontSize:"20px", fontWeight:600}}>Delivered</p>
-                            <p style={{fontSize:"20px", fontWeight:600}}>{(food.filter((item) => item.status === "Delivered" && item?.donorId?._id === profileData._id)).length}</p>
-                        </div>
-                    </div>
-                </div>
-                }
-
-                {profileData?.role === "ngo" && 
-                <div>
-                    <h4 style={{ fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.75rem' }}>
-                    My Orders overview
-                    </h4>
-
-                    {/* Total bar */}
-                    <div style={{
-                    background: '#6c63ff', borderRadius: 8, padding: '1rem 1.25rem',
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem',
-                    }}>
-                    <div>
-                        <h4 style={{ color: 'rgba(255,255,255,0.8)' }}>Total Orders</h4>
-                        <p style={{ color: 'rgba(255,255,255,0.6)' }}>All time contributions</p>
-                    </div>
-                    <p style={{ fontSize: 26, fontWeight: 500, color: 'white' }}>{(food.filter((item) => item?.ngoId?._id === user?._id)).length}</p>
-                    </div>
-
-                    {/* Breakdown grid */}
-                    <div className='col-12 d-flex gap-2 pe-4'>
-                        <div className='col-4 shadow rounded d-flex flex-column align-items-center'>
-                            <p style={{fontSize:"17px", fontWeight:600}}>Accepted Orders</p>
-                            <p className="mt-0" style={{fontSize:"20px", fontWeight:600}}>{(food.filter((item) => item.status === "Accepted")).length}</p>
-                        </div>
-                        <div className='col-4 shadow rounded d-flex flex-column align-items-center'>
-                            <p style={{fontSize:"17px", fontWeight:600}}>Received Orders</p>
-                            <p style={{fontSize:"20px", fontWeight:600}}>{(food.filter((item) => item.status === "Delivered" && item?.ngoId._id === user._id)).length}</p>
-                        </div>
-                        <div className='col-4 shadow rounded d-flex flex-column align-items-center'>
-                            <p style={{fontSize:"17px", fontWeight:600}}>Received Meals</p>
-                            <p style={{fontSize:"20px", fontWeight:600}}>{(food.filter((item) => item.status === "Delivered" && item?.ngoId?._id === user._id)).reduce((total, food) => total + food.quantity, 0)}</p>
-                        </div>
-                    </div>
-                </div>
-                }
-
-                {profileData?.role === "volunteer" && 
-                <div>
-                    <h4 style={{ fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.75rem' }}>
-                    My Orders overview
-                    </h4>
-
-                    {/* Total bar */}
-                    <div style={{
-                    background: '#6c63ff', borderRadius: 8, padding: '1rem 1.25rem',
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem',
-                    }}>
-                    <div>
-                        <h4 style={{ color: 'rgba(255,255,255,0.8)' }}>Total Deliveries</h4>
-                        <p style={{ color: 'rgba(255,255,255,0.6)' }}>All time contributions</p>
-                    </div>
-                    <p style={{ fontSize: 26, fontWeight: 500, color: 'white' }}>{(food.filter((item) => item.status === "Delivered" && item?.volunteerId?._id === user._id)).length}</p>
-                    </div>
-
-                    {/* Breakdown grid */}
-                    <div className='col-12 d-flex gap-2 pe-4'>
-                        <div className='col-4 shadow rounded d-flex flex-column align-items-center'>
-                            <p style={{fontSize:"17px", fontWeight:600}}>Available Deliveries</p>
-                            <p className="mt-0" style={{fontSize:"20px", fontWeight:600}}>{(food.filter((item) => item.status === "Accepted")).length}</p>
-                        </div>
-                        <div className='col-4 shadow rounded d-flex flex-column align-items-center'>
-                            <p style={{fontSize:"17px", fontWeight:600}}>Active Deliveries</p>
-                            <p style={{fontSize:"20px", fontWeight:600}}>{(food.filter((item) => (item.status === "Assigned" || item.status === "Out for Delivery") && item?.volunteerId._id === user._id)).length}</p>
-                        </div>
-                        <div className='col-4 shadow rounded d-flex flex-column align-items-center'>
-                            <p style={{fontSize:"17px", fontWeight:600}}>Meals Delivered</p>
-                            <p style={{fontSize:"20px", fontWeight:600}}>{(food.filter((item) => item.status === "Delivered" && item?.volunteerId?._id === user._id)).reduce((total, food) => total + food.quantity, 0)}</p>
-                        </div>
-                    </div>
-                </div>
-                }
 
                 {profileData?.role === "admin" &&
                 <div>
@@ -360,14 +241,6 @@ export const Profile = () => {
                     name='email' value={email} onChange={handleChange}/>
                     </div>
                     <div>
-                        <h6>Role</h6>
-                        <select className='form-control form-select' name="role" id="role" value={role} onChange={(e) => setRole(e.target.value)} style={{cursor:"pointer"}}>
-                            <option value="donor">Donor</option>
-                            <option value="ngo">NGO</option>
-                            <option value="volunteer">Volunteer</option>
-                        </select>
-                    </div>
-                    <div>
                     <h6>Phone No.</h6>
                     <input className='form-control' type="number" placeholder='Enter your Contact Number'
                     name='phoneNo' value={phoneNo} onChange={handleChange}/>
@@ -378,6 +251,11 @@ export const Profile = () => {
                     name='address' value={address} onChange={handleChange}/>
                     </div>
                     <div >
+                    <div >
+                    <h6>State</h6>
+                    <input className="form-control" type="text" placeholder='Enter your State' 
+                    name='state' value={state} onChange={handleChange}/>
+                    </div>
                     <h6>Country</h6>
                     <input className="form-control" type="text" placeholder='Enter your Country' 
                     name='country' value={country} onChange={handleChange}/>

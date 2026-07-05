@@ -4,7 +4,7 @@ import logo from '../assets/image.avif'
 
 export const Footer = () => {
   return (
-    <footer className="bg-dark text-light mt-5 py-5">
+    <footer className="bg-dark text-light py-5">
       <div className="container">
         <div className="row">
 

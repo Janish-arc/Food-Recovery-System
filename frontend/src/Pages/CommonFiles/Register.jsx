@@ -12,10 +12,9 @@ const [preview, setPreview] = useState("https://cdn-icons-png.flaticon.com/512/3
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [user, setUser] = useState({
-    name:"", email:"", password:"", phoneNo:"", role:"", address:"", country:"", pincode:""
+    name:"", email:"", password:"", phoneNo:"", state:"", address:"", country:"", pincode:""
   })
-  const {name, email, password, phoneNo, address, country, pincode} = user
-  const [role, setRole] = useState("donor")
+  const {name, email, password, phoneNo, address, state, country, pincode} = user
   const [image, setImage] = useState(null)
 
   const handleChange = (e) => {
@@ -25,7 +24,7 @@ const [preview, setPreview] = useState("https://cdn-icons-png.flaticon.com/512/3
   const registerNow = (e) => {
   e.preventDefault();
 
-  if (!name || !email || !password || !role || !phoneNo || !image) {
+  if (!name || !email || !password || !address || !phoneNo || !image || !state || !country || !pincode) {
     toast.error("Please fill out all the fields required", {
       position: "top-center",
     });
@@ -37,10 +36,10 @@ const [preview, setPreview] = useState("https://cdn-icons-png.flaticon.com/512/3
   myform.set("name", name);
   myform.set("email", email);
   myform.set("password", password);
-  myform.set("role", role);
   myform.set("phoneNo", phoneNo);
   myform.set("image", image);
   myform.set("address", address);
+  myform.set("state", state);
   myform.set("country", country);
   myform.set("pincode", pincode);
 
@@ -96,14 +95,7 @@ const [preview, setPreview] = useState("https://cdn-icons-png.flaticon.com/512/3
             </span>
           </div>
         </div>
-        <div className='position-relative'>
-            <h6>Role</h6>
-            <select className='form-control form-select' name="role" id="role" value={role} onChange={(e) => setRole(e.target.value)} style={{cursor:"pointer"}}>
-                <option value="donor">Donor</option>
-                <option value="ngo">NGO</option>
-                <option value="volunteer">Volunteer</option>
-            </select>
-        </div>
+        
         <div>
           <h6>Phone No.</h6>
           <input className='form-control' type="number" placeholder='Enter your Contact Number'
@@ -114,7 +106,12 @@ const [preview, setPreview] = useState("https://cdn-icons-png.flaticon.com/512/3
           <input className="form-control" type="text" placeholder='Enter your Address' 
           name='address' value={address} onChange={handleChange}/>
         </div>
-         <div >
+        <div >
+          <h6>State</h6>
+          <input className="form-control" type="text" placeholder='Enter your State' 
+          name='state' value={state} onChange={handleChange}/>
+        </div>
+        <div >
           <h6>Country</h6>
           <input className="form-control" type="text" placeholder='Enter your Country' 
           name='country' value={country} onChange={handleChange}/>

@@ -1,6 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import api from "../api";
 
+export const GetRestaurantFoods = createAsyncThunk("get/restaurant/foods", async(restaurantId, {rejectWithValue}) => {
+    try {
+        const {data} = await api.get(`/api/v1/food/menu/restaurant/${restaurantId}`, {withCredentials: true})
+        return data
+    } catch (error) {
+        return rejectWithValue(error.response?.data)
+    }
+})
+
 export const DonateFood = createAsyncThunk("food/donate", async(foodData, {rejectWithValue}) => {
     try {
         const config = {
@@ -16,18 +25,9 @@ export const DonateFood = createAsyncThunk("food/donate", async(foodData, {rejec
     }
 })
 
-export const GetDonorFoods = createAsyncThunk("get/foods", async(_, {rejectWithValue}) => {
-    try {
-        const {data} = await api.get("/api/v1/food/getsingledonorfood", {withCredentials: true})
-        return data
-    } catch (error) {
-        return rejectWithValue(error.response?.data)
-    }
-})
-
 export const GetAllFoods = createAsyncThunk("get/allfoods", async(_, {rejectWithValue}) => {
     try {
-        const {data} = await api.get("/api/v1/food/getallfoods", {withCredentials: true})
+        const {data} = await api.get("/api/v1/food/menu/get/allmenu")
         return data
     } catch (error) {
         return rejectWithValue(error.response?.data)
@@ -136,6 +136,7 @@ const FoodSlice = createSlice({
     name: "food",
     initialState: {
         food: [],
+        restaurantfood: [],
         loading: false,
         error: null,
         success: false,
@@ -168,20 +169,6 @@ const FoodSlice = createSlice({
             state.loading = false
         })
 
-        builder.addCase(GetDonorFoods.pending, (state) => {
-            state.loading = true
-            state.error = null
-        })
-        .addCase(GetDonorFoods.fulfilled, (state, action) => {
-            state.loading = false
-            state.error = null
-            state.food = action.payload?.foods
-        })
-        .addCase(GetDonorFoods.rejected, (state, action) => {
-            state.error = action.payload?.error
-            state.loading = false
-        })
-
         builder.addCase(GetAllFoods.pending, (state) => {
             state.loading = true
             state.error = null
@@ -189,9 +176,23 @@ const FoodSlice = createSlice({
         .addCase(GetAllFoods.fulfilled, (state, action) => {
             state.loading = false
             state.error = null
-            state.food = action.payload?.foods
+            state.food = action.payload?.food
         })
         .addCase(GetAllFoods.rejected, (state, action) => {
+            state.error = action.payload?.error
+            state.loading = false
+        })
+
+        builder.addCase(GetRestaurantFoods.pending, (state) => {
+            state.loading = true
+            state.error = null
+        })
+        .addCase(GetRestaurantFoods.fulfilled, (state, action) => {
+            state.loading = false
+            state.error = null
+            state.restaurantfood = action.payload?.foods
+        })
+        .addCase(GetRestaurantFoods.rejected, (state, action) => {
             state.error = action.payload?.error
             state.loading = false
         })

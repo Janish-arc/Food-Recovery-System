@@ -8,10 +8,8 @@ import { Toaster } from 'react-hot-toast'
 import { Home } from './Pages/CommonFiles/Home.jsx'
 import { Register } from './Pages/CommonFiles/Register.jsx'
 import { Login } from './Pages/CommonFiles/Login.jsx'
-import { Donor } from './Pages/Donor/Donor.jsx'
 import { Volunteer } from './Pages/Volunteer/Volunteer.jsx'
 import { Ngo } from './Pages/Ngo/Ngo.jsx'
-import { MyDonations } from './Pages/Donor/MyDonations.jsx'
 import { Profile } from './Pages/CommonFiles/Profile.jsx'
 import { FoodDetails } from './Pages/CommonFiles/FoodDetails.jsx'
 import { NgoAcceptedFoods } from './Pages/Ngo/NgoAcceptedFoods.jsx'
@@ -26,6 +24,12 @@ import { VolunteerUsers } from './Pages/Admin/VolunteerUsers.jsx'
 import { AllFoods } from './Pages/Admin/AllFoods.jsx'
 import { ForgotPasswordPage } from './Pages/CommonFiles/ForgotPassword.jsx'
 import { ResetPasswordPage } from './Pages/CommonFiles/ResetPassword.jsx'
+import { RestaurantDetails } from './Pages/CommonFiles/RestaurantDetails.jsx'
+import { Cart } from './Pages/CommonFiles/Cart.jsx'
+import { Checkout } from './Pages/CommonFiles/Checkout.jsx'
+import { Order } from './Pages/CommonFiles/Order.jsx'
+import { MyOrders } from './Pages/CommonFiles/Myorders.jsx'
+import { OrderDetails } from './Pages/CommonFiles/OrderDetails.jsx'
 
 const ProtectedRoute = ({children}) => {
   const {isAuthenticated} = useSelector((state) => state.user)
@@ -41,10 +45,14 @@ const route = createBrowserRouter(
     {path: '/', element: <Home/>},
     {path: "/register", element: <Register/>},
     {path: "/login", element: <Login/>},
-    {path: "/donor", element:<Donor/>},
+    {path: "/restaurantdetails/:id", element: <RestaurantDetails/>},
+    {path: "/cart", element: <Cart/>},
+    {path: "/checkout", element:<Checkout/>},
+    {path: "/order", element: <Order/>},
+    {path: "/myorder", element: <MyOrders/>},
+    {path: "/orderdetails/:id", element: <OrderDetails/>},
     {path: "/volunteer", element: <Volunteer/>},
     {path: "/ngo", element: <Ngo/>},
-    {path: "/mydonations", element: <MyDonations/>},
     {path: "/myprofile", element: <Profile/>},
     {path: "/fooddetails/:id", element: <FoodDetails/>},
     {path: "/ngo/acceptedfood", element: <NgoAcceptedFoods/>},

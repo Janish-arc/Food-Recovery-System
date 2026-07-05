@@ -42,18 +42,7 @@ export const Login = () => {
 
   useEffect(() => {
     if(success){
-      if(user?.role === "donor"){
-      toast.success(navigate('/donor'))
-      }
-      if(user?.role === "volunteer"){
-      toast.success(navigate('/volunteer'))
-      }
-      if(user?.role === "ngo"){
-      toast.success(navigate('/ngo'))
-      }
-      if(user?.role === "admin"){
-      toast.success(navigate('/admin'))
-      }
+      toast.success(navigate('/'))
       dispatch(removeSuccess())
     }
   },[dispatch, success, navigate])

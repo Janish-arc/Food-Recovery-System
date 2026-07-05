@@ -3,7 +3,16 @@ import api from "../api";
 
 export const GetRestaurant = createAsyncThunk("/restaurant/get", async(_, {rejectWithValue}) => {
     try {
-        const {data} = await api.get("/api/v1/restaurant/restaurant/get/allrestaurant", {withCredentials: true})
+        const {data} = await api.get("/api/v1/restaurant/restaurant/get/allrestaurant")
+        return data
+    } catch (error) {
+        return rejectWithValue(error.message)
+    }
+})
+
+export const GetSingleRestaurant = createAsyncThunk("/restaurant/get/single", async(id, {rejectWithValue}) => {
+    try {
+        const {data} = await api.get(`/api/v1/restaurant/restaurant/get/${id}`, {withCredentials: true})
         return data
     } catch (error) {
         return rejectWithValue(error.message)
@@ -13,7 +22,8 @@ export const GetRestaurant = createAsyncThunk("/restaurant/get", async(_, {rejec
 const RestaurantSlice = createSlice({
     name: "restaurant",
     initialState: {
-        restaurant: [],
+        restaurants: [],
+        restaurant: " ",
         loading: false,
         error: null,
         success: false,
@@ -35,10 +45,25 @@ const RestaurantSlice = createSlice({
         })
         .addCase(GetRestaurant.fulfilled, (state, action) => {
             state.loading = false
-            state.restaurant = action.payload.restaurant
+            state.restaurants = action.payload.restaurants
             state.success = action.payload.success
         })
         .addCase(GetRestaurant.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+        })
+
+        builder
+        .addCase(GetSingleRestaurant.pending, (state) => {
+            state.loading = true
+            state.error = null
+        })
+        .addCase(GetSingleRestaurant.fulfilled, (state, action) => {
+            state.loading = false
+            state.restaurant = action.payload.restaurant
+            state.success = action.payload.success
+        })
+        .addCase(GetSingleRestaurant.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload
         })

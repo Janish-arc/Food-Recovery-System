@@ -10,6 +10,7 @@ import cors from "cors";
 import restaurant from "./routes/RestaurantRoute.js";
 import category from "./routes/CategoryRoute.js";
 import cart from "./routes/CartRoute.js";
+import order from "./routes/OrderRoute.js";
 
 dotenv.config({ path: "./config/.env" });
 
@@ -38,6 +39,7 @@ app.use("/api/v1/user", user);
 app.use("/api/v1/restaurant", restaurant)
 app.use("/api/v1/category", category)
 app.use("/api/v1/cart", cart)
+app.use("/api/v1/order", order)
 
 app.use(error);
 // Test Route

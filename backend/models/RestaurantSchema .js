@@ -24,6 +24,16 @@ const RestaurantSchema = new mongoose.Schema({
             required: true
         }
     },
+    banner: {
+        public_id: {
+            type: String,
+            required: true
+        },
+        url: {
+            type: String,
+            required: true
+        }
+    },
     email: {
         type: String,
         required: true,
@@ -85,6 +95,12 @@ const RestaurantSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     }
-}, {timestamps: true})
+}, {timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true }})
+
+RestaurantSchema.virtual("foods", {
+    ref: "Food",
+    localField: "_id",
+    foreignField: "restaurant"
+});
 
 export const Restaurant = mongoose.model("Restaurant", RestaurantSchema)

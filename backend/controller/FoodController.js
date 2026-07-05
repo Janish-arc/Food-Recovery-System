@@ -104,6 +104,18 @@ export const DeleteMenuItem = async(req,res)=>{
     }
 }
 
+//Get All Foods
+export const GetAllMenuItems = async(req, res) => {
+    try {
+        const food = await Food.find()
+        if(!food){
+            return res.status(404).json({success: false, message: "No foods available"})
+        }
+        return res.status(200).json({success: true, food})
+    } catch (error) {
+        return res.status(404).json({success: false, message: error.message})
+    }
+}
 
 //Get Restaurant Menu
 export const GetRestaurantMenu = async(req,res)=>{

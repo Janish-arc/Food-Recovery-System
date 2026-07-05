@@ -8,7 +8,7 @@ const storage = multer.memoryStorage()
 const upload = multer({storage})
 
 category.route("/category/create").post(upload.single("image"), isAuthenticated, roleBasedAccess("admin"), CreateCategory)
-category.route("/category/get").get(isAuthenticated, GetCategory)
+category.route("/category/get").get(GetCategory)
 category.route("/category/update/:id").put(upload.single("image"), isAuthenticated, roleBasedAccess("admin"), UpdateCategory)
 category.route("/category/delete/:id").delete(isAuthenticated, roleBasedAccess("admin"), DeleteCategory)
 

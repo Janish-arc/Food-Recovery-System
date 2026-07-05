@@ -4,9 +4,7 @@ import handleError from "./handleError.js"
 
 export const isAuthenticated = async(req, res, next) => {
     try {
-        //  console.log("Cookies:", req.cookies);
         const {token} = req.cookies
-        //  console.log("Token:", token);
         const decodedData = jwt.verify(token, process.env.JWT_SECRET)
         req.user = await User.findById(decodedData.id)
         next()

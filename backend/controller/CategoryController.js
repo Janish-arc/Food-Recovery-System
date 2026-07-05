@@ -39,6 +39,7 @@ export const CreateCategory = async(req, res) => {
 export const GetCategory = async(req, res) => {
     try {
         const category = await Category.find()
+        
         return res.status(200).json({success: true, category})
     } catch (error) {
         return res.status(404).json({success: false, message: error.message})

@@ -13,25 +13,29 @@ export const CreateCart = async(req, res) => {
         if(!food){
             return res.status(404).json({success: false, message: "MenuItem not Available"})
         }
-        const cart = await Cart.findById({user: req.user._id})
+        let cart = await Cart.findOne({user: req.user._id})
         if(!cart){
             cart = await Cart.create({user: req.user._id, items: []})
         }
-        const itemIndex = cart.items.findIndex(item => item.menuItem.toString === menuItem)
+        const itemIndex = cart.items.findIndex(item => item.menuItem.toString() === menuItem)
         if(itemIndex > -1){
-            cart.items[itemsIndex].quantity += Number(quantity)
+            cart.items[itemIndex].quantity += Number(quantity)
         }else{
             cart.items.push({menuItem, quantity, price: food.price})
         }
         cart.subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity,0);
+        let discount = 0;
+        if (cart.subtotal >= 1000) discount = cart.subtotal * 0.15;
+        else if (cart.subtotal >= 500) discount = cart.subtotal * 0.10;
+        else if (cart.subtotal >= 250) discount = cart.subtotal * 0.05;
         cart.deliveryFee = cart.subtotal >= 500 ? 0 : 40;
         cart.tax = Number((cart.subtotal * 0.05).toFixed(2));
-        cart.total = cart.subtotal + cart.deliveryFee + cart.tax;
+        cart.total = cart.subtotal + cart.deliveryFee + cart.tax - cart.discount;
         await cart.save();
 
         return res.status(200).json({success: true, message: "Item added to Cart", cart})
     } catch (error) {
-        return res.stauts(404).json({success: false, message: error.message})
+         return res.status(404).json({success: false, message: error.message})
     }
 }
 
@@ -56,18 +60,25 @@ export const UpdateCart = async(req, res) => {
         if(!cart){
             return res.status(400).json({success: false, message: "Cart not found"})
         }
-        const item = cart.items.find(item => item.menuItem.toString() === req.params.id);
+        const item = cart.items.find(item => item._id.toString() === req.params.id);
         if(!item){
             return res.status(404).json({success: false, message: "MenuItem not found"})
         }
+        item.quantity = Number(quantity);
         cart.subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity,0);
+        console.log("subtotal", cart.subtotal)
+        cart.discount = 0;
+        if (cart.subtotal >= 1000) cart.discount = cart.subtotal * 0.15;
+        else if (cart.subtotal >= 500) cart.discount = cart.subtotal * 0.10;
+        else if (cart.subtotal >= 250) cart.discount = cart.subtotal * 0.05;
+        console.log("subtotal", cart.discount)
         cart.deliveryFee = cart.subtotal >= 500 ? 0 : 40;
         cart.tax = Number((cart.subtotal * 0.05).toFixed(2));
-        cart.total = cart.subtotal + cart.deliveryFee + cart.tax;
+        cart.total = cart.subtotal + cart.deliveryFee + cart.tax - cart.discount;
         await cart.save();
-        res.status(200).json({success: true, cart});
+        return res.status(200).json({success: true, cart});
     } catch (error) {
-        return res.stauts(404).json({success: false, message: error.message})
+        return res.status(404).json({success: false, message: error.message})
     }
 }
 

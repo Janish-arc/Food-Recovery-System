@@ -14,7 +14,7 @@ const OrderSchema = new mongoose.Schema({
     deliveryPartner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required: true,
+        default: null
     },
     items: [{
         menuItem: {

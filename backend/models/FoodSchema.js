@@ -37,7 +37,7 @@ const FoodSchema = new mongoose.Schema({
         default: true
     },
     preparedTime:{
-        type: Number,
+        type: String,
         required: true
     },
     rating:{

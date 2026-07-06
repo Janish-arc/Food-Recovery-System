@@ -3,16 +3,38 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Navbar } from '../../Components/Navbar'
 import { Footer } from '../../Components/Footer'
 import { GetAllFoods } from '../../Redux/FoodSlice'
-import { Eye, EyeOff } from 'lucide-react'
-import { GetSingleUser, removeError, removeSuccess, UpdateProfile } from '../../Redux/UserSlice'
+import {
+    Eye, EyeOff, Mail, Phone, MapPin, Calendar, ShieldCheck,
+    Users, Truck, Salad, Settings, Lock, LogOut, Edit2,
+    Package, Heart, Star, IndianRupee, ClipboardList,
+    CheckCircle2, Clock, Bike, XCircle
+} from 'lucide-react'
+import { GetAllUsers, GetSingleUser, removeError, removeSuccess, UpdateProfile } from '../../Redux/UserSlice'
 import toast from 'react-hot-toast'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { GetMyOrder } from '../../Redux/OrderSlice'
+
+// Status -> icon/color config, kept in the same spirit as the My Orders page
+const STATUS_META = {
+    pending:   { label: 'Pending',   color: '#b45309', bg: '#fef3c7', icon: Clock },
+    confirmed: { label: 'Confirmed', color: '#1d4ed8', bg: '#dbeafe', icon: CheckCircle2 },
+    preparing: { label: 'Preparing', color: '#7c3aed', bg: '#ede9fe', icon: Package },
+    out:       { label: 'Out for delivery', color: '#0369a1', bg: '#e0f2fe', icon: Bike },
+    delivered: { label: 'Delivered', color: '#15803d', bg: '#dcfce7', icon: CheckCircle2 },
+    cancelled: { label: 'Cancelled', color: '#b91c1c', bg: '#fee2e2', icon: XCircle },
+}
+
+const getStatusMeta = (status) => STATUS_META[status?.toLowerCase()] || {
+    label: status || 'Processing', color: '#475569', bg: '#f1f5f9', icon: Truck
+}
 
 export const Profile = () => {
 
     const {user, users, error, success, singleuser} = useSelector((state) => state.user)
     const {food, mydelivery} = useSelector((state) => state.food)
+    const {order} = useSelector((state) => state.order)
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const {id} = useParams()
     const profileData = id ? singleuser : user;
 
@@ -83,150 +105,299 @@ export const Profile = () => {
     
     useEffect(() => {
         dispatch(GetAllFoods())
+        dispatch(GetAllUsers())
+        if (user?.role === "customer") {
+            dispatch(GetMyOrder());
+        }
     }, [dispatch])
 
-  
+    // Most recent orders first, capped to a short preview list
+    const recentOrders = [...(order || [])]
+        .sort((a, b) => new Date(b?.createdAt || 0) - new Date(a?.createdAt || 0))
+        .slice(0, 4)
 
+    const customerUsers = users.filter((user) => user.role === "customer")
   return (
     <div>
         <Navbar/>
-    
-        <div className="px-4 py-4">
-        <h2 className='text-center mb-3'><strong>🙍MY ACCOUNT</strong></h2>
-        <div className='shadow card' style={{ borderRadius: 12, overflow: 'hidden', border: '0.5px solid #e2e8f0' }}>
-            
+
+        <div className="px-3 px-md-4 py-4 home">
+        <h2 className='text-center mb-3'><strong>🙍 MY ACCOUNT</strong></h2>
+
+        <div className='shadow card border-0' style={{ borderRadius: 16, overflow: 'hidden' }}>
+
             {/* ── Hero Header ── */}
-            <div style={{
-            background: '#6c63ff', padding: '2rem',
-            display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap',
-            }}>
-            {/* Avatar */}
-            <div style={{
-                width: 100, height: 100, borderRadius: '50%',
-                border: '3px solid rgba(255,255,255,0.4)',
-                background: '#4f46e5', overflow: 'hidden', flexShrink: 0,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 28, fontWeight: 500, color: 'white',
-            }}>
-                {profileData?.image?.url
-                ? <img src={profileData.image.url} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                : getInitials(profileData?.name)}
-            </div>
+            <div className="d-flex flex-column flex-md-row align-items-center gap-3 gap-md-4 text-center text-md-start"
+                style={{ background: '#6c63ff', padding: '1.75rem 1.5rem' }}>
 
-            {/* Name + meta */}
-            <div style={{ flex: 1 }}>
-                <p style={{ color: 'rgba(255,255,255,0.7)', marginBottom: 4 }}>Welcome back,</p>
-                <h3 style={{ fontWeight: 500, color: 'white', marginBottom: 4 }}>{profileData?.name}</h3>
-                <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap', marginTop:8 }}>
-                <span style={{ color: 'rgba(255, 255, 255, 0.83)'}}><b>Email: </b> {profileData?.email}</span>
-                <span style={{ color: 'rgba(255, 255, 255, 0.83)'}}><b>Phone No:</b> +91 {profileData?.phoneNo}</span>
-                <span style={{ color: 'rgba(255, 255, 255, 0.83)'}}><b>Address: </b>{profileData?.address}</span>
+                {/* Avatar */}
+                <div style={{
+                    width: 104, height: 104, borderRadius: '50%',
+                    border: '3px solid rgba(255,255,255,0.4)',
+                    background: '#4f46e5', overflow: 'hidden', flexShrink: 0,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 26, fontWeight: 500, color: 'white',
+                }}>
+                    {profileData?.image?.url
+                    ? <img src={profileData.image.url} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    : getInitials(profileData?.name)}
                 </div>
-            </div>
 
-            {/* Edit button */}
-            <button className='btn btn-dark' onClick={() => setPop(true)}>Edit profile</button>
+                {/* Name + meta */}
+                <div className="flex-grow-1" style={{ minWidth: 0 }}>
+                    <div className="d-flex flex-column flex-md-row align-items-center gap-2">
+                        <h3 className="mb-0" style={{ fontWeight: 600, color: 'white' }}>{profileData?.name}</h3>
+                        {profileData?.role &&
+                        <span className="d-inline-flex align-items-center gap-1 rounded-pill px-2 py-1"
+                            style={{ background: 'rgba(255,255,255,0.18)', color: 'white', fontSize: 12, fontWeight: 600, textTransform: 'capitalize' }}>
+                            <ShieldCheck size={13}/> {profileData.role}
+                        </span>}
+                    </div>
+
+                    <div className="d-flex flex-column flex-sm-row flex-wrap justify-content-center justify-content-md-start gap-2 gap-sm-3 mt-2">
+                        <span className="d-inline-flex align-items-center gap-1" style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14 }}>
+                            <Mail size={14}/> {profileData?.email}
+                        </span>
+                        <span className="d-inline-flex align-items-center gap-1" style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14 }}>
+                            <Phone size={14}/> +91 {profileData?.phoneNo}
+                        </span>
+                        {profileData?.address &&
+                        <span className="d-inline-flex align-items-center gap-1" style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14 }}>
+                            <MapPin size={14}/> {profileData.address}
+                        </span>}
+                    </div>
+                </div>
+
+                {/* Edit button */}
+                <button
+                    className='btn btn-light rounded-pill px-4 fw-semibold d-inline-flex align-items-center gap-2 flex-shrink-0'
+                    onClick={() => setPop(true)}
+                >
+                    <Edit2 size={15}/> Edit profile
+                </button>
             </div>
 
             {/* ── Content ── */}
-            <div style={{ background: '#fff', padding: '1.5rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+            <div className="p-3 p-md-4" style={{ background: '#f8fafc' }}>
+                <div className='row g-3'>
 
-            {/* Profile details */}
-            <div>
-                <h3 style={{fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: '0.75rem' }}>
-                Profile details
-                </h3>
+                    {/* Profile details card */}
+                    <div className='col-12 col-lg-7'>
+                        <div className="card h-100 border-0 shadow-sm" style={{ borderRadius: 12 }}>
+                            <div className="card-body">
+                                <h6 className="text-uppercase text-muted mb-3" style={{ letterSpacing: 0.8, fontSize: 13, fontWeight: 700 }}>
+                                    Profile details
+                                </h6>
 
-                <div style={{ background: '#f8fafc', borderRadius: 8, padding: '1rem' }}>
-                    {[
-                        { label: 'Name',    value: profileData?.name },
-                        { label: 'Joined',  value: profileData?.createdAt ? new Date(profileData?.createdAt).toLocaleDateString() : '—' },
-                        { label: 'Address', value: profileData?.address },
-                        { label: 'State', value: profileData?.state },
-                        { label: 'Country', value: profileData?.country },
-                        { label: 'Pincode', value: profileData?.pincode },
-                    ].map(({ label, value }) => (
-                        <div key={label} style={{display: 'flex', alignItems: 'center', padding: '8px 0', borderBottom: '0.5px solid #e2e8f0',}}>
-                        <span style={{ width: '35%', color: '#6b7280', flexShrink: 0 }}>
-                            {label}
-                        </span>
-                        <span style={{ fontWeight: 600, color: '#0f172a' }}>
-                            {value || '—'}
-                        </span>
+                                {[
+                                    { label: 'Name',    value: profileData?.name,    icon: Users },
+                                    { label: 'Joined',  value: profileData?.createdAt ? new Date(profileData?.createdAt).toLocaleDateString() : '—', icon: Calendar },
+                                    { label: 'Address', value: profileData?.address, icon: MapPin },
+                                    { label: 'State',   value: profileData?.state,   icon: MapPin },
+                                    { label: 'Country',  value: profileData?.country, icon: MapPin },
+                                    { label: 'Pincode', value: profileData?.pincode, icon: MapPin },
+                                ].map(({ label, value, icon: Icon }) => (
+                                <div key={label} className="d-flex align-items-center py-2"
+                                    style={{ borderBottom: '1px solid #eef1f5' }}>
+                                    <span className="d-inline-flex align-items-center gap-2 text-muted" style={{ width: '38%', flexShrink: 0, fontSize: 14 }}>
+                                        <Icon size={14}/> {label}
+                                    </span>
+                                    <span style={{ fontWeight: 600, color: '#0f172a', fontSize: 14, wordBreak: 'break-word' }}>
+                                        {value || '—'}
+                                    </span>
+                                </div>
+                                ))}
+                            </div>
                         </div>
-                    ))}
                     </div>
+
+                    {/* Role-based card */}
+                    <div className='col-12 col-lg-5'>
+                        {profileData?.role === "admin" &&
+                        <div className="card h-100 border-0 shadow-sm" style={{ borderRadius: 12 }}>
+                            <div className="card-body">
+                                <h6 className="text-uppercase text-muted mb-3" style={{ letterSpacing: 0.8, fontSize: 13, fontWeight: 700 }}>
+                                    Admin overview
+                                </h6>
+
+                                <div className="rounded-3 p-3 mb-3 text-white" style={{ background: '#6c63ff' }}>
+                                    <div className="fw-semibold mb-1">Platform summary</div>
+                                    <small style={{ opacity: 0.85 }}>Monitor users, orders and food listings.</small>
+                                </div>
+
+                                <div className="row g-2">
+                                    <div className="col-6">
+                                        <div className="border rounded-3 text-center p-3 h-100">
+                                            <Users size={18} className="mb-1" style={{ color: '#6c63ff' }}/>
+                                            <h5 className="mb-0 fw-bold">{customerUsers?.length}</h5>
+                                            <small className="text-muted">Total Customers</small>
+                                        </div>
+                                    </div>
+                                    <div className="col-6">
+                                        <div className="border rounded-3 text-center p-3 h-100">
+                                            <Salad size={18} className="mb-1" style={{ color: '#6c63ff' }}/>
+                                            <h5 className="mb-0 fw-bold">{food?.length}</h5>
+                                            <small className="text-muted">Total foods available</small>
+                                        </div>
+                                    </div>
+                                    <div className="col-6">
+                                        <div className="border rounded-3 text-center p-3 h-100">
+                                            <Package size={18} className="mb-1" style={{ color: '#6c63ff' }}/>
+                                            <h5 className="mb-0 fw-bold">{order?.length || 0}</h5>
+                                            <small className="text-muted">Total orders</small>
+                                        </div>
+                                    </div>
+                                    <div className="col-6">
+                                        <div className="border rounded-3 text-center p-3 h-100">
+                                            <Clock size={18} className="mb-1" style={{ color: '#6c63ff' }}/>
+                                            <h5 className="mb-0 fw-bold">
+                                                {order?.filter(o => ['pending', 'processing', 'placed'].includes(o?.status?.toLowerCase())).length || 0}
+                                            </h5>
+                                            <small className="text-muted">Pending orders</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        }
+
+                        {profileData?.role === "customer" &&
+                        <div className="card h-100 border-0 shadow-sm" style={{ borderRadius: 12 }}>
+                            <div className="card-body">
+                                <h6 className="text-uppercase text-muted mb-3" style={{ letterSpacing: 0.8, fontSize: 13, fontWeight: 700 }}>
+                                    Quick actions
+                                </h6>
+                                <div className="d-flex flex-column gap-2">
+                                    <button className="btn btn-outline-primary rounded-pill d-flex align-items-center justify-content-center gap-2" onClick={() => setPop(true)}>
+                                        <Edit2 size={15}/> Edit profile
+                                    </button>
+                                    <button className="btn btn-outline-primary rounded-pill d-flex align-items-center justify-content-center gap-2">
+                                        <MapPin size={15}/> Manage addresses
+                                    </button>
+                                    <button className="btn btn-outline-primary rounded-pill d-flex align-items-center justify-content-center gap-2">
+                                        <Lock size={15}/> Change password
+                                    </button>
+                                    <button className="btn btn-outline-danger rounded-pill d-flex align-items-center justify-content-center gap-2">
+                                        <LogOut size={15}/> Logout
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    </div>
+
+                    {/* Stats row — customers only, matches existing stat cards */}
+                    {profileData?.role === "customer" &&
+                    <div className="col-12">
+                        <h6 className="text-uppercase text-muted mt-2 mb-2" style={{ letterSpacing: 0.8, fontSize: 13, fontWeight: 700 }}>
+                            Statistics
+                        </h6>
+                        <div className="row g-2 g-md-3">
+                            <div className="col-6 col-md-3">
+                                <div className="card border-0 shadow-sm text-center h-100" style={{ borderRadius: 12 }}>
+                                    <div className="card-body py-3">
+                                        <Package size={20} style={{ color: '#6c63ff' }}/>
+                                        <h5 className="fw-bold mt-1 mb-0">{order?.length || 0}</h5>
+                                        <small className="text-muted">Orders</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-6 col-md-3">
+                                <div className="card border-0 shadow-sm text-center h-100" style={{ borderRadius: 12 }}>
+                                    <div className="card-body py-3">
+                                        <Heart size={20} style={{ color: '#e0245e' }}/>
+                                        <h5 className="fw-bold mt-1 mb-0">18</h5>
+                                        <small className="text-muted">Favorites</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-6 col-md-3">
+                                <div className="card border-0 shadow-sm text-center h-100" style={{ borderRadius: 12 }}>
+                                    <div className="card-body py-3">
+                                        <Star size={20} style={{ color: '#f4b400' }}/>
+                                        <h5 className="fw-bold mt-1 mb-0">8</h5>
+                                        <small className="text-muted">Reviews</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-6 col-md-3">
+                                <div className="card border-0 shadow-sm text-center h-100" style={{ borderRadius: 12 }}>
+                                    <div className="card-body py-3">
+                                        <IndianRupee size={20} style={{ color: '#15803d' }}/>
+                                        <h5 className="fw-bold mt-1 mb-0">₹8450</h5>
+                                        <small className="text-muted">Spent</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                    {/* Recent orders */}
+                    {profileData?.role === "customer" &&
+                    <div className="col-12">
+                        <div className="card border-0 shadow-sm mt-1" style={{ borderRadius: 12 }}>
+                            <div className="card-body">
+                                <div className="d-flex align-items-center justify-content-between mb-3">
+                                    <h6 className="text-uppercase text-muted mb-0" style={{ fontSize: 15, fontWeight: 700 }}>Recent orders</ h6>
+                                    {recentOrders.length > 0 &&
+                                    <div className="text-decoration-none" style={{ fontSize: 15, fontWeight: 600, color: '#6c63ff', cursor: "pointer" }} onClick={() => navigate("/myorder")}>View all</div>}
+                                </div>
+
+                                {recentOrders.length === 0
+                                ? <div className="text-center text-muted py-4">
+                                    <ClipboardList size={28} className="mb-2"/>
+                                    <div style={{ fontSize: 14 }}>No orders yet</div>
+                                  </div>
+                                : <div className="d-flex flex-column gap-2">
+                                    {recentOrders.map((o) => {
+                                        const meta = getStatusMeta(o?.orderStatus)
+                                        const StatusIcon = meta.icon
+                                        const itemCount = o?.orderItems?.length ?? o?.items?.length ?? o?.foodItems?.length
+                                        const amount = o?.totalAmount ?? o?.totalPrice ?? o?.amount
+                                        return (
+                                        <div key={o?._id} className="d-flex align-items-center justify-content-between gap-2 p-2 p-md-3 rounded-3"
+                                            style={{ background: '#f8fafc' }}>
+                                            <div className="d-flex align-items-center gap-2" style={{ minWidth: 0 }}>
+                                                <div className="d-flex align-items-center justify-content-center flex-shrink-0"
+                                                    style={{ width: 36, height: 36, borderRadius: '50%', background: meta.bg, color: meta.color }}>
+                                                    <StatusIcon size={16}/>
+                                                </div>
+                                                <div style={{ minWidth: 0 }}>
+                                                    <div className="fw-semibold" style={{ fontSize: 14 }}>
+                                                        Order #{o?._id?.slice(-6) || '—'}
+                                                    </div>
+                                                    <small className="text-muted">
+                                                        {o?.createdAt ? new Date(o.createdAt).toLocaleDateString() : '—'}
+                                                        {itemCount ? ` · ${itemCount} item${itemCount > 1 ? 's' : ''}` : ''}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                            <div className="text-end flex-shrink-0">
+                                                <span className="d-inline-block rounded-pill px-2 py-1 mb-1"
+                                                    style={{ background: meta.bg, color: meta.color, fontSize: 11, fontWeight: 700 }}>
+                                                    {meta.label}
+                                                </span>
+                                                {amount != null && <div className="fw-bold" style={{ fontSize: 14 }}>₹{amount}</div>}
+                                            </div>
+                                        </div>
+                                        )
+                                    })}
+                                  </div>}
+                            </div>
+                        </div>
+                    </div>
+                    }
+
                 </div>
-
-                {/* Donation overview */}
-
-                {profileData?.role === "admin" &&
-                <div>
-                    <h4
-                        style={{
-                            fontWeight: 700,
-                            textTransform: "uppercase",
-                            marginBottom: "0.75rem"
-                        }}
-                    >
-                        Admin Overview
-                    </h4>
-
-                    <div
-                        style={{
-                            background: "#6c63ff",
-                            borderRadius: 8,
-                            padding: "1rem 1.25rem",
-                            color: "white",
-                            marginBottom: "1rem"
-                        }}
-                    >
-                        <h4>Platform Summary</h4>
-                        <p>Monitor users, donations and food distribution.</p>
-                    </div>
-
-                    <div className="row g-2">
-
-                        <div className="col-6">
-                            <div className="card shadow-sm text-center p-3">
-                                <h6>Total Users</h6>
-                                <h4>{users?.length}</h4>
-                            </div>
-                        </div>
-
-                        <div className="col-6">
-                            <div className="card shadow-sm text-center p-3">
-                                <h6>Total Donations</h6>
-                                <h4>{food.length}</h4>
-                            </div>
-                        </div>
-
-                        <div className="col-6">
-                            <div className="card shadow-sm text-center p-3">
-                                <h6>Total NGOs</h6>
-                                <h4>{users.filter(u => u?.role === "ngo").length}</h4>
-                            </div>
-                        </div>
-
-                        <div className="col-6">
-                            <div className="card shadow-sm text-center p-3">
-                                <h6>Total Volunteers</h6>
-                                <h4>{users.filter(u => u?.role === "volunteer").length}</h4>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                }
-
             </div>
         </div>
         </div>
 
         {pop &&
-        <div className='position-fixed top-0 start-0 vh-100 w-100 d-flex justify-content-center align-items-center' 
+        <div className='position-fixed top-0 start-0 vh-100 w-100 d-flex justify-content-center align-items-center px-3'
         style={{zIndex:1000, backgroundColor:"rgba(0,0,0,0.5)"}}>
-            <div className="bg-white rounded shadow-lg p-4 overflow-y-auto" style={{width:"500px", height:"600px", scrollbarWidth:"none"}}>
+            <div className="bg-white rounded shadow-lg p-4 overflow-y-auto w-100" style={{maxWidth:"550px", maxHeight:"90vh", scrollbarWidth:"none"}}>
                 <h2 className='text-center'>Edit Profile</h2>
                 <form onSubmit={updateNow}>
                     <div className='d-flex flex-column gap-4'>

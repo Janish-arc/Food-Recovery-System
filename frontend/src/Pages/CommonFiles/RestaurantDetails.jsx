@@ -1,14 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  ArrowLeft,
-  Heart,
-  Share2,
-  Clock3,
-  MapPin,
-  Star,
-  Search,
-} from "lucide-react";
-
+import {ArrowLeft, Heart, Share2, Clock3, MapPin, Star, Search} from "lucide-react";
 import Banner from "../../assets/banner1.png";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,13 +10,14 @@ import { Footer } from "../../Components/Footer";
 import { GetCategory } from "../../Redux/CategorySlice";
 import { CreateCart } from "../../Redux/CartSlice";
 import { BsGeoAltFill } from "react-icons/bs";
+import toast from "react-hot-toast";
 
 export const RestaurantDetails = () => {
 
     const {restaurant} = useSelector((state) => state.restaurant)
     const {restaurantfood} = useSelector((state) => state.food)
     const {category} = useSelector((state) => state.category)
-    const {cart} = useSelector((state) => state.cart)
+    const {cart, success} = useSelector((state) => state.cart)
     const {isAuthenticated} = useSelector((state) => state.user)
 
     const {id} = useParams()
@@ -69,10 +61,12 @@ export const RestaurantDetails = () => {
         dispatch(CreateCart({
             menuItem,
             quantity: 1,
-        })).then(() => navigate("/cart"));
+        }))
+        if(success){
+            toast.success("Food item added to cart successfully")
+        };
     }
 
-  
     return (
         <>
             <Navbar/>
@@ -137,7 +131,7 @@ export const RestaurantDetails = () => {
                     {/* Foods */}
                     <h3 className="fw-bold mb-1"> Recommended</h3>
                     {restaurantfood.map((food) => (
-                    <div key={food._id} className="shadow-sm rounded-4 p-3 mb-3">
+                    <div key={food._id} className="shadow-sm rounded-4 p-3 mb-3" onClick={() => navigate(`/fooddetails/${food._id}`)}>
                         <div className="row align-items-center">
                             <div className="col-12 col-sm-4 col-lg-2 text-center">
                                 <img src={food?.image?.url} className="rounded-4 mb-2 me-2 " style={{width:"90%", height: "150px", objectFit: "cover",}}/>

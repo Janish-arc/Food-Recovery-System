@@ -31,6 +31,7 @@ export const Order = () => {
     return (
         <>
             <Navbar />
+            <div className="home">
             <div className="container py-5">
                 <h2 className="fw-bold text-center mb-5">Order Summary</h2>
                 <div className="row g-4">
@@ -149,6 +150,7 @@ export const Order = () => {
                         </button>
                     </div>
                 </div>
+            </div>
             </div>
             <Footer />
         </>

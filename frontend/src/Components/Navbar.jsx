@@ -148,10 +148,10 @@ export const Navbar = () => {
         <table className="ms-auto">
           <tbody>
             <tr className="d-flex gap-3 fs-6 fw-bold" >
-              <td style={{ fontFamily: "'Poppins', sans-serif" , cursor: "pointer"}} onClick={() => navigate("/")}>Home</td>
+              <td className="d-none d-md-block" style={{ fontFamily: "'Poppins', sans-serif" , cursor: "pointer"}} onClick={() => navigate("/")}>Home</td>
               <td style={{ fontFamily: "'Poppins', sans-serif", cursor: "pointer" }} onClick={() => navigate("/cart")}>Cart</td>
               <td style={{ fontFamily: "'Poppins', sans-serif", cursor: "pointer" }} onClick={() => navigate("/myorder")}>MyOrders</td>
-              <td style={{ fontFamily: "'Poppins', sans-serif" , cursor: "pointer"}} onClick={() => navigate("/myprofile")}>Profile</td>
+              <td className="d-none d-md-block" style={{ fontFamily: "'Poppins', sans-serif" , cursor: "pointer"}} onClick={() => navigate("/myprofile")}>Profile</td>
             </tr>
           </tbody>
         </table>

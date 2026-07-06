@@ -49,7 +49,7 @@ export const Home = () => {
                     }
                     <div className='d-flex gap-4 my-3 overflow-x-auto' style={{scrollbarWidth: "none"}}>
                         {category?.map((item) => (
-                            <div  key={item._id} className='text-center'>                   
+                            <div  key={item._id} className='text-center' onClick={() => navigate(`/category/${item._id}`)}>                   
                                 <img src={item?.image?.url} alt={item.name} className='rounded-circle' style={{width: "clamp(70px, 18vw, 120px)", height: "clamp(70px, 18vw, 120px)", objectFit: "cover"}}/>
                                 <h6 className='mt-2 text-truncate'>{item.name}</h6>
                             </div>
@@ -84,7 +84,7 @@ export const Home = () => {
                 <div className='row g-4 '>
                     <h4 className='fw-bold fs-4'>Customer Favourites</h4>
                     {sortedRestaurants?.map((item) => (
-                        <div className="col-6 col-md-4 col-lg-3 overflow-x-auto" style={{scrollbarWidth: "none"}} key={item._id}>
+                        <div className="col-6 col-md-4 col-lg-3 overflow-x-auto" style={{scrollbarWidth: "none"}} key={item._id} onClick={() => navigate(`/restaurantdetails/${item._id}`)}>
                             <div className="h-100 food">
                                 <img src={item.banner.url} alt={item.name} className="img-fluid shadow w-100" style={{height: "clamp(150px, 18vw, 230px)", objectFit: "cover", borderRadius: "15px"}}/>
                                 <h6 className="fw-bold mt-2 ms-2 text-truncate">{item.name}</h6>
@@ -105,8 +105,8 @@ export const Home = () => {
                 <div className="row g-4 mb-2 ">
                     <h4 className='fw-bold fs-4'>Popular dishes</h4>
                     {sortedFoods?.map((item) => (
-                        <div className="col-6 col-md-4 col-lg-3 overflow-x-auto" style={{scrollbarWidth: "none"}} key={item._id}>
-                            <div className="h-100 food shadow rounded">
+                        <div className="col-6 col-md-4 col-lg-3 overflow-x-auto" style={{scrollbarWidth: "none"}} key={item._id} onClick={() => navigate(`/fooddetails/${item._id}`)}>
+                            <div className="h-100 food shadow rounded overflow-x-auto" style={{scrollbarWidth: "none"}}>
                                 <img src={item.image.url} alt={item.name} className="img-fluid w-100 " style={{height: "clamp(150px, 18vw, 180px)", objectFit: "cover", borderRadius:"10px 10px 0px 0px"}}/>
                                 <h6 className='fw-bold  text-truncate mt-2 ms-3'>{item.name}</h6>
                                 <div className="d-flex justify-content-between align-items-center ms-3">
@@ -177,7 +177,7 @@ export const Home = () => {
                 </div>
                 <div className="row g-4 mt-1">
                     {latestRestaurants?.map((item) => (
-                        <div className="col-6 col-md-4 col-lg-3 overflow-x-auto" style={{scrollbarWidth: "none"}} key={item._id}>
+                        <div className="col-6 col-md-4 col-lg-3 overflow-x-auto" style={{scrollbarWidth: "none"}} key={item._id} onClick={() => navigate(`/restaurantdetails/${item._id}`)}>
                             <div className="h-100 food">
                                 <img src={item.banner.url} alt={item.name} className="img-fluid shadow w-100" style={{height: "clamp(150px, 18vw, 230px)", objectFit: "cover", borderRadius: "15px"}}/>
                                 <h6 className="fw-bold fs-5 mt-2 ms-2 text-truncate">{item.name}</h6>

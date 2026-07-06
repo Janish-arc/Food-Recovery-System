@@ -36,6 +36,7 @@ export const Checkout = () => {
   return (
     <>
       <Navbar/>
+      <div className="home">
       <div className="container py-5">
         <div className="mb-4">
           <h2 className="fw-bold">Checkout</h2>
@@ -146,6 +147,7 @@ export const Checkout = () => {
             </div>
           </div>
         </div>
+      </div>
       </div>
       <Footer />
     </>

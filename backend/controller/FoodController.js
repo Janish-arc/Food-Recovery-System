@@ -132,12 +132,38 @@ export const GetRestaurantMenu = async(req,res)=>{
 //Get Single MenuItem
 export const GetSingleMenuItem = async(req,res)=>{
     try{
-        const food = await Food.findById(req.params.id).populate("restaurant").populate("category");
+        const food = await Food.findById(req.params.id).populate({path: "restaurant", populate:{path: "foods"}}).populate("category");
         if(!food){
             return res.status(404).json({success:false, message:"Menu item not found."});
         }
         res.status(200).json({success:true, food});
     }catch(error){
         res.status(500).json({success:false, message:error.message});
+    }
+}
+
+//Get FoodItems By Category
+export const MenuByCategory = async(req, res) => {
+    try {
+        const { sort } = req.query;
+        let sortBy = {};
+        if (sort === "priceLow") {
+            sortBy.price = 1;
+        } else if (sort === "priceHigh") {
+            sortBy.price = -1;
+        } else if (sort === "newest") {
+            sortBy.createdAt = -1;
+        } else if (sort === "oldest") {
+            sortBy.createdAt = 1;
+        } else if (sort === "name") {
+            sortBy.name = 1;
+        }
+        const food = await Food.find({category: req.params.id}).populate("restaurant").populate("category").sort(sortBy)
+        if(!food){
+            return res.status(404).json({success: false, message: "No foods available"})
+        }
+        return res.status(200).json({success: true, food})
+    } catch (error) {
+        return res.status(404).json({success: false, message: error.message})
     }
 }

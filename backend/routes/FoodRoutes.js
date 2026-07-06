@@ -1,6 +1,6 @@
 import express from "express"
 import { isAuthenticated, roleBasedAccess } from "../helper/UserAuth.js"
-import {CreateMenuItem, DeleteMenuItem, GetAllMenuItems, GetMyMenu, GetRestaurantMenu, GetSingleMenuItem, UpdateMenuItem} from "../controller/FoodController.js"
+import {CreateMenuItem, DeleteMenuItem, GetAllMenuItems, GetMyMenu, GetRestaurantMenu, GetSingleMenuItem, MenuByCategory, UpdateMenuItem} from "../controller/FoodController.js"
 import multer from "multer";
 
 const food = express.Router()
@@ -14,5 +14,6 @@ food.route("/menu/delete/:id").delete(isAuthenticated, roleBasedAccess("restaura
 food.route("/menu/get/allmenu").get(GetAllMenuItems)
 food.route("/menu/restaurant/:restaurantId").get(isAuthenticated, GetRestaurantMenu)
 food.route("/menu/:id").get(isAuthenticated, GetSingleMenuItem)
+food.route("/menu/category/get/:id").get(isAuthenticated, roleBasedAccess("customer"), MenuByCategory)
 
 export default food

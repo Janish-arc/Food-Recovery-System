@@ -1,5 +1,6 @@
 import { Order } from "../models/OrderSchema.js"
 import { Cart } from "../models/CartSchema.js"
+import { Restaurant } from "../models/RestaurantSchema .js"
 
 //Create Order
 export const CreateOrder = async(req, res) => {
@@ -86,6 +87,20 @@ export const CancelOrder = async(req, res) => {
         order.orderStatus = "Cancelled"
         await order.save()
         return res.status(200).json({success: true, message: "Order cancelled successfully", order})
+    } catch (error) {
+        return res.status(404).json({success: false, message: error?.message})
+    }
+}
+
+//Get Restaurant Orders
+export const GetRestaurantOrders = async(req, res) => {
+    try {
+        const restaurant = await Restaurant.findOne({owner: req.user._id});
+        const order = await Order.find({restaurant: restaurant._id}).populate("user")
+        if (order.length === 0) {
+            return res.status(404).json({success: false, message: "No orders found."});
+        }
+        return res.status(200).json({success: true, order})
     } catch (error) {
         return res.status(404).json({success: false, message: error?.message})
     }

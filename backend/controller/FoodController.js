@@ -127,7 +127,16 @@ export const GetRestaurantMenu = async(req,res)=>{
     }
 }
 
-
+//Get Menuitems of a Restaurant By Owner
+export const GetMenuItemsOfRestaurant = async(req,res)=>{
+    try{
+        const restaurant = await Restaurant.findOne({owner: req.user._id});
+        const foods = await Food.find({restaurant: restaurant._id}).populate("category");
+        res.status(200).json({success:true, foods});
+    }catch(error){
+        res.status(500).json({success:false, message:error.message});
+    }
+}
 
 //Get Single MenuItem
 export const GetSingleMenuItem = async(req,res)=>{
@@ -167,3 +176,17 @@ export const MenuByCategory = async(req, res) => {
         return res.status(404).json({success: false, message: error.message})
     }
 }
+
+export const ToggleFoodAvailability = async (req, res) => {
+    try {
+        const food = await Food.findById(req.params.id);
+        if (!food) {
+            return res.status(404).json({success: false, message: "Food not found"});
+        }
+        food.isAvailable = !food.isAvailable;
+        await food.save();
+        res.status(200).json({success: true,food});
+    } catch (error) {
+        res.status(500).json({success: false,message: error.message});
+    }
+};

@@ -41,7 +41,7 @@ export const CreateRestaurant = async (req, res) => {
       email, phone, address, city, state, pincode, location, openingTime, closingTime, deliveryFee, minimumOrder, deliveryTime,
       rating: 0, totalReviews: 0, isOpen: true,
     });
-    await User.findByIdAndUpdate(req.user._id, { role: "restaurant"});
+    const updatedUser = await User.findByIdAndUpdate(req.user._id, { role: "restaurant" },{ new: true });
     return res.status(201).json({success: true, message: "Restaurant created successfully.", restaurant});
   } catch (error) {
     return res.status(500).json({success: false, message: error.message});

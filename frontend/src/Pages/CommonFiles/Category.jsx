@@ -17,6 +17,7 @@ export const Category = () => {
     const {success} = useSelector((state) => state.cart)
     const [sort, setSort] = useState("")
     const [search, setSearch] = useState("")
+    const [filter, setFilter] = useState("All")
 
     useEffect(() => {
         dispatch(GetSingleCategoryFood({id, sort}))
@@ -31,7 +32,26 @@ export const Category = () => {
             toast.success("Food added to cart")
         }
     }
-  return (
+
+    const filteredfoods = categoryFoods.filter((item) => {
+      if(filter === "Low"){
+        return item?.price <= 200
+      }
+      if(filter === "Medium"){
+        return item?.price >= 200 && item?.price <= 500
+      }
+      if(filter === "Costly"){
+        return item?.price >= 500
+      }
+      if(filter === "rating"){
+        return item?.rating > 4
+      }
+      return true;
+    })
+
+    console.log(categoryFoods)
+
+    return (
   <>
     <Navbar />
     <div className="container py-4" style={{ minHeight: "85vh" }}>
@@ -42,7 +62,7 @@ export const Category = () => {
           <button className="btn btn-light border rounded-pill px-3 mb-3 d-flex align-items-center" onClick={() => navigate(-1)}><ChevronLeft/> Back</button>
           <div className='d-flex gap-3 align-items-center'>
             <div>
-                <img src={categoryFoods?.[0]?.category?.image?.url} alt={categoryFoods?.[0]?.category?.name} style={{width: "100px", height:"100px", objectFit:"cover", borderRadius:"50%"}}/>
+                <img src={categoryFoods?.[0]?.category?.image?.url} alt={categoryFoods?.category?.name} style={{width: "100px", height:"100px", objectFit:"cover", borderRadius:"50%"}}/>
             </div>
             <div>
                 <h2 className="fw-bold">{categoryFoods?.[0]?.category?.name}</h2>
@@ -74,11 +94,11 @@ export const Category = () => {
 
       {/* Filter Chips */}
       <div className="d-flex gap-2 flex-wrap mb-4">
-        <button className="btn btn-outline-danger rounded-pill">All</button>
-        <button className="btn btn-outline-success rounded-pill">Veg</button>
-        <button className="btn btn-outline-danger rounded-pill">Non-Veg</button>
-        <button className="btn btn-outline-dark rounded-pill">Under ₹200</button>
-        <button className="btn btn-outline-warning rounded-pill">Rating 4+</button>
+        <button className="btn btn-outline-danger rounded-pill" onClick={() => setFilter("All")}>All</button>
+        <button className="btn btn-outline-success rounded-pill" onClick={() => setFilter("Low")}>Under ₹200</button>
+        <button className="btn btn-outline-danger rounded-pill" onClick={() => setFilter("Medium")}> ₹200 - ₹500</button>
+        <button className="btn btn-outline-dark rounded-pill" onClick={() => setFilter("Costly")}>Above ₹500</button>
+        <button className="btn btn-outline-warning rounded-pill" onClick={() => setFilter("rating")}>Rating 4+</button>
       </div>
 
       {/* Foods */}
@@ -87,8 +107,8 @@ export const Category = () => {
         <div className="col-12 text-center py-5">
           <div className="spinner-border text-danger" role="status"></div>
         </div>
-        ) : categoryFoods?.length > 0 ? (
-        categoryFoods ?.filter((food) => food?.name ?.toLowerCase().includes(search.toLowerCase())).map((food) => (
+        ) : filteredfoods?.length > 0 ? (
+        filteredfoods ?.filter((food) => food?.name ?.toLowerCase().includes(search.toLowerCase())).map((food) => (
             <div className="col-6 col-lg-4 col-xl-3 food" key={food._id}>
               <div className="card border-0 shadow-sm rounded-4 h-100 overflow-hidden"
                 style={{transition: "0.3s", cursor: "pointer"}}>

@@ -48,7 +48,7 @@ export const Navbar = () => {
               <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/register")}>📝 Register</li>
               </div>}
             
-              {isAuthenticated && user.role==="donor" &&
+              {isAuthenticated && user.role==="restaurant" &&
               <div className='d-flex flex-column gap-2 shadow-sm py-2 ps-3 rounded'>
               <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/donor")}>📊 Dashboard</li>
               <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => { navigate("/donor", {state: {popUp: true}})}}>🍽️ Donate Food</li>
@@ -151,7 +151,7 @@ export const Navbar = () => {
               <td className="d-none d-md-block" style={{ fontFamily: "'Poppins', sans-serif" , cursor: "pointer"}} onClick={() => navigate("/")}>Home</td>
               <td style={{ fontFamily: "'Poppins', sans-serif", cursor: "pointer" }} onClick={() => navigate("/cart")}>Cart</td>
               <td style={{ fontFamily: "'Poppins', sans-serif", cursor: "pointer" }} onClick={() => navigate("/myorder")}>MyOrders</td>
-              <td className="d-none d-md-block" style={{ fontFamily: "'Poppins', sans-serif" , cursor: "pointer"}} onClick={() => navigate("/myprofile")}>Profile</td>
+              <td className="d-none d-md-block" style={{ fontFamily: "'Poppins', sans-serif" , cursor: "pointer"}} onClick={() => navigate("/myprofile")}>👤{user?.name}</td>
             </tr>
           </tbody>
         </table>

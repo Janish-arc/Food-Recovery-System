@@ -1,6 +1,20 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../api";
 
+export const CreateRestaurant =createAsyncThunk("restaurant/create", async(restaurant, {rejectWithValue}) => {
+    try {
+        const config = {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        }
+        const {data} = await api.post("/api/v1/restaurant/restaurant/create", restaurant, config)
+        return data
+    } catch (error) {
+        return rejectWithValue(error.response?.data || "Registration failed, Please try again later")
+    }
+})
+
 export const GetRestaurant = createAsyncThunk("/restaurant/get", async(_, {rejectWithValue}) => {
     try {
         const {data} = await api.get("/api/v1/restaurant/restaurant/get/allrestaurant")
@@ -9,6 +23,16 @@ export const GetRestaurant = createAsyncThunk("/restaurant/get", async(_, {rejec
         return rejectWithValue(error.message)
     }
 })
+
+export const GetMyRestaurant = createAsyncThunk("/myrestaurant/get", async(_, {rejectWithValue}) => {
+    try {
+        const {data} = await api.get("/api/v1/restaurant/restaurant/get/mine")
+        return data
+    } catch (error) {
+        return rejectWithValue(error.message)
+    }
+})
+
 
 export const GetSingleRestaurant = createAsyncThunk("/restaurant/get/single", async(id, {rejectWithValue}) => {
     try {
@@ -24,6 +48,7 @@ const RestaurantSlice = createSlice({
     initialState: {
         restaurants: [],
         restaurant: " ",
+        myrestaurant: " ",
         loading: false,
         error: null,
         success: false,
@@ -39,6 +64,21 @@ const RestaurantSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+        .addCase(CreateRestaurant.pending, (state) => {
+            state.loading = true
+            state.error = null
+        })
+        .addCase(CreateRestaurant.fulfilled, (state, action) => {
+            state.loading = false
+            state.restaurant = action.payload.restaurant
+            state.success = action.payload.success
+        })
+        .addCase(CreateRestaurant.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+        })
+
+        builder
         .addCase(GetRestaurant.pending, (state) => {
             state.loading = true
             state.error = null
@@ -52,6 +92,22 @@ const RestaurantSlice = createSlice({
             state.loading = false
             state.error = action.payload
         })
+
+        builder
+        .addCase(GetMyRestaurant.pending, (state) => {
+            state.loading = true
+            state.error = null
+        })
+        .addCase(GetMyRestaurant.fulfilled, (state, action) => {
+            state.loading = false
+            state.myrestaurant = action.payload.restaurant
+            state.success = action.payload.success
+        })
+        .addCase(GetMyRestaurant.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+        })
+
 
         builder
         .addCase(GetSingleRestaurant.pending, (state) => {

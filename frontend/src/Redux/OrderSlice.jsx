@@ -33,6 +33,14 @@ export const GetSingleOrder = createAsyncThunk("/order/get/one", async(id, {reje
     }
 })
 
+export const GetRestaurantOrder = createAsyncThunk("/order/restaurantOrders", async(_, {rejectWithValue}) => {
+    try {
+        const {data} = await api.get("/api/v1/order/order/restaurantOrders", {withCredentials: true})
+        return data
+    } catch (error) {
+        return rejectWithValue(error.response?.data)
+    }
+})
 
 export const CancelOrder = createAsyncThunk("/order/cancel", async(id, {rejectWithValue}) => {
     try {
@@ -91,6 +99,21 @@ const OrderSlice = createSlice({
             state.error = action.payload.error
         })
         .addCase(GetMyOrder.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload.error
+        })
+
+        builder.addCase(GetRestaurantOrder.pending, (state) => {
+            state.loading = true
+            state.success = false
+        })
+        .addCase(GetRestaurantOrder.fulfilled, (state, action) => {
+            state.loading = false
+            state.success = action.payload.success
+            state.order = action.payload.order
+            state.error = action.payload.error
+        })
+        .addCase(GetRestaurantOrder.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload.error
         })

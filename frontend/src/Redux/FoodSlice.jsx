@@ -37,9 +37,28 @@ export const GetSingleCategoryFood = createAsyncThunk("get/single/category/food"
     }
 })
 
+export const GetMenuOfRestaurant = createAsyncThunk("get/restaurant/allfoods", async(_, {rejectWithValue}) => {
+    try {
+        const {data} = await api.get("/api/v1/food/menu/restaurant/foods")
+        return data
+    } catch (error) {
+        return rejectWithValue(error.response?.data)
+    }
+})
+
+export const ToggleFoodAvailability = createAsyncThunk("food/toggleAvailability", async (id, { rejectWithValue }) => {
+        try {
+            const { data } = await api.put(`/api/v1/food/menu/toggle/availablity/${id}`);
+            return data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data);
+        }
+    }
+);
+
 export const DeleteFood = createAsyncThunk("food/deletefood", async(id, {rejectWithValue}) => {
     try {
-        const {data} = await api.delete(`/api/v1/food/deletefood/${id}`)
+        const {data} = await api.delete(`/api/v1/food/menu/delete/${id}`)
         return data
     } catch (error) {
         return rejectWithValue(error.response?.data)
@@ -51,6 +70,7 @@ const FoodSlice = createSlice({
     initialState: {
         food: [],
         restaurantfood: [],
+        resFood: [],
         loading: false,
         error: null,
         success: false,
@@ -78,6 +98,34 @@ const FoodSlice = createSlice({
             state.food = action.payload?.food
         })
         .addCase(GetAllFoods.rejected, (state, action) => {
+            state.error = action.payload?.error
+            state.loading = false
+        })
+
+        builder.addCase(ToggleFoodAvailability.pending, (state) => {
+            state.loading = true
+            state.error = null
+        })
+        .addCase(ToggleFoodAvailability.fulfilled, (state, action) => {
+            state.loading = false
+            state.error = null
+            state.food = action.payload?.food
+        })
+        .addCase(ToggleFoodAvailability.rejected, (state, action) => {
+            state.error = action.payload?.error
+            state.loading = false
+        })
+
+        builder.addCase(GetMenuOfRestaurant.pending, (state) => {
+            state.loading = true
+            state.error = null
+        })
+        .addCase(GetMenuOfRestaurant.fulfilled, (state, action) => {
+            state.loading = false
+            state.error = null
+            state.resFood = action.payload?.foods
+        })
+        .addCase(GetMenuOfRestaurant.rejected, (state, action) => {
             state.error = action.payload?.error
             state.loading = false
         })

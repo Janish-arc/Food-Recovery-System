@@ -94,7 +94,7 @@ export const RestaurantDetails = () => {
                     <h6 className="mt-4 fw-bold ms-3">Categories</h6>
                     <div className="d-flex gap-2 overflow-x-auto mb-4 p-3 shadow rounded-pill border border-black " style={{ scrollbarWidth: "none" }}>
                         {category?.map((cat) => (
-                        <button key={cat._id} className="btn btn-warning rounded-pill text-truncate flex-shrink-0" style={{width: "clamp(80px, 12vw, 100px)", height:"40px"}}>{cat?.name}</button>
+                        <button key={cat._id} className="btn btn-warning rounded-pill text-truncate flex-shrink-0" style={{width: "clamp(80px, 12vw, 100px)", height:"40px"}} onClick={() => navigate(`/category/${cat._id}`)}>{cat?.name}</button>
                         ))}
                     </div>
 

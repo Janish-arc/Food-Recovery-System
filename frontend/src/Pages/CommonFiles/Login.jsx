@@ -49,7 +49,7 @@ export const Login = () => {
 
   return (
     <div className='vh-100 d-flex flex-column align-items-center justify-content-center'>
-      <div className='shadow-lg px-5 py-4 rounded' style={{width:"500px"}}>
+      <div className='col-10 col-md-6 col-lg-4 shadow-lg px-4 py-4 rounded'>
         <h4 className='text-center'><b>LOGIN</b></h4>
       <form onSubmit={loginNow} className='d-flex flex-column gap-4'>
         <div >
@@ -64,9 +64,9 @@ export const Login = () => {
           <button className="btn w-100 rounded-pill" style={{backgroundColor:"#217fea", color:"white"}}>LOGIN</button>
         </div>
 
-        <div className='d-flex'>
-          <p>Don't have an account? <Link to={'/register'} style={{textDecoration:"none"}}>Register</Link></p>
-          <Link className="ms-auto" style={{textDecoration:"none"}} to={'/forgotpassword'}>Forgot Password</Link>
+        <div className='d-flex gap-4 justify-content-around'>
+          <small><p>Don't have an account? <Link to={'/register'} style={{textDecoration:"none"}}>Register</Link></p></small>
+          <small><Link className="ms-auto" style={{textDecoration:"none"}} to={'/forgotpassword'}>Forgot Password</Link></small>
         </div>
       </form>
       </div>

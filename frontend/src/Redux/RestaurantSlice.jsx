@@ -15,6 +15,20 @@ export const CreateRestaurant =createAsyncThunk("restaurant/create", async(resta
     }
 })
 
+export const UpdateRestaurant =createAsyncThunk("restaurant/update", async({id, formData}, {rejectWithValue}) => {
+    try {
+        const config = {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        }
+        const {data} = await api.put(`/api/v1/restaurant/restaurant/update/${id}`, formData, config)
+        return data
+    } catch (error) {
+        return rejectWithValue(error.response?.data || "Please try again later")
+    }
+})
+
 export const GetRestaurant = createAsyncThunk("/restaurant/get", async(_, {rejectWithValue}) => {
     try {
         const {data} = await api.get("/api/v1/restaurant/restaurant/get/allrestaurant")
@@ -77,6 +91,22 @@ const RestaurantSlice = createSlice({
             state.loading = false
             state.error = action.payload
         })
+
+        builder
+        .addCase(UpdateRestaurant.pending, (state) => {
+            state.loading = true
+            state.error = null
+        })
+        .addCase(UpdateRestaurant.fulfilled, (state, action) => {
+            state.loading = false
+            state.restaurant = action.payload.restaurant
+            state.success = action.payload.success
+        })
+        .addCase(UpdateRestaurant.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+        })
+
 
         builder
         .addCase(GetRestaurant.pending, (state) => {

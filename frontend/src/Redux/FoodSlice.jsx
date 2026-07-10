@@ -1,6 +1,20 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import api from "../api";
 
+export const CreateFood = createAsyncThunk("create/food", async(foodData, {rejectWithValue}) => {
+    try {
+        const config = {
+            headers : {
+                "Content-Type" : "multipart/form-data"
+            }
+        }
+        const {data} = await api.post("/api/v1/food/menu/create", foodData)
+        return data
+    } catch (error) {
+        return rejectWithValue(error.response?.data)
+    }
+})
+
 export const GetRestaurantFoods = createAsyncThunk("get/restaurant/foods", async(restaurantId, {rejectWithValue}) => {
     try {
         const {data} = await api.get(`/api/v1/food/menu/restaurant/${restaurantId}`, {withCredentials: true})
@@ -87,6 +101,21 @@ const FoodSlice = createSlice({
         }
     },
     extraReducers:(builder) => {
+
+        builder.addCase(CreateFood.pending, (state) => {
+            state.loading = true
+            state.error = null
+        })
+        .addCase(CreateFood.fulfilled, (state, action) => {
+            state.loading = false
+            state.error = null
+            state.success = true
+            state.food = action.payload?.food
+        })
+        .addCase(CreateFood.rejected, (state, action) => {
+            state.error = action.payload?.error
+            state.loading = false
+        })
         
         builder.addCase(GetAllFoods.pending, (state) => {
             state.loading = true

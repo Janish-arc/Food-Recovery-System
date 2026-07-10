@@ -52,14 +52,15 @@ export const Category = () => {
     console.log(categoryFoods)
 
     return (
-  <>
+  <div className='home'>
     <Navbar />
     <div className="container py-4" style={{ minHeight: "85vh" }}>
-
+      
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center flex-wrap mb-4">
         <div>
           <button className="btn btn-light border rounded-pill px-3 mb-3 d-flex align-items-center" onClick={() => navigate(-1)}><ChevronLeft/> Back</button>
+          {categoryFoods.length > 0 && 
           <div className='d-flex gap-3 align-items-center'>
             <div>
                 <img src={categoryFoods?.[0]?.category?.image?.url} alt={categoryFoods?.category?.name} style={{width: "100px", height:"100px", objectFit:"cover", borderRadius:"50%"}}/>
@@ -69,9 +70,12 @@ export const Category = () => {
                 <p className="text-secondary mb-0">{categoryFoods?.length} Foods Available</p>
             </div>
           </div>
+          }
         </div>
       </div>
 
+      {categoryFoods.length > 0 && 
+      <div>
       {/* Search & Sort */}
       <div className="row g-3 mb-4">
         <div className="col-lg-8">
@@ -100,6 +104,7 @@ export const Category = () => {
         <button className="btn btn-outline-dark rounded-pill" onClick={() => setFilter("Costly")}>Above ₹500</button>
         <button className="btn btn-outline-warning rounded-pill" onClick={() => setFilter("rating")}>Rating 4+</button>
       </div>
+      </div>}
 
       {/* Foods */}
       <div className="row g-4">
@@ -155,6 +160,6 @@ export const Category = () => {
       </div>
     </div>
     <Footer />
-  </>
+  </div>
 );
 }

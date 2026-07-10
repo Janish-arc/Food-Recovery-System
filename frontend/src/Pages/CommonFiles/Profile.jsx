@@ -9,7 +9,7 @@ import {
     Package, Heart, Star, IndianRupee, ClipboardList,
     CheckCircle2, Clock, Bike, XCircle, ChefHat 
 } from 'lucide-react'
-import { GetAllUsers, GetSingleUser, MyProfile, removeError, removeSuccess, UpdateProfile } from '../../Redux/UserSlice'
+import { GetAllUsers, GetSingleUser, logout, MyProfile, removeError, removeSuccess, UpdateProfile } from '../../Redux/UserSlice'
 import toast from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
 import { GetMyOrder } from '../../Redux/OrderSlice'
@@ -173,6 +173,16 @@ export const Profile = () => {
         .slice(0, 4)
 
     const customerUsers = users.filter((user) => user.role === "customer")
+    const logoutUser = async() => {
+      try {
+          await api.post("/api/v1/user/logout", {}, { withCredentials: true });
+      } catch (err) {
+          console.log("Logout API failed:", err);
+      }
+
+      dispatch(logout());
+      navigate("/");
+    }
 
   return (
     <div>
@@ -336,7 +346,7 @@ export const Profile = () => {
                                         <button className="btn btn-outline-primary rounded-pill d-flex align-items-center justify-content-center gap-2" onClick={() => setPopUp(true)}>
                                             <ChefHat size={15}/> Become a Restaurant
                                         </button>
-                                        <button className="btn btn-outline-danger rounded-pill d-flex align-items-center justify-content-center gap-2">
+                                        <button className="btn btn-outline-danger rounded-pill d-flex align-items-center justify-content-center gap-2" onClick={() => logoutUser()}>
                                             <LogOut size={15}/> Logout
                                         </button>
                                     </div>
@@ -347,49 +357,24 @@ export const Profile = () => {
                             {profileData?.role === "restaurant" &&
                         <div className="card h-100 border-0 shadow-sm" style={{ borderRadius: 12 }}>
                             <div className="card-body">
-                                <h6
-                                    className="text-uppercase text-muted mb-3"
-                                    style={{ letterSpacing: 0.8, fontSize: 13, fontWeight: 700 }}
-                                >
-                                    Restaurant Dashboard
-                                </h6>
+                                <h6 className="text-uppercase text-muted mb-3" style={{ letterSpacing: 0.8, fontSize: 13, fontWeight: 700 }}>Restaurant Dashboard</h6>
 
                                 <div className="d-flex flex-column gap-2">
-
-                                    <button
-                                        className="btn btn-outline-primary rounded-pill d-flex align-items-center justify-content-center gap-2"
-                                        onClick={() => navigate("/restaurant/profile")}
-                                    >
+                                    <button className="btn btn-outline-primary rounded-pill d-flex align-items-center justify-content-center gap-2" onClick={() => navigate("/restaurant/profile")}>
                                         <ChefHat size={15}/> Restaurant Profile
                                     </button>
-
-                                    <button
-                                        className="btn btn-outline-primary rounded-pill d-flex align-items-center justify-content-center gap-2"
-                                        onClick={() => navigate("/restaurant/menu")}
-                                    >
+                                    <button className="btn btn-outline-primary rounded-pill d-flex align-items-center justify-content-center gap-2" onClick={() => navigate("/restaurant/menu")}>
                                         <Salad size={15}/> Manage Menu
                                     </button>
-
-                                    <button
-                                        className="btn btn-outline-primary rounded-pill d-flex align-items-center justify-content-center gap-2"
-                                        onClick={() => navigate("/restaurant/orders")}
-                                    >
+                                    <button className="btn btn-outline-primary rounded-pill d-flex align-items-center justify-content-center gap-2" onClick={() => navigate("/restaurant/orders")}>
                                         <Package size={15}/> Orders
                                     </button>
-
-                                    <button
-                                        className="btn btn-outline-primary rounded-pill d-flex align-items-center justify-content-center gap-2"
-                                        onClick={() => navigate("/restaurant/reviews")}
-                                    >
+                                    <button className="btn btn-outline-primary rounded-pill d-flex align-items-center justify-content-center gap-2" onClick={() => navigate("/restaurant/reviews")}>
                                         <Star size={15}/> Reviews
                                     </button>
-
-                                    <button
-                                        className="btn btn-outline-danger rounded-pill d-flex align-items-center justify-content-center gap-2"
-                                    >
+                                    <button className="btn btn-outline-danger rounded-pill d-flex align-items-center justify-content-center gap-2" onClick={() => logoutUser()}>
                                         <LogOut size={15}/> Logout
                                     </button>
-
                                 </div>
                             </div>
                         </div>

@@ -41,9 +41,9 @@ export const FoodDetails = () => {
     }
   };
 
-  const addToCartHandler = () => {
+  const addToCartHandler = (id) => {
     dispatch(CreateCart({
-      menuItem: SingleFood._id,
+      menuItem: id,
       quantity
     }))
     if(success){
@@ -175,7 +175,7 @@ export const FoodDetails = () => {
                 {/* Buttons */}
                 <div className="row">
                   <div className="col-6 mb-3">
-                    <button className="btn btn-outline-danger w-100 py-3 rounded-pill fw-bold" onClick={addToCartHandler}>🛒 Add To Cart</button>
+                    <button className="btn btn-outline-danger w-100 py-3 rounded-pill fw-bold" onClick={() => addToCartHandler(SingleFood._id)}>🛒 Add To Cart</button>
                   </div>
 
                   <div className="col-6 mb-3">

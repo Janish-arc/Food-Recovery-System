@@ -24,6 +24,7 @@ import { OrderDetails } from './Pages/CommonFiles/OrderDetails.jsx'
 import { Category } from './Pages/CommonFiles/Category.jsx'
 import { RestaurantDashboard } from './Pages/CommonFiles/RestaurantDashboard.jsx'
 import { RestaurantMenu } from './Pages/CommonFiles/RestaurantMenu.jsx'
+import { RestaurantProfile } from './Pages/CommonFiles/RestaurantProfile.jsx'
 
 const ProtectedRoute = ({children}) => {
   const {isAuthenticated} = useSelector((state) => state.user)
@@ -49,6 +50,7 @@ const route = createBrowserRouter(
     {path: "/myprofile", element: <Profile/>},
     {path: "/fooddetails/:id", element: <FoodDetails/>},
     {path: "/restaurant/profile", element: <RestaurantDashboard/>},
+    {path: "/res/profile/:id", element: <RestaurantProfile/>}, 
     {path: "/restaurant/menu", element: <RestaurantMenu/>},
     {path: "/admin", element: <Admin/>},
     {path: "/allUsers", element: <AllUsers/>},

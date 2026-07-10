@@ -70,10 +70,12 @@ export const Cart = () => {
                     <span>Subtotal</span>
                     <span>₹ {cart?.subtotal}</span>
                 </div>
+                {cart.discount > 0 && 
                 <div className="d-flex justify-content-between mb-3">
                     <span>Discount</span>
                     <span>₹ {cart?.discount}</span>
                 </div>
+                }
                 <div className="d-flex justify-content-between mb-3">
                     <span>GST & Other Charges</span>
                     <span>₹ {cart?.deliveryFee + cart?.tax}</span>

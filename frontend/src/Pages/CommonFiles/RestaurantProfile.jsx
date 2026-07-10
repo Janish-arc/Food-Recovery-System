@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Save, Camera } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { GetSingleRestaurant, UpdateRestaurant } from "../../Redux/RestaurantSlice";
+// import { GetSingleRestaurant, UpdateRestaurant } from "../../Redux/RestaurantSlice";
 import toast from "react-hot-toast";
+import { GetMyRestaurant, UpdateRestaurant } from "../../Redux/RestaurantSlice";
 
 export const RestaurantProfile = () => {
 
     const dispatch = useDispatch();
 
     const {
-        restaurant,
+        myrestaurant,
         loading,
         success,
         error
@@ -38,39 +39,40 @@ export const RestaurantProfile = () => {
 
     const [logo, setLogo] = useState(null);
     const [banner, setBanner] = useState(null);
+    console.log(myrestaurant)
 
     useEffect(() => {
-        dispatch(GetSingleRestaurant());
+        dispatch(GetMyRestaurant());
     }, [dispatch]);
 
     useEffect(() => {
 
-        if (restaurant) {
+        if (myrestaurant) {
 
             setRestaurantData({
-                name: restaurant.name || "",
-                description: restaurant.description || "",
-                email: restaurant.email || "",
-                phone: restaurant.phone || "",
-                address: restaurant.address || "",
-                city: restaurant.city || "",
-                state: restaurant.state || "",
-                pincode: restaurant.pincode || "",
-                location: restaurant.location || "",
-                openingTime: restaurant.openingTime || "",
-                closingTime: restaurant.closingTime || "",
-                deliveryFee: restaurant.deliveryFee || "",
-                minimumOrder: restaurant.minimumOrder || "",
-                deliveryTime: restaurant.deliveryTime || "",
-                isOpen: restaurant.isOpen
+                name: myrestaurant.name ?? "",
+                description: myrestaurant.description ?? "",
+                email: myrestaurant.email ?? "",
+                phone: myrestaurant.phone ?? "",
+                address: myrestaurant.address ?? "",
+                city: myrestaurant.city ?? "",
+                state: myrestaurant.state ?? "",
+                pincode: myrestaurant.pincode ?? "",
+                location: myrestaurant.location ?? "",
+                openingTime: myrestaurant.openingTime ?? "",
+                closingTime: myrestaurant.closingTime ?? "",
+                deliveryFee: myrestaurant.deliveryFee ?? "",
+                minimumOrder: myrestaurant.minimumOrder ?? "",
+                deliveryTime: myrestaurant.deliveryTime ?? "",
+                isOpen: myrestaurant.isOpen ?? true
             });
 
-            setLogoPreview(restaurant.logo?.url);
-            setBannerPreview(restaurant.banner?.url);
+            setLogoPreview(myrestaurant.logo?.url);
+            setBannerPreview(myrestaurant.banner?.url);
 
         }
 
-    }, [restaurant]);
+    }, [myrestaurant]);
 
     const handleChange = (e) => {
 
@@ -95,7 +97,9 @@ export const RestaurantProfile = () => {
 
         if (banner) formData.set("banner", banner);
 
-        dispatch(UpdateRestaurant(formData));
+        dispatch(UpdateRestaurant({
+            id: myrestaurant._id,
+            formData}));
 
     };
 
@@ -139,7 +143,7 @@ export const RestaurantProfile = () => {
                             <h5>Restaurant Banner</h5>
 
                             <img
-                                src={bannerPreview}
+                                src={bannerPreview || null}
                                 className="img-fluid rounded mb-2"
                                 style={{
                                     width: "100%",
@@ -165,7 +169,7 @@ export const RestaurantProfile = () => {
                         <div className="mb-4 text-center">
 
                             <img
-                                src={logoPreview}
+                                src={logoPreview || null}
                                 className="rounded-circle"
                                 style={{
                                     width:100,
@@ -260,7 +264,7 @@ export const RestaurantProfile = () => {
 
                                 <input
                                     className="form-control"
-                                    type="time"
+                                    type="text"
                                     name="openingTime"
                                     value={restaurantData.openingTime}
                                     onChange={handleChange}
@@ -274,7 +278,7 @@ export const RestaurantProfile = () => {
 
                                 <input
                                     className="form-control"
-                                    type="time"
+                                    type="text"
                                     name="closingTime"
                                     value={restaurantData.closingTime}
                                     onChange={handleChange}

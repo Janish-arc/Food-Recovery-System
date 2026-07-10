@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import {Package,IndianRupee,Star,Clock,Salad,PlusCircle,ClipboardList,Settings} from "lucide-react";
+import {Package,IndianRupee,Star,Clock,Salad,PlusCircle,ClipboardList,Settings, ChefHat} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Footer } from "../../Components/Footer";
 import { Navbar } from "../../Components/Navbar";
@@ -87,6 +87,9 @@ export const RestaurantDashboard = () => {
             </button>
             <button className="btn btn-warning rounded-pill" onClick={() => navigate("/restaurant/orders")}>
               <ClipboardList size={16} className="me-2" /> View Orders
+            </button>
+            <button className="btn btn-dark rounded-pill" onClick={() => navigate(`/res/profile/${myrestaurant._id}`)}>
+              <ChefHat size={16} className="me-2" /> Restaurant Profile
             </button>
           </div>
         </div>

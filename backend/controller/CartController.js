@@ -24,12 +24,12 @@ export const CreateCart = async(req, res) => {
             cart.items.push({menuItem, quantity, price: food.price})
         }
         cart.subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity,0);
-        let discount = 0;
-        if (cart.subtotal >= 1000) discount = cart.subtotal * 0.15;
-        else if (cart.subtotal >= 500) discount = cart.subtotal * 0.10;
-        else if (cart.subtotal >= 250) discount = cart.subtotal * 0.05;
+        cart.discount = 0;
+        if (cart.subtotal >= 1000) cart.discount = Math.round(cart.subtotal * 0.15);
+        else if (cart.subtotal >= 500) cart.discount = Math.round(cart.subtotal * 0.10);
+        else if (cart.subtotal >= 250) cart.discount = Math.round(cart.subtotal * 0.05);
         cart.deliveryFee = cart.subtotal >= 500 ? 0 : 40;
-        cart.tax = Number((cart.subtotal * 0.05).toFixed(2));
+        cart.tax = Math.round(Number(cart.subtotal * 0.05));
         cart.total = cart.subtotal + cart.deliveryFee + cart.tax - cart.discount;
         await cart.save();
 
@@ -66,14 +66,12 @@ export const UpdateCart = async(req, res) => {
         }
         item.quantity = Number(quantity);
         cart.subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity,0);
-        console.log("subtotal", cart.subtotal)
         cart.discount = 0;
-        if (cart.subtotal >= 1000) cart.discount = cart.subtotal * 0.15;
-        else if (cart.subtotal >= 500) cart.discount = cart.subtotal * 0.10;
-        else if (cart.subtotal >= 250) cart.discount = cart.subtotal * 0.05;
-        console.log("subtotal", cart.discount)
+        if (cart.subtotal >= 1000) cart.discount = Math.round(cart.subtotal * 0.15);
+        else if (cart.subtotal >= 500) cart.discount = Math.round(cart.subtotal * 0.10);
+        else if (cart.subtotal >= 250) cart.discount = Math.round(cart.subtotal * 0.05);
         cart.deliveryFee = cart.subtotal >= 500 ? 0 : 40;
-        cart.tax = Number((cart.subtotal * 0.05).toFixed(2));
+        cart.tax = Math.round(Number(cart.subtotal * 0.05));
         cart.total = cart.subtotal + cart.deliveryFee + cart.tax - cart.discount;
         await cart.save();
         return res.status(200).json({success: true, cart});

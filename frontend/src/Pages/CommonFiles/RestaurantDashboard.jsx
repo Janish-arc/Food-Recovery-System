@@ -67,7 +67,7 @@ export const RestaurantDashboard = () => {
 
       {/* Stats */}
       <div className="row g-3">
-        <div className="col-md-3">
+        <div className="col-6 col-md-3">
           <div className="card shadow-sm border-0 h-100">
             <div className="card-body text-center">
               <Package size={28} color="#0d6efd" />
@@ -77,7 +77,7 @@ export const RestaurantDashboard = () => {
           </div>
         </div>
 
-        <div className="col-md-3">
+        <div className="col-6 col-md-3">
           <div className="card shadow-sm border-0 h-100">
             <div className="card-body text-center">
               <Clock size={28} color="#ffc107" />
@@ -87,7 +87,7 @@ export const RestaurantDashboard = () => {
           </div>
         </div>
 
-        <div className="col-md-3">
+        <div className="col-6 col-md-3">
           <div className="card shadow-sm border-0 h-100">
             <div className="card-body text-center">
               <Salad size={28} color="#198754" />
@@ -97,7 +97,7 @@ export const RestaurantDashboard = () => {
           </div>
         </div>
 
-        <div className="col-md-3">
+        <div className="col-6 col-md-3">
           <div className="card shadow-sm border-0 h-100">
             <div className="card-body text-center">
               <IndianRupee size={28} color="#dc3545" />

@@ -60,15 +60,19 @@ export const GetMenuOfRestaurant = createAsyncThunk("get/restaurant/allfoods", a
     }
 })
 
-export const ToggleFoodAvailability = createAsyncThunk("food/toggleAvailability", async (id, { rejectWithValue }) => {
-        try {
-            const { data } = await api.put(`/api/v1/food/menu/toggle/availablity/${id}`);
-            return data;
-        } catch (error) {
-            return rejectWithValue(error.response?.data);
+export const UpdateFood = createAsyncThunk("update/food", async({id, foodData}, {rejectWithValue}) => {
+    try {
+        const config = {
+            headers : {
+                "Content-Type" : "multipart/form-data"
+            }
         }
+        const {data} = await api.put(`/api/v1/food/menu/update/${id}`, foodData, config)
+        return data
+    } catch (error) {
+        return rejectWithValue(error.response?.data)
     }
-);
+})
 
 export const DeleteFood = createAsyncThunk("food/deletefood", async(id, {rejectWithValue}) => {
     try {
@@ -131,16 +135,17 @@ const FoodSlice = createSlice({
             state.loading = false
         })
 
-        builder.addCase(ToggleFoodAvailability.pending, (state) => {
+        builder.addCase(UpdateFood.pending, (state) => {
             state.loading = true
             state.error = null
         })
-        .addCase(ToggleFoodAvailability.fulfilled, (state, action) => {
+        .addCase(UpdateFood.fulfilled, (state, action) => {
             state.loading = false
             state.error = null
+            state.success = action.payload.success
             state.food = action.payload?.food
         })
-        .addCase(ToggleFoodAvailability.rejected, (state, action) => {
+        .addCase(UpdateFood.rejected, (state, action) => {
             state.error = action.payload?.error
             state.loading = false
         })

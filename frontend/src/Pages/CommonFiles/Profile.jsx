@@ -51,7 +51,7 @@ export const Profile = () => {
     const [restaurant, setRestaurant] = useState({
         name:"", description:"", email:"", phone:"", state:"", address:"", city:"", pincode:"", location:"", openingTime:"", closingTime:"", deliveryFee:"", minimumOrder:"", deliveryTime:""
     })
-    const {name, email, password, phoneNo, address, state, country, pincode} = userdata
+    const {name, email, password, phoneNo, address, state: userState, country, pincode} = userdata
     const {name: restaurantName, description, email: restaurantEmail, phone, state: restaurantState, address: restaurantAddress, city, pincode: restaurantPincode, location, openingTime, closingTime, deliveryFee, minimumOrder, deliveryTime} = restaurant
     const [image, setImage] = useState(preview)
     const [resImage, setResImage] = useState(null)
@@ -92,7 +92,7 @@ export const Profile = () => {
     myform.set("email", email);
     myform.set("phoneNo", phoneNo);
     myform.set("address", address);
-    myform.set("state", state);
+    myform.set("state", userState);
     myform.set("country", country);
     myform.set("pincode", pincode);
     if(image){
@@ -103,7 +103,11 @@ export const Profile = () => {
     };
 
     const handleChange = (e) => {
-        setUser({...userdata, [e.target.name]:e.target.value})
+        const updatedData = {
+        ...userdata,
+        [e.target.name]: e.target.value,
+    };
+    setUser(updatedData);
     }
 
     const createRestaurant = (e) => {
@@ -159,14 +163,14 @@ export const Profile = () => {
     }, [dispatch, error])
 
     useEffect(() => {
+        dispatch(MyProfile())
         if (user?.role === "admin"){
             dispatch(GetAllUsers())
         }
         if (user?.role === "customer") {
             dispatch(GetMyOrder());
         }
-        dispatch(MyProfile())
-    }, [dispatch, user])
+    }, [dispatch])
 
     const recentOrders = [...(order || [])]
         .sort((a, b) => new Date(b?.createdAt || 0) - new Date(a?.createdAt || 0))
@@ -360,8 +364,8 @@ export const Profile = () => {
                                 <h6 className="text-uppercase text-muted mb-3" style={{ letterSpacing: 0.8, fontSize: 13, fontWeight: 700 }}>Restaurant Dashboard</h6>
 
                                 <div className="d-flex flex-column gap-2">
-                                    <button className="btn btn-outline-primary rounded-pill d-flex align-items-center justify-content-center gap-2" onClick={() => navigate("/restaurant/profile")}>
-                                        <ChefHat size={15}/> Restaurant Profile
+                                    <button className="btn btn-outline-primary rounded-pill d-flex align-items-center justify-content-center gap-2" onClick={() => navigate("/restaurant/dashboard")}>
+                                        <ChefHat size={15}/> Restaurant Dashboard
                                     </button>
                                     <button className="btn btn-outline-primary rounded-pill d-flex align-items-center justify-content-center gap-2" onClick={() => navigate("/restaurant/menu")}>
                                         <Salad size={15}/> Manage Menu
@@ -419,7 +423,7 @@ export const Profile = () => {
                                     <div className="card border-0 shadow-sm text-center h-100" style={{ borderRadius: 12 }}>
                                         <div className="card-body py-3">
                                             <IndianRupee size={20} style={{ color: '#15803d' }}/>
-                                            <h5 className="fw-bold mt-1 mb-0">₹8450</h5>
+                                            <h5 className="fw-bold mt-1 mb-0">₹{order?.reduce((sum, orderItem) => sum + orderItem.totalAmount,0)}</h5>
                                             <small className="text-muted">Spent</small>
                                         </div>
                                     </div>
@@ -493,6 +497,7 @@ export const Profile = () => {
         style={{zIndex:1000, backgroundColor:"rgba(0,0,0,0.5)"}}>
             <div className="bg-white rounded shadow-lg p-4 overflow-y-auto w-100" style={{maxWidth:"550px", maxHeight:"90vh", scrollbarWidth:"none"}}>
                 <h2 className='text-center'>Edit Profile</h2>
+                <p>{JSON.stringify(userdata)}</p>
                 <form onSubmit={updateNow}>
                     <div className='d-flex flex-column gap-4'>
                     <div>
@@ -518,8 +523,8 @@ export const Profile = () => {
                     <div >
                     <div >
                     <h6>State</h6>
-                    <input className="form-control" type="text" placeholder='Enter your State' 
-                    name='state' value={state} onChange={handleChange}/>
+                    <input className="form-control" type="text" placeholder="Enter your State"
+                    name="state" value={userdata.state} onChange={handleChange}/>
                     </div>
                     <h6>Country</h6>
                     <input className="form-control" type="text" placeholder='Enter your Country' 

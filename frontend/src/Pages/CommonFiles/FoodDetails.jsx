@@ -209,22 +209,42 @@ export const FoodDetails = () => {
         {/* Restaurant Details */}
         <div className="card border-0 shadow rounded-4 mt-5 mb-4">
           <div className="card-body p-4">
-            <h3 className="fw-bold mb-4"> Restaurant Information</h3>
-            <div className="row align-items-center justify-content-center" onClick={() => navigate(`/restaurantdetails/${SingleFood.restaurant._id}`)}>
-              <div className="col-3 col-md-2 text-center">
-                <img src={SingleFood?.restaurant?.banner?.url} alt={SingleFood?.restaurant?.name} className="rounded-circle border" style={{width: "120px", height: "120px", objectFit: "cover"}}/>
-              </div>
+              <h3 className="fw-bold mb-4">🏪 Restaurant Information</h3>
+              <div className="row align-items-center g-4" style={{ cursor: "pointer" }} onClick={() => navigate(`/restaurantdetails/${SingleFood?.restaurant?._id}`)}>
+                  {/* Restaurant Image */}
+                  <div className="col-12 col-md-3 text-center">
+                      <img src={SingleFood?.restaurant?.banner?.url} alt={SingleFood?.restaurant?.name} className="rounded-circle shadow img-fluid" style={{width: "150px",height: "150px",objectFit: "cover"}}/>
+                  </div>
 
-              <div className="col-9 col-md-10">
-                <h4 className="fw-bold">{SingleFood?.restaurant?.name}</h4>
-                <p className="text-secondary mb-2">{SingleFood?.restaurant?.address}, {SingleFood?.restaurant?.city}</p>
-                <div className="d-flex flex-wrap gap-3">
-                  <span className="badge bg-success px-3 py-2">⭐ {SingleFood?.restaurant?.rating}</span>
-                  <span className="badge bg-primary px-3 py-2">{SingleFood.restaurant?.deliveryTime}</span>
-                  <span className="badge bg-warning text-dark px-3 py-2">Open Now</span>
-                </div>
+                  {/* Restaurant Details */}
+                  <div className="col-12 col-md-9 text-center text-md-start">
+                      <h3 className="fw-bold mb-2">
+                          {SingleFood?.restaurant?.name}
+                      </h3>
+                      <p className="text-muted mb-3">
+                          📍 {SingleFood?.restaurant?.address},{" "}
+                          {SingleFood?.restaurant?.city}
+                      </p>
+
+                      <div className="d-flex flex-wrap justify-content-center justify-content-md-start gap-2">
+                        <span className="badge bg-success fs-6 px-3 py-2">
+                            ⭐ {SingleFood?.restaurant?.rating}
+                        </span>
+                        <span className="badge bg-primary fs-6 px-3 py-2">
+                            🚴 {SingleFood?.restaurant?.deliveryTime}
+                        </span>
+                        <span
+                            className={`badge fs-6 px-3 py-2 ${
+                                SingleFood?.restaurant?.isOpen
+                                    ? "bg-success"
+                                    : "bg-danger"
+                            }`}
+                        >
+                            {SingleFood?.restaurant?.isOpen ? "🟢 Open" : "🔴 Closed"}
+                        </span>
+                      </div>
+                  </div>
               </div>
-            </div>
           </div>
         </div>
 

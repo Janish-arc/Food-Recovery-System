@@ -497,7 +497,6 @@ export const Profile = () => {
         style={{zIndex:1000, backgroundColor:"rgba(0,0,0,0.5)"}}>
             <div className="bg-white rounded shadow-lg p-4 overflow-y-auto w-100" style={{maxWidth:"550px", maxHeight:"90vh", scrollbarWidth:"none"}}>
                 <h2 className='text-center'>Edit Profile</h2>
-                <p>{JSON.stringify(userdata)}</p>
                 <form onSubmit={updateNow}>
                     <div className='d-flex flex-column gap-4'>
                     <div>

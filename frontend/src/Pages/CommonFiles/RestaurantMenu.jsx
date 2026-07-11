@@ -157,7 +157,7 @@ if (loading) {
 
                 {/* Statistics */}
                 <div className="row g-3 mb-4">
-                    <div className="col-md-4">
+                    <div className="col-6 col-md-4">
                         <div className="card shadow-sm border-0">
                             <div className="card-body text-center">
                                 <Package size={28} color="#0d6efd"/>
@@ -166,21 +166,12 @@ if (loading) {
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-6 col-md-4">
                         <div className="card shadow-sm border-0">
                             <div className="card-body text-center">
                                 <CircleCheckBig size={28} color="green"/>
                                 <h3 className="mt-2">{availableFoods.length}</h3>
                                 <p className="text-muted mb-0">Available</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-4">
-                        <div className="card shadow-sm border-0">
-                            <div className="card-body text-center">
-                                <Salad size={28} color="red"/>
-                                <h3 className="mt-2">{outOfStock.length}</h3>
-                                <p className="text-muted mb-0">Out Of Stock</p>
                             </div>
                         </div>
                     </div>

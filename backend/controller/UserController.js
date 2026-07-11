@@ -109,9 +109,9 @@ export const MyProfile = async(req, res, next) => {
 
 //Update Profile
 export const UpdateProfile = async (req, res, next) => {
-  const { name, email, phoneNo, role, address, country, pincode  } = req.body;
+  const { name, email, phoneNo, state, address, country, pincode  } = req.body;
   const updatedUserProfile = {
-    name, email, phoneNo, role, address, country, pincode
+    name, email, phoneNo, state, address, country, pincode
   };
   const user = await User.findById(req.user.id);
   if (req.file) {

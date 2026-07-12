@@ -105,3 +105,13 @@ export const GetRestaurantOrders = async(req, res) => {
         return res.status(404).json({success: false, message: error?.message})
     }
 }
+
+//Get Orders by Admin
+export const GetOrdersByAdmin = async(req, res) => {
+    try {
+        const order = await Order.find().populate("restaurant").populate("user")
+        return res.status(200).json({success: true, order})
+    } catch (error) {
+        return res.status(404).json({success: false, message: error.message})
+    }
+}

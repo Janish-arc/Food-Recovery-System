@@ -51,7 +51,7 @@ export const GetMyMenu = async(req,res)=>{
         if(!restaurant){
             return res.status(404).json({success:false, message:"Restaurant not found."});
         }
-        const foods = await Food.find({restaurant:restaurant._id}).populate("category");
+        const foods = await Food.find({restaurant:restaurant._id}).populate("category").populate({path: "restaurant", populate:{path: "foods"}});
         res.status(200).json({success:true, foods});
     }catch(error){
         res.status(500).json({success:false, message:error.message});
@@ -107,7 +107,7 @@ export const DeleteMenuItem = async(req,res)=>{
 //Get All Foods
 export const GetAllMenuItems = async(req, res) => {
     try {
-        const food = await Food.find()
+        const food = await Food.find().populate({path: "restaurant", populate:{path: "foods"}}).populate("category").populate("restaurant")
         if(!food){
             return res.status(404).json({success: false, message: "No foods available"})
         }

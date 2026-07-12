@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Navbar } from '../../Components/Navbar'
 import { Footer } from '../../Components/Footer'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { GetCategory } from '../../Redux/CategorySlice'
 import { GetRestaurant } from '../../Redux/RestaurantSlice'
 import { ImageSlider } from './ImageSlider';
@@ -16,7 +16,7 @@ export const Home = () => {
     const {restaurants} = useSelector((state) => state.restaurant)
     const navigate = useNavigate()
     const dispatch = useDispatch()
-
+    const location = useLocation();
     const sortedRestaurants = [...restaurants].sort((a, b) => b.rating - a.rating);
     const sortedFoods = Array.isArray(food) ? [...food].sort((a, b) => b.rating - a.rating): [];
     const latestRestaurants = [...restaurants].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -33,6 +33,19 @@ export const Home = () => {
         dispatch(GetAllFoods())
     }, [dispatch])
 
+    useEffect(() => {
+    if (location.state?.scrollTo) {
+        const section = document.getElementById(location.state.scrollTo);
+
+        if (section) {
+            section.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
+        }
+    }
+    }, [location]);
+
   return (
     <>
         <Navbar/>
@@ -43,7 +56,7 @@ export const Home = () => {
             <div className='container-fluid pt-4'>
 
                 {/* Category Section */}
-                <div className='mt-4 container'>
+                <div className='mt-4 container'  id="categories">
                     {isAuthenticated && 
                     <h4 className='fw-bold fs-3'>{user?.name}, Find Your Favourite . . </h4>
                     }
@@ -59,7 +72,7 @@ export const Home = () => {
                 </div>
 
                 {/* Restaurant Section */}
-                <div className='container'>
+                <div className='container' id="restaurants">
                 <div className="row g-4 ">
                     <h4 className="fw-bold fs-4">Recommended for You</h4>
                     {restaurants?.map((item) => (
@@ -80,9 +93,12 @@ export const Home = () => {
                 </div>
 
                 {/* Top Rated Restaurants */}
-                <div className='container'>
+                <div className='container' id="Top-restaurants">
                 <div className='row g-4 '>
-                    <h4 className='fw-bold fs-4'>Customer Favourites</h4>
+                    <div className="d-flex justify-content-between align-items-center">
+                        <h4 className='fw-bold fs-4'>Customer Favourites</h4>
+                        <button className="btn btn-outline-primary rounded-pill" onClick={() => navigate("/all/restaurants")}>See All</button>
+                    </div>
                     {sortedRestaurants?.map((item) => (
                         <div className="col-6 col-md-4 col-lg-3 overflow-x-auto" style={{scrollbarWidth: "none"}} key={item._id} onClick={() => navigate(`/restaurantdetails/${item._id}`)}>
                             <div className="h-100 food">
@@ -101,9 +117,12 @@ export const Home = () => {
                 </div>
 
                 {/* Popular Dishes */}
-                <div className='container '>
+                <div className='container ' id="popular">
                 <div className="row g-4 mb-2 ">
-                    <h4 className='fw-bold fs-4'>Popular dishes</h4>
+                    <div className="d-flex justify-content-between align-items-center">
+                        <h4 className='fw-bold fs-4'>Popular dishes</h4>
+                        <button className="btn btn-outline-primary rounded-pill" onClick={() => navigate("/all/foods")}>See All</button>
+                    </div>
                     {sortedFoods?.map((item) => (
                         <div className="col-6 col-md-4 col-lg-3 overflow-x-auto" style={{scrollbarWidth: "none"}} key={item._id} onClick={() => navigate(`/fooddetails/${item._id}`)}>
                             <div className="h-100 food shadow overflow-x-auto" style={{scrollbarWidth: "none"}}>
@@ -125,7 +144,7 @@ export const Home = () => {
                 </div>
 
                 {/* Todays Offer */}
-                <div className="container mt-4">
+                <div className="container mt-4"  id="offer">
                     <h4 className="fw-bold mb-3">🔥 Today's Offers</h4>
 
                     <div className="row g-3">
@@ -170,7 +189,7 @@ export const Home = () => {
                 </div>
                 
                 {/* New */}
-                <div className="container mt-5">
+                <div className="container mt-5" id="new">
                 <div className="d-flex justify-content-between align-items-center">
                     <h3 className="fw-bold">🆕 New on Recupy</h3>
                     <button className="btn btn-outline-primary rounded-pill">See More</button>

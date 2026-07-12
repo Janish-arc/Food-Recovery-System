@@ -15,6 +15,15 @@ export const CreateOrder = createAsyncThunk("/order/create", async(datas, {rejec
     }
 })
 
+export const GetOrdersByAdmin = createAsyncThunk("/order/get/admin", async(_, {rejectWithValue}) => {
+    try {
+        const {data} = await api.get("/api/v1/order/order/all/orders", {withCredentials: true})
+        return data
+    } catch (error) {
+        return rejectWithValue(error.response?.data)
+    }
+})
+
 export const GetMyOrder = createAsyncThunk("/order/get", async(_, {rejectWithValue}) => {
     try {
         const {data} = await api.get("/api/v1/order/order/get", {withCredentials: true})
@@ -58,6 +67,7 @@ const OrderSlice = createSlice({
     name: "order",
     initialState: {
         order: [],
+        adminOrder: [],
         singleOrder: "",
         loading: true, 
         success: false,
@@ -129,6 +139,21 @@ const OrderSlice = createSlice({
             state.error = action.payload.error
         })
         .addCase(GetSingleOrder.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload.error
+        })
+
+        builder.addCase(GetOrdersByAdmin.pending, (state) => {
+            state.loading = true
+            state.success = false
+        })
+        .addCase(GetOrdersByAdmin.fulfilled, (state, action) => {
+            state.loading = false
+            state.success = action.payload.success
+            state.adminOrder = action.payload.order
+            state.error = action.payload.error
+        })
+        .addCase(GetOrdersByAdmin.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload.error
         })

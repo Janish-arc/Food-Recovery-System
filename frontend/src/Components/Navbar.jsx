@@ -98,10 +98,10 @@ export const Navbar = () => {
 
             <h6 className="text-muted mt-3 mb-3">Quick Access</h6>
             <div className="list-group border-0">
-                <button className="list-group-item list-group-item-action border-0 rounded-3" onClick={()=>navigate("/")}>🍽️ Restaurants</button>
-                <button className="list-group-item list-group-item-action border-0 rounded-3">🍕 Categories</button>
-                <button className="list-group-item list-group-item-action border-0 rounded-3">🔥 Offers</button>
-                <button className="list-group-item list-group-item-action border-0 rounded-3">⭐ Top Rated</button>
+                <button className="list-group-item list-group-item-action border-0 rounded-3" onClick={()=>{navigate("/all/restaurants") ;setOpen(false)}}>🍽️ Restaurants</button>
+                <button className="list-group-item list-group-item-action border-0 rounded-3" onClick={()=>{navigate("/all/foods") ;setOpen(false)}}>🍕 Foods</button>
+                <button className="list-group-item list-group-item-action border-0 rounded-3" onClick={()=>{navigate("/", {state: {scrollTo: "offer"}}); setOpen(false);}}>🔥 Offers</button>
+                <button className="list-group-item list-group-item-action border-0 rounded-3" onClick={()=>{navigate("/", {state: {scrollTo: "Top-restaurants"}}); setOpen(false);}}>⭐ Top Rated Foods</button>
             </div>
             <hr/>
 
@@ -142,10 +142,10 @@ export const Navbar = () => {
             <tr className="d-flex gap-3 fs-6 fw-bold text-primary" >
               <td className="d-none d-md-block" style={{ fontFamily: "'Poppins', sans-serif" , cursor: "pointer"}} onClick={() => navigate("/")}>Home</td>
               {user?.role === "customer" && (
-                <div className='d-flex gap-3'>
-                  <td style={{ fontFamily: "'Poppins', sans-serif", cursor: "pointer" }} onClick={() => navigate("/cart")}>🛒 Cart</td>
+                <>
+                  <td style={{ fontFamily: "'Poppins', sans-serif", cursor: "pointer"}} onClick={() => navigate("/cart")}>🛒 Cart</td>
                   <td style={{ fontFamily: "'Poppins', sans-serif", cursor: "pointer" }} onClick={() => navigate("/myorder")}>📦 MyOrders</td>
-                </div>
+                </>
               )}
               {user.role === "restaurant" && 
                 <td style={{ fontFamily: "'Poppins', sans-serif" , cursor: "pointer"}} onClick={() => navigate("/myprofile")}>👤{user?.name}</td>

@@ -26,6 +26,8 @@ import { RestaurantDashboard } from './Pages/CommonFiles/RestaurantDashboard.jsx
 import { RestaurantMenu } from './Pages/CommonFiles/RestaurantMenu.jsx'
 import { RestaurantProfile } from './Pages/CommonFiles/RestaurantProfile.jsx'
 import { RestaurantOrders } from './Pages/CommonFiles/RestaurantOrders.jsx'
+import { AllRestaurants } from './Pages/CommonFiles/AllRestaurants.jsx'
+import { AllFood } from './Pages/CommonFiles/AllFood.jsx'
 
 const ProtectedRoute = ({children}) => {
   const {isAuthenticated} = useSelector((state) => state.user)
@@ -41,6 +43,8 @@ const route = createBrowserRouter(
     {path: '/', element: <Home/>},
     {path: "/register", element: <Register/>},
     {path: "/login", element: <Login/>},
+    {path: "/all/restaurants", element: <AllRestaurants/>},
+    {path: "/all/foods", element: <AllFood/>},
     {path: "/restaurantdetails/:id", element: <RestaurantDetails/>},
     {path: "/category/:id", element: <Category/>},
     {path: "/cart", element: <Cart/>},

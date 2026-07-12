@@ -7,6 +7,7 @@ import { Footer } from "../../Components/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { GetCart } from "../../Redux/CartSlice";
 import { CreateOrder } from "../../Redux/OrderSlice";
+import { useNavigate } from "react-router-dom";
 
 export const Order = () => {
 
@@ -15,6 +16,7 @@ export const Order = () => {
     const [paymentMethod, setPaymentMethod] = useState("Cash on Delivery");
     const [instructions, setInstructions] = useState("");
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     useEffect(() => {
         dispatch(GetCart())
@@ -26,6 +28,9 @@ export const Order = () => {
             deliveryAddress: user?.address
         }))
         alert("Order Placed Successfully!")
+        if(success){
+            navigate("/myorder")
+        }
     }
 
     return (

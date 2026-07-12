@@ -12,7 +12,7 @@ import {
 import { GetAllUsers, GetSingleUser, logout, MyProfile, removeError, removeSuccess, UpdateProfile } from '../../Redux/UserSlice'
 import toast from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
-import { GetMyOrder } from '../../Redux/OrderSlice'
+import { GetMyOrder, GetOrdersByAdmin } from '../../Redux/OrderSlice'
 import { CreateRestaurant } from '../../Redux/RestaurantSlice'
 
 // Status -> icon/color config, kept in the same spirit as the My Orders page
@@ -33,7 +33,7 @@ export const Profile = () => {
 
     const {user, users, error, success, singleuser} = useSelector((state) => state.user)
     const {food, mydelivery} = useSelector((state) => state.food)
-    const {order} = useSelector((state) => state.order)
+    const {order, adminOrder} = useSelector((state) => state.order)
     const {success: restaurantSuccess} = useSelector((state) => state.restaurant)
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -166,6 +166,7 @@ export const Profile = () => {
         dispatch(MyProfile())
         if (user?.role === "admin"){
             dispatch(GetAllUsers())
+            dispatch(GetOrdersByAdmin())
         }
         if (user?.role === "customer") {
             dispatch(GetMyOrder());
@@ -176,7 +177,7 @@ export const Profile = () => {
         .sort((a, b) => new Date(b?.createdAt || 0) - new Date(a?.createdAt || 0))
         .slice(0, 4)
 
-    const customerUsers = users.filter((user) => user.role === "customer")
+    const Availableusers = users.filter((user) => user.role !== "admin")
     const logoutUser = async() => {
       try {
           await api.post("/api/v1/user/logout", {}, { withCredentials: true });
@@ -187,6 +188,8 @@ export const Profile = () => {
       dispatch(logout());
       navigate("/");
     }
+
+    console.log(adminOrder)
 
   return (
     <div>
@@ -299,7 +302,7 @@ export const Profile = () => {
                                         <div className="col-6">
                                             <div className="border rounded-3 text-center p-3 h-100">
                                                 <Users size={18} className="mb-1" style={{ color: '#6c63ff' }}/>
-                                                <h5 className="mb-0 fw-bold">{customerUsers?.length}</h5>
+                                                <h5 className="mb-0 fw-bold">{Availableusers?.length}</h5>
                                                 <small className="text-muted">Total Customers</small>
                                             </div>
                                         </div>
@@ -313,7 +316,7 @@ export const Profile = () => {
                                         <div className="col-6">
                                             <div className="border rounded-3 text-center p-3 h-100">
                                                 <Package size={18} className="mb-1" style={{ color: '#6c63ff' }}/>
-                                                <h5 className="mb-0 fw-bold">{order?.length || 0}</h5>
+                                                <h5 className="mb-0 fw-bold">{adminOrder?.length || 0}</h5>
                                                 <small className="text-muted">Total orders</small>
                                             </div>
                                         </div>
@@ -321,7 +324,7 @@ export const Profile = () => {
                                             <div className="border rounded-3 text-center p-3 h-100">
                                                 <Clock size={18} className="mb-1" style={{ color: '#6c63ff' }}/>
                                                 <h5 className="mb-0 fw-bold">
-                                                    {order?.filter(o => ['pending', 'processing', 'placed'].includes(o?.status?.toLowerCase())).length || 0}
+                                                    {adminOrder?.filter(o => o.status !== "Delivered" && o.status !== "Cancelled").length || 0}
                                                 </h5>
                                                 <small className="text-muted">Pending orders</small>
                                             </div>

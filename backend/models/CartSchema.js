@@ -6,6 +6,10 @@ const CartSchema = new mongoose.Schema({
         ref: "User",
         required: true
     },
+    restaurant: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Restaurant",
+    },
     items: [{
         menuItem: {
             type: mongoose.Schema.Types.ObjectId,

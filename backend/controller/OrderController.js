@@ -33,6 +33,7 @@ export const CreateOrder = async(req, res) => {
             deliveryAddress, orderStatus: "Placed", paymentStatus: paymentMethod === "Cash on Delivery" ? "Pending" : "Paid"
         })
         cart.items = [];
+        cart.restaurant = null;
         cart.subtotal = 0;
         cart.discount = 0;
         cart.deliveryFee = 0;

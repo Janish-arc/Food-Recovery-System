@@ -20,6 +20,18 @@ const ReviewSchema = new mongoose.Schema(
       required: true,
     },
 
+    food: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Food",
+        default: null
+    },
+
+    reviewType: {
+      type: String,
+      enum: ["restaurant", "food", "order"],
+      required: true
+    },
+
     rating: {
       type: Number,
       required: true,

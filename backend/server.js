@@ -11,6 +11,7 @@ import restaurant from "./routes/RestaurantRoute.js";
 import category from "./routes/CategoryRoute.js";
 import cart from "./routes/CartRoute.js";
 import order from "./routes/OrderRoute.js";
+import review from "./routes/ReviewRoute.js";
 
 dotenv.config({ path: "./config/.env" });
 
@@ -19,7 +20,6 @@ console.log("PORT =", process.env.PORT);
 console.log("MONGO_URL =", process.env.MONGO_URL);
 // Connect Database
 connectiondb();
-
 cloudinary.config({ 
         cloud_name: process.env.CLOUDINARY_NAME, 
         api_key: process.env.CLOUDINARY_API_KEY, 
@@ -31,6 +31,7 @@ app.use(
     credentials: true,
   })
 );
+
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
@@ -40,11 +41,11 @@ app.use("/api/v1/restaurant", restaurant)
 app.use("/api/v1/category", category)
 app.use("/api/v1/cart", cart)
 app.use("/api/v1/order", order)
-
+app.use("/api/v1/review", review)
 app.use(error);
-// Test Route
+
 app.get("/", (req, res) => {
-  res.send("Food Recovery System API Running");
+  res.send("Recupy API Running");
 });
 
 const PORT = process.env.PORT;

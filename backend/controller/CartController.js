@@ -14,8 +14,13 @@ export const CreateCart = async(req, res) => {
             return res.status(404).json({success: false, message: "MenuItem not Available"})
         }
         let cart = await Cart.findOne({user: req.user._id})
+        if (cart && cart.restaurant && cart.restaurant.toString() !== food.restaurant.toString()) {
+            return res.status(400).json({success: false, message:"You can only order from one restaurant at a time."});
+        }
         if(!cart){
-            cart = await Cart.create({user: req.user._id, items: []})
+            cart = await Cart.create({user: req.user._id, restaurant: food.restaurant, items: []})
+        }else if (!cart.restaurant || cart.items.length === 0) {
+            cart.restaurant = food.restaurant;
         }
         const itemIndex = cart.items.findIndex(item => item.menuItem.toString() === menuItem)
         if(itemIndex > -1){
@@ -107,6 +112,7 @@ export const ClearCart = async (req, res) => {
       return res.status(404).json({success: false, message: "Cart not found."});
     }
     cart.items = [];
+    cart.restaurant = null;
     cart.subtotal = 0;
     cart.deliveryFee = 0;
     cart.tax = 0;

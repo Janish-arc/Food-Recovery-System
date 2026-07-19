@@ -5,6 +5,7 @@ import CategorySlice from './CategorySlice'
 import RestaurantSlice from './RestaurantSlice'
 import CartSlice from './CartSlice'
 import OrderSlice from './OrderSlice'
+import ReviewSlice from './ReviewSlice'
 
 export const store = configureStore({
     reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
         category: CategorySlice,
         restaurant: RestaurantSlice,
         cart: CartSlice,
-        order: OrderSlice
+        order: OrderSlice,
+        review: ReviewSlice
     }
 })

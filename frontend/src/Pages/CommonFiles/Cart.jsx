@@ -43,6 +43,8 @@ export const Cart = () => {
         dispatch(GetCart())
     }
 
+    console.log(cart?.items?.length)
+
   return (
     <div>
         <Navbar/>

@@ -14,6 +14,7 @@ import toast from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
 import { GetMyOrder, GetOrdersByAdmin } from '../../Redux/OrderSlice'
 import { CreateRestaurant } from '../../Redux/RestaurantSlice'
+import { GetUserReview } from '../../Redux/ReviewSlice'
 
 // Status -> icon/color config, kept in the same spirit as the My Orders page
 const STATUS_META = {
@@ -35,6 +36,7 @@ export const Profile = () => {
     const {food, mydelivery} = useSelector((state) => state.food)
     const {order, adminOrder} = useSelector((state) => state.order)
     const {success: restaurantSuccess} = useSelector((state) => state.restaurant)
+    const {userReview} = useSelector((state) => state.review)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const {id} = useParams()
@@ -189,7 +191,9 @@ export const Profile = () => {
       navigate("/");
     }
 
-    console.log(adminOrder)
+    useEffect(() => {
+        dispatch(GetUserReview())
+    }, [dispatch])
 
   return (
     <div>
@@ -417,7 +421,7 @@ export const Profile = () => {
                                     <div className="card border-0 shadow-sm text-center h-100" style={{ borderRadius: 12 }}>
                                         <div className="card-body py-3">
                                             <Star size={20} style={{ color: '#f4b400' }}/>
-                                            <h5 className="fw-bold mt-1 mb-0">8</h5>
+                                            <h5 className="fw-bold mt-1 mb-0">{userReview}</h5>
                                             <small className="text-muted">Reviews</small>
                                         </div>
                                     </div>

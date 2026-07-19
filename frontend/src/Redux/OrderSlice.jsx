@@ -90,7 +90,7 @@ const OrderSlice = createSlice({
         .addCase(CreateOrder.fulfilled, (state, action) => {
             state.loading = false
             state.success = action.payload.success
-            state.order = action.payload.order
+            state.order = [...state.order, action.payload.order];
             state.error = action.payload.error
         })
         .addCase(CreateOrder.rejected, (state, action) => {

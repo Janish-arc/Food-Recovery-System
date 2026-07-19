@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
     ArrowLeft, Package, ChevronDown, ChevronUp, MapPin, Receipt, Truck,
-    CheckCircle, XCircle, Clock, Trash2, ChefHat, Home, CreditCard
+    CheckCircle, XCircle, Clock, Trash2, ChefHat, Home, CreditCard,
+    Star
 } from "lucide-react";
 import EmptyOrders from "../../assets/cart.webp";
 import { Navbar } from "../../Components/Navbar";
@@ -9,6 +10,9 @@ import { Footer } from "../../Components/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { GetMyOrder, CancelOrder } from "../../Redux/OrderSlice";
 import { useNavigate } from "react-router-dom";
+import { CreateRestaurantReview } from "../../Redux/ReviewSlice";
+import toast from "react-hot-toast";
+
 
 const STATUS_STEPS = [
     { key: "Placed", label: "Placed", icon: Receipt },
@@ -57,8 +61,12 @@ export const MyOrders = () => {
     const navigate = useNavigate();
 
     const [expandedId, setExpandedId] = useState(null);
+    const [reviewId, setReviewId] = useState(null)
     const [filter, setFilter] = useState("All");
     const [cancellingId, setCancellingId] = useState(null);
+    const [rating, setRating] = useState(0);
+    const [hover, setHover] = useState(0);
+    const [comment, setComment] = useState("");
 
     useEffect(() => {
         dispatch(GetMyOrder());
@@ -67,7 +75,9 @@ export const MyOrders = () => {
     const toggleExpand = (id) => {
         setExpandedId(expandedId === id ? null : id);
     };
-
+    const toggleReview = (id) => {
+        setReviewId(reviewId === id ? null : id)
+    }
     const filteredOrders = order?.filter((o) => {
         if (filter === "All") return true;
         if (filter === "Active") return !["Delivered", "Cancelled"].includes(o?.orderStatus);
@@ -86,6 +96,23 @@ export const MyOrders = () => {
         await dispatch(CancelOrder(id));
         await dispatch(GetMyOrder());
         setCancellingId(null);
+    };
+
+    const submitReview = async (o) => {
+        const result = await dispatch(
+            CreateRestaurantReview({
+                restaurant: o.restaurant._id,
+                order: o._id,
+                rating,
+                comment,
+            })
+        );
+        if (CreateRestaurantReview.fulfilled.match(result)) {
+            toast.success(result.payload.message);
+            setReviewId(null)
+        } else {
+            toast.error(result.payload?.message || "Something went wrong");
+        }
     };
 
     return (
@@ -119,7 +146,7 @@ export const MyOrders = () => {
                     {["All", "Active", "Delivered", "Cancelled"].map((f) => (
                         <button
                             key={f}
-                            className={`btn rounded-pill px-3 d-flex align-items-center gap-1 flex-shrink-0 ${filter === f ? "btn-dark" : "btn-outline-secondary"}`}
+                            className={`btn rounded-pill btn-sm px-3 d-flex align-items-center gap-1 flex-shrink-0 ${filter === f ? "btn-dark" : "btn-outline-secondary"}`}
                             onClick={() => setFilter(f)}>
                             {f}
                             <span className={`badge rounded-pill ${filter === f ? "bg-white text-dark" : "bg-secondary-subtle text-secondary"}`}>{counts[f]}</span>
@@ -181,13 +208,13 @@ export const MyOrders = () => {
                                             </small>
                                         </div>
                                         <div className="d-flex align-items-center gap-2">
-                                            <button className="btn btn-primary rounded" onClick={() => navigate(`/orderdetails/${o._id}`)}>View Order</button>
-                                            <span className={`badge rounded-pill px-3 py-2 ${meta.badge}`}>
+                                            <button className="btn btn-primary rounded btn-sm" onClick={() => navigate(`/orderdetails/${o._id}`)}><small>View Order</small></button>
+                                            <span className={`badge rounded-pill px-2 py-1 ${meta.badge}`}>
                                                 {o?.orderStatus}
                                             </span>
                                             {canCancel && (
                                                 <button
-                                                    className="btn btn-outline-danger btn-sm rounded-circle d-flex align-items-center justify-content-center"
+                                                    className="btn border-danger btn-sm rounded-circle d-flex align-items-center justify-content-center text-danger"
                                                     style={{ width: "34px", height: "34px" }}
                                                     title="Cancel order"
                                                     disabled={cancellingId === o._id}
@@ -202,9 +229,9 @@ export const MyOrders = () => {
                                     </div>
 
                                     {/* Items Preview */}
-                                    <div className="d-flex gap-2 overflow-auto pb-2 mb-3">
+                                    <div className="d-md-flex gap-2 overflow-auto pb-2 mb-3">
                                         {visibleItems.map((item) => (
-                                            <div key={item?._id} className="d-flex align-items-center gap-2 flex-shrink-0">
+                                            <div key={item?._id} className="d-flex align-items-center gap-2 flex-shrink-0 my-2">
                                                 <img
                                                     src={item?.image?.url}
                                                     alt={item?.name}
@@ -273,13 +300,18 @@ export const MyOrders = () => {
                                             <small className="text-secondary d-block">Total</small>
                                             <h5 className="fw-bold mb-0">₹ {o?.totalAmount}</h5>
                                         </div>
-                                        <button
-                                            className="btn btn-outline-dark rounded-pill px-3 d-flex align-items-center gap-1"
-                                            onClick={() => toggleExpand(o?._id)}
-                                        >
-                                            {expandedId === o?._id ? "Hide details" : "View details"}
-                                            {expandedId === o?._id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                                        </button>
+                                        <div className="d-flex gap-2">
+                                            {o?.orderStatus === "Delivered" && (
+                                            <button className="btn btn-light btn-outline-dark btn-sm rounded-pill px-3"
+                                                onClick={() => toggleReview(o?._id)}
+                                            >Review Restaurant</button>)}
+                                            <button className="btn btn-outline-dark btn-sm rounded-pill px-3 d-flex align-items-center gap-1"
+                                                onClick={() => toggleExpand(o?._id)}
+                                            >
+                                                {expandedId === o?._id ? "Hide details" : "View details"}
+                                                {expandedId === o?._id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                                            </button>
+                                        </div>
                                     </div>
 
                                     {/* Expanded Details */}
@@ -341,6 +373,35 @@ export const MyOrders = () => {
                                                     <Truck size={16} /> <small>Delivery partner: {o?.deliveryPartner?.name}</small>
                                                 </div>
                                             )}
+                                        </div>
+                                    )}
+
+                                    {reviewId === o?._id && (
+                                        <div>
+                                            <hr/>
+                                            <div className="my-3">
+                                                <label className="form-label"><small>Rating</small></label>
+                                                <div className="d-flex align-items-center gap-1">
+                                                {[1, 2, 3, 4, 5].map((star) => (
+                                                    <Star key={star}
+                                                    size={20} fill={(hover || rating) >= star ? "#ffc107" : "none"} color={(hover || rating) >= star ? "#ffc107" : "#ced4da"}
+                                                    style={{ cursor: "pointer" }} onClick={() => setRating(star)} onMouseEnter={() => setHover(star)} onMouseLeave={() => setHover(0)}/>
+                                                ))}
+                                                <small className="ms-2 text-muted"> {rating > 0 ? `${rating}/5` : "Select Rating"} </small>
+                                                </div>
+                                            </div>
+                                            <div className="mb-3">
+                                                <label className="form-label">Comment</label>
+
+                                                <textarea
+                                                    className="form-control"
+                                                    rows={2}
+                                                    value={comment}
+                                                    onChange={(e) => setComment(e.target.value)}
+                                                    placeholder="Share your experience..."
+                                                />
+                                            </div>
+                                            <button className="btn btn-warning btn-sm float-end" onClick={() => submitReview(o)}>Submit Review</button>
                                         </div>
                                     )}
                                 </div>

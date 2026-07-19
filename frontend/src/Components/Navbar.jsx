@@ -87,7 +87,7 @@ export const Navbar = () => {
                     Explore hundreds of delicious meals and
                     exclusive offers near you.
                 </p>
-                <button className="btn btn-light btn-sm fw-semibold" onClick={() => {navigate("/"); setOpen(false)}}>Browse Foods →</button>
+                <button className="btn btn-light btn-sm fw-semibold" onClick={() => {navigate("/all/foods"); setOpen(false)}}>Browse Foods →</button>
             </div>
 
             {!isAuthenticated &&     
@@ -152,6 +152,10 @@ export const Navbar = () => {
               }
               {user.role === "customer" && 
                 <td className="d-none d-md-block" style={{ fontFamily: "'Poppins', sans-serif" , cursor: "pointer"}} onClick={() => navigate("/myprofile")}>👤{user?.name}</td>
+              }
+              {
+                user?.role === "admin" && 
+                <td onClick={logoutUser}>🔓 Logout</td>
               }
               </tr>
           </tbody>

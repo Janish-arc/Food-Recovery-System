@@ -49,7 +49,7 @@ export const Login = () => {
 
   return (
     <div className='vh-100 d-flex flex-column align-items-center justify-content-center'>
-      <div className='col-10 col-md-6 col-lg-4 shadow-lg px-4 py-4 rounded'>
+      <div className='col-10 col-md-6 col-lg-4 shadow-lg px-4 py-4 rounded-4'>
         <h4 className='text-center'><b>LOGIN</b></h4>
       <form onSubmit={loginNow} className='d-flex flex-column gap-4'>
         <div >

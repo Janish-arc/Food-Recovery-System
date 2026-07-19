@@ -6,7 +6,7 @@ import { GetAllFoods } from "../../Redux/FoodSlice";
 import { useNavigate } from "react-router-dom";
 import {Search,Star,X,ChevronLeft,ChevronRight,Flame} from "lucide-react";
 import { GetRestaurant } from "../../Redux/RestaurantSlice";
-import { CreateCart } from "../../Redux/CartSlice";
+import { CreateCart, ClearCart } from "../../Redux/CartSlice";
 import toast from "react-hot-toast";
 
 export const AllFood = () => {
@@ -14,7 +14,6 @@ export const AllFood = () => {
     const navigate = useNavigate();
     const { food } = useSelector((state) => state.food);
     const { restaurants } = useSelector((state) => state.restaurant)
-    const { success } = useSelector((state) => state.cart)
     const [search, setSearch] = useState("");
     const [sort, setSort] = useState("default");
     const [isLoading, setIsLoading] = useState(true);
@@ -68,15 +67,55 @@ export const AllFood = () => {
     const totalPages = Math.ceil(filteredFoods.length / foodsPerPage);
     const hasActiveFilters = search.trim() || sort !== "default";
 
-    const AddToCart = (id) => {
-        dispatch(CreateCart({
-          menuItem: id,
-          quantity: 1
-        }))
-        if(success){
-          toast.success("Food added to Cart successfully")
+    const AddToCart = async (id) => {
+        const result = await dispatch(
+            CreateCart({
+                menuItem: id,
+                quantity: 1,
+            })
+        );
+        if (CreateCart.fulfilled.match(result)) {
+            toast.dismiss();
+            toast.success(result.payload.message);
+        } else {
+            if (result.payload?.message === "You can only order from one restaurant at a time.") {
+                showReplaceCartPopup(id);
+            } else {
+                toast.dismiss();
+                toast.error(result.payload?.message);
+            }
         }
       };
+
+    const showReplaceCartPopup  = (foodId) => {
+        toast.custom((t) => (
+            <div
+                className="bg-white shadow-lg rounded-4 p-4"
+                style={{ width: "350px" }}
+            >
+                <h5 className="fw-bold mb-2">Replace Cart?</h5>
+                <p className="text-secondary mb-3">
+                    Your cart contains items from another restaurant.
+                    <br />
+                    Replace it with this item?
+                </p>
+                <div className="d-flex justify-content-end gap-2">
+                    <button className="btn btn-outline-secondary btn-sm rounded-pill px-3" onClick={() => toast.dismiss(t.id)}>Cancel</button>
+                    <button className="btn btn-dark btn-sm rounded-pill px-3" onClick={async () => {toast.dismiss(t.id);
+                        await dispatch(ClearCart());
+                        setTimeout(async () => {
+                            const addResult = await dispatch(
+                                CreateCart({
+                                    menuItem: foodId,
+                                    quantity: 1,
+                                })
+                            );
+                        }, 500);
+                    }}>Replace</button>
+                </div>
+            </div>
+        ));
+    };
 
     useEffect(() => {
         dispatch(GetRestaurant())
@@ -92,11 +131,20 @@ export const AllFood = () => {
 
                 {/* Top */}
                 <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
-                    <div>
-                        <h2 className="fw-bold mb-1" style={{fontFamily: "Fraunces"}}>🍽 Foods</h2>
-                        <p className="text-secondary mb-0">Discover delicious foods you want.</p>
-                    </div>
+                    <div className="mb-2">
 
+                        <span className="badge rounded-pill bg-danger-subtle text-danger px-3 py-2 shadow-sm">
+                            🍴 Fresh • Fast • Flavorful
+                        </span>
+
+                        <h1 className=" fw-bold mt-3" style={{ fontFamily: "'Fraunces', serif" }}>
+                            Discover
+                            <span className="text-danger"> unforgettable flavors.</span>
+                        </h1>
+                        <small className="text-secondary mb-0">
+                            Explore handcrafted meals from the best restaurants around you.
+                        </small>
+                    </div>
                     <div className="d-flex gap-2">
                         <div className="bg-white rounded-3 shadow-sm px-3 py-2 text-center" style={{minWidth:"95px"}}>
                             <h6 className="fw-bold text-danger mb-0">{restaurants.length}</h6>
@@ -180,13 +228,13 @@ export const AllFood = () => {
                             <span className="badge bg-success position-absolute top-0 end-0 m-2">₹{item.price}</span>
                         </div>
 
-                        <div className="card-body d-flex flex-column">
+                        <div className="card-body d-flex flex-column" style={{boxShadow: "inset 0 0 10px 2px rgba(0, 0, 0, 0.31)"}}>
                             <h5 className="fw-bold text-truncate">{item.name}</h5>
-                            <p className="text-secondary small mb-2">🏪 {item?.restaurant?.name}</p>
+                            <p className="text-secondary small m-0">🏪 {item?.restaurant?.name}</p>
                             
                             <div className="d-flex justify-content-between align-items-center mt-auto">
-                            <small className="text-muted">⭐ {item.totalReviews} Reviews</small>
-                            <button className="btn btn-success btn-sm rounded-pill px-3" onClick={(e)=>{e.stopPropagation(); AddToCart(item._id)}}>+ Add</button>
+                                <small className="text-muted">⭐ {item.totalReviews} Reviews</small>
+                                <button className="btn btn-dark btn-sm rounded-pill px-3 text-white" onClick={(e)=>{e.stopPropagation(); AddToCart(item._id)}}>🛒 Add</button>
                             </div>
                         </div>
                     </div>

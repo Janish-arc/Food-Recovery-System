@@ -47,6 +47,16 @@ export const DeleteCart = createAsyncThunk("delete/cart", async(id, {rejectWithV
     }
 })
 
+export const ClearCart = createAsyncThunk("clear/cart", async(_, {rejectWithValue}) => {
+    try {
+        const {data} = await api.delete(`/api/v1/cart/cart/clear`, {withCredentials: true})
+        return data
+    } catch (error) {
+        return rejectWithValue(error.response?.data)
+    }
+})
+
+
 const CartSlice = createSlice({
     name: "cart",
     initialState: {
@@ -117,6 +127,19 @@ const CartSlice = createSlice({
             state.success = action.payload.success
         })
         .addCase(DeleteCart.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload.error
+        })
+
+        builder.addCase(ClearCart.pending, (state) => {
+            state.loading = true
+            state.error = null
+        })
+        .addCase(ClearCart.fulfilled, (state, action) => {
+            state.loading = false
+            state.success = action.payload.success
+        })
+        .addCase(ClearCart.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload.error
         })

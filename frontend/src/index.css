@@ -137,3 +137,14 @@
         height: 220px;
     }
 }
+.category-banner {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+@media (min-width: 992px) {
+  .category-banner {
+    height: 300px;
+  }
+}

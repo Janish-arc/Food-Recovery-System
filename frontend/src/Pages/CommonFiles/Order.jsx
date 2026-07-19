@@ -13,6 +13,7 @@ export const Order = () => {
 
     const {user} = useSelector((state) => state.user)
     const {cart} = useSelector((state) => state.cart)
+    const {success} = useSelector((state) => state.order)
     const [paymentMethod, setPaymentMethod] = useState("Cash on Delivery");
     const [instructions, setInstructions] = useState("");
     const dispatch = useDispatch()

@@ -18,6 +18,7 @@ dotenv.config({ path: "./config/.env" });
 const app = express();
 console.log("PORT =", process.env.PORT);
 console.log("MONGO_URL =", process.env.MONGO_URL);
+
 // Connect Database
 connectiondb();
 cloudinary.config({ 

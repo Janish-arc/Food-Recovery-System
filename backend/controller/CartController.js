@@ -92,6 +92,7 @@ export const RemoveCartItem = async (req, res) => {
     if (!cart) {
       return res.status(404).json({success: false, message: "Cart not found."});
     }
+    cart.restaurant = null;
     cart.items = cart.items.filter(item => item._id.toString() !== req.params.id);
     cart.subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity,0);
     cart.deliveryFee = cart.subtotal >= 500 ? 0 : 40;

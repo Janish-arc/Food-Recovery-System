@@ -5,7 +5,7 @@ import { ChevronLeft, Search } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { GetSingleCategoryFood } from '../../Redux/FoodSlice'
-import { CreateCart } from '../../Redux/CartSlice'
+import { ClearCart, CreateCart } from '../../Redux/CartSlice'
 import toast from 'react-hot-toast'
 
 export const Category = () => {
@@ -23,15 +23,55 @@ export const Category = () => {
         dispatch(GetSingleCategoryFood({id, sort}))
     }, [dispatch, id, sort])
 
-    const createCart = (id) => {
-        dispatch(CreateCart({
-            menuItem: id, 
-            quantity: 1
-        }))
-        if(success){
-            toast.success("Food added to cart")
+    const createCart = async (id) => {
+        const result = await dispatch(
+            CreateCart({
+                menuItem: id,
+                quantity: 1,
+            })
+        );
+        if (CreateCart.fulfilled.match(result)) {
+            toast.dismiss();
+            toast.success(result.payload.message);
+        } else {
+            if (result.payload?.message === "You can only order from one restaurant at a time.") {
+                showReplaceCartPopup(id);
+            } else {
+                toast.dismiss();
+                toast.error(result.payload?.message);
+            }
         }
-    }
+      };
+
+    const showReplaceCartPopup  = (foodId) => {
+        toast.custom((t) => (
+            <div
+                className="bg-white shadow-lg rounded-4 p-4"
+                style={{ width: "350px" }}
+            >
+                <h5 className="fw-bold mb-2">Replace Cart?</h5>
+                <p className="text-secondary mb-3">
+                    Your cart contains items from another restaurant.
+                    <br />
+                    Replace it with this item?
+                </p>
+                <div className="d-flex justify-content-end gap-2">
+                    <button className="btn btn-outline-secondary btn-sm rounded-pill px-3" onClick={() => toast.dismiss(t.id)}>Cancel</button>
+                    <button className="btn btn-dark btn-sm rounded-pill px-3" onClick={async () => {toast.dismiss(t.id);
+                        await dispatch(ClearCart());
+                        setTimeout(async () => {
+                            const addResult = await dispatch(
+                                CreateCart({
+                                    menuItem: foodId,
+                                    quantity: 1,
+                                })
+                            );
+                        }, 500);
+                    }}>Replace</button>
+                </div>
+            </div>
+        ));
+    };
 
     const filteredfoods = categoryFoods.filter((item) => {
       if(filter === "Low"){
@@ -137,7 +177,7 @@ export const Category = () => {
                   </div>
                   <div className='d-flex justify-content-between align-items-center gap-2'>
                     <small className="mb-0 text-truncate">{food?.restaurant?.name}</small>
-                    <button className="btn btn-danger btn-sm rounded-2 flex-shrink-0" onClick={()=> createCart(food._id)}><small>Add To Cart</small></button>
+                    <button className="btn btn-danger btn-sm rounded-2 flex-shrink-0" onClick={(e)=> {e.stopPropagation(); createCart(food._id)}}><small>Add To Cart</small></button>
                   </div>
                   {/* <div className="mt-auto d-grid gap-2 d-flex justify-content-around">
                     <button className="btn btn-outline-danger btn-sm rounded-pill" onClick={() => navigate(`/fooddetails/${food._id}`)}><small>View Details</small></button>

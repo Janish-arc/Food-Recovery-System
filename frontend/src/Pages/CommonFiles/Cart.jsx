@@ -54,33 +54,33 @@ export const Cart = () => {
         {/* Header */}
         <div className="d-flex justify-content-between align-items-center mb-4">
             <div className="d-flex align-items-center gap-3">
-                <button className="btn rounded-circle border border-white" style={{fontSize:"30px"}}><i className="bi bi-arrow-left-circle" onClick={() => navigate(`/`)}></i></button>
+                <button className="btn rounded-circle border border-white" style={{fontSize:"25px"}}><i className="bi bi-arrow-left-circle" onClick={() => navigate(`/`)}></i></button>
                 <div>
-                    <h3 className="fw-bold mb-0"> My Cart </h3>
+                    <h5 className="fw-bold mb-0"> My Cart </h5>
                     <small className="text-secondary">{cart?.items?.length || 0} Items</small>
                 </div>
             </div>
-            <ShoppingBag size={30} />
+            <ShoppingBag size={25} />
         </div>        
 
         {/* Calculations  */}
         {cart?.items?.length > 0 && 
         <div className="card shadow border-0 rounded-4 mb-5">
             <div className="card-body">
-                <h4 className="fw-bold mb-4">Bill Details</h4>
-                <div className="d-flex justify-content-between mb-3">
+                <h5 className="fw-bold mb-4">Bill Details</h5>
+                <div className="d-flex justify-content-between mb-2">
                     <span>Subtotal</span>
-                    <span>₹ {cart?.subtotal}</span>
+                    <span className="fw-medium">₹ {cart?.subtotal}</span>
                 </div>
                 {cart.discount > 0 && 
-                <div className="d-flex justify-content-between mb-3">
+                <div className="d-flex justify-content-between mb-2">
                     <span>Discount</span>
-                    <span>₹ {cart?.discount}</span>
+                    <span className="fw-medium">₹ {cart?.discount}</span>
                 </div>
                 }
-                <div className="d-flex justify-content-between mb-3">
+                <div className="d-flex justify-content-between mb-2">
                     <span>GST & Other Charges</span>
-                    <span>₹ {cart?.deliveryFee + cart?.tax}</span>
+                    <span className="fw-medium">₹ {cart?.deliveryFee + cart?.tax}</span>
                 </div>
                 <hr />
                 <div className="d-flex justify-content-between">
@@ -96,10 +96,10 @@ export const Cart = () => {
             <div className="card-body">
                 <div className="d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 className="fw-bold mb-1">📍 Deliver To</h5>
-                        <p className="text-secondary mb-0">{user?.address}</p>
+                        <h6 className="fw-bold mb-1">📍 Deliver To</h6>
+                        <small className="text-secondary mb-0">{user?.address}</small>
                     </div>
-                    <button className="btn btn-outline-warning rounded-pill">Change</button>
+                    <button className="btn btn-outline-warning btn-sm rounded-pill">Change</button>
                 </div>
             </div>
         </div>
@@ -109,10 +109,10 @@ export const Cart = () => {
             <div className="card-body">
                 <div className="d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 className="fw-bold mb-1">🎁 Apply Coupon</h5>
+                        <h6 className="fw-bold mb-1">🎁 Apply Coupon</h6>
                         <small className="text-secondary">Save more on your order</small>
                     </div>
-                    <button className="btn btn-warning rounded-pill">Apply</button>
+                    <button className="btn btn-warning btn-sm rounded-pill">Apply</button>
                 </div>
             </div>
         </div>
@@ -139,10 +139,10 @@ export const Cart = () => {
                         <div className="col-8 col-md-9">
                         <div className="d-flex justify-content-between">
                             <div>
-                                <h5 className="fw-bold">{item?.menuItem?.name}</h5>
-                                <p className="text-secondary mb-1">{item?.menuItem?.description}</p>
-                                <h6>⭐ {item?.menuItem?.rating}</h6>
-                                <h5 className="text-success">₹ {item?.menuItem?.price}</h5>
+                                <h6 className="fw-bold">{item?.menuItem?.name}</h6>
+                                <small className="text-secondary">{item?.menuItem?.description}</small>
+                                <h6 className="mt-2">⭐ {item?.menuItem?.rating}</h6>
+                                <h6 className="text-success">₹ {item?.menuItem?.price}</h6>
                             </div>
 
                         {/* Delete */}
@@ -174,7 +174,7 @@ export const Cart = () => {
                     <h6 className="fw-bold mb-0">{cart?.items?.length} Items</h6>
                     ₹ {cart?.total}
                 </div>
-            <button className="btn btn-dark rounded-pill px-4" onClick={() => navigate("/checkout")}>Proceed →</button>
+            <button className="btn btn-dark btn-sm rounded-pill px-4" onClick={() => navigate("/checkout")}>Proceed →</button>
             </div>
         </div>
         </div>

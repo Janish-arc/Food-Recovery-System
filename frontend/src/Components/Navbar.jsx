@@ -11,16 +11,16 @@ export const Navbar = () => {
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const {isAuthenticated, user} = useSelector((state) => state.user)
+  const {isAuthenticated, user, success} = useSelector((state) => state.user)
   const logoutUser = async() => {
       try {
           await api.post("/api/v1/user/logout", {}, { withCredentials: true });
+          setOpen(false)
+          dispatch(logout());
+          navigate("/");
       } catch (err) {
           console.log("Logout API failed:", err);
       }
-
-      dispatch(logout());
-      navigate("/");
   }
 
   return (
@@ -130,9 +130,9 @@ export const Navbar = () => {
         </div>
 
         {!isAuthenticated && 
-        <div className='d-flex gap-3 ms-auto mt-2'>
-            <h6 className='btn btn-primary'  style={{fontSize: window.innerWidth < 768 ? "13px" : "16px", padding: window.innerWidth < 768 ? "4px 8px" : "8px 16px"}} onClick={() => navigate("/login")}>LOGIN</h6>
-            <h6 className='btn btn-primary'  style={{fontSize: window.innerWidth < 768 ? "13px" : "16px", padding: window.innerWidth < 768 ? "4px 8px" : "8px 16px"}} onClick={() => navigate("/register")}>REGISTER</h6>   
+        <div className='d-flex gap-3 ms-auto mt-2 align-items-center'>
+            <h6 className='text-primary fw-bold' style={{fontFamily: "'Poppins', sans-serif", cursor: "pointer"}}  onClick={() => navigate("/login")}>Login</h6>
+            <h6 className='text-primary fw-bold' style={{fontFamily: "'Poppins', sans-serif", cursor: "pointer"}} onClick={() => navigate("/register")}>Register</h6>   
         </div>
         }
 

@@ -73,16 +73,16 @@ export const Home = () => {
 
                 {/* Restaurant Section */}
                 <div className='container' id="restaurants">
-                <div className="row g-4 ">
+                <div className="row g-4">
                     <h4 className="fw-bold fs-4">Recommended for You</h4>
                     {restaurants?.map((item) => (
                         <div className="col-6 col-md-4 col-lg-3 overflow-x-auto" style={{scrollbarWidth: "none"}} key={item._id} onClick={() => navigate(`/restaurantdetails/${item._id}`)}>
                             <div className="h-100 food">
                                 <img src={item.banner.url} alt={item.name} className="img-fluid shadow w-100" style={{height: "clamp(150px, 18vw, 230px)", objectFit: "cover", borderRadius: "15px"}}/>
                                 <h6 className="fw-bold mt-2 ms-2 text-truncate">{item.name}</h6>
-                                <div className="d-flex align-items-center gap-3 ms-2">
-                                    <h6 className="fw-semibold mb-0">⭐ {item.rating} ({item.totalReviews} reviews)</h6>
-                                    <h6 className="text-muted mb-0">{item.deliveryTime}</h6>
+                                <div className="d-flex align-items-center gap-3 ms-2 flex-wrap">
+                                    <small className="text-muted mb-0 flex-shrink-0">{item.deliveryTime}</small>
+                                    <small className="fw-semibold mb-0 flex-shrink-0">⭐ {item.rating} ({item.totalReviews} reviews)</small>
                                 </div>
                                 <h6 className="text-muted mt-2 ms-2 text-truncate"><small>{item.foods ?.slice(0, 3).map((food) => food.name).join(",")}</small></h6>
                             </div>
@@ -97,16 +97,16 @@ export const Home = () => {
                 <div className='row g-4 '>
                     <div className="d-flex justify-content-between align-items-center">
                         <h4 className='fw-bold fs-4'>Customer Favourites</h4>
-                        <button className="btn btn-outline-primary rounded-pill" onClick={() => navigate("/all/restaurants")}>See All</button>
+                        <button className="btn btn-outline-primary btn-sm rounded-pill" onClick={() => navigate("/all/restaurants")}><small className='fw-semibold'>See All</small></button>
                     </div>
                     {sortedRestaurants?.map((item) => (
                         <div className="col-6 col-md-4 col-lg-3 overflow-x-auto" style={{scrollbarWidth: "none"}} key={item._id} onClick={() => navigate(`/restaurantdetails/${item._id}`)}>
                             <div className="h-100 food">
                                 <img src={item.banner.url} alt={item.name} className="img-fluid shadow w-100" style={{height: "clamp(150px, 18vw, 230px)", objectFit: "cover", borderRadius: "15px"}}/>
                                 <h6 className="fw-bold mt-2 ms-2 text-truncate">{item.name}</h6>
-                                <div className="d-flex align-items-center gap-3 ms-2">
-                                    <h6 className="fw-semibold mb-0">⭐ {item.rating} ({item.totalReviews} reviews)</h6>
-                                    <h6 className="text-muted mb-0">{item.deliveryTime}</h6>
+                                <div className="d-flex align-items-center gap-3 ms-2 flex-wrap">
+                                    <small className="text-muted mb-0 flex-shrink-0">{item.deliveryTime}</small>
+                                    <small className="fw-semibold mb-0 flex-shrink-0">⭐ {item.rating} ({item.totalReviews} reviews)</small>
                                 </div>
                                 <h6 className="text-muted mt-2 ms-2 text-truncate">{item.foods ?.slice(0, 3).map((food) => food.name).join(",")}</h6>
                             </div>
@@ -121,7 +121,7 @@ export const Home = () => {
                 <div className="row g-4 mb-2 ">
                     <div className="d-flex justify-content-between align-items-center">
                         <h4 className='fw-bold fs-4'>Popular dishes</h4>
-                        <button className="btn btn-outline-primary rounded-pill" onClick={() => navigate("/all/foods")}>See All</button>
+                        <button className="btn btn-outline-primary btn-sm rounded-pill" onClick={() => navigate("/all/foods")}><small className='fw-semibold'>See All</small></button>
                     </div>
                     {sortedFoods?.map((item) => (
                         <div className="col-6 col-md-4 col-lg-3 overflow-x-auto" style={{scrollbarWidth: "none"}} key={item._id} onClick={() => navigate(`/fooddetails/${item._id}`)}>
@@ -129,10 +129,10 @@ export const Home = () => {
                                 <img src={item.image.url} alt={item.name} className="img-fluid w-100 " style={{height: "clamp(150px, 18vw, 180px)", objectFit: "cover", borderRadius:"10px 10px 0px 0px"}}/>
                                 <h6 className='fw-bold  text-truncate mt-2 ms-3'>{item.name}</h6>
                                 <div className="d-flex justify-content-between align-items-center ms-3">
-                                    <h6 className='fw-semibold'>⭐ {item.rating} ({item.totalReviews} reviews)</h6>
-                                    <h6 className='pe-3'>₹{item.price}</h6>
+                                    <small className='fw-semibold'>⭐ {item.rating} ({item.totalReviews} reviews)</small>
+                                    <small className='pe-3 fw-bold'>₹{item.price}</small>
                                 </div>
-                                <div className='d-flex justify-content-end m-2'>
+                                <div className='d-flex justify-content-end mx-2 mb-2 mt-1'>
                                     <button className="btn btn-warning w-50 btn-sm"> Add to Cart</button>
                                 </div>
                          

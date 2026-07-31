@@ -11,6 +11,7 @@ import { GetCategory } from "../../Redux/CategorySlice";
 import { ClearCart, CreateCart } from "../../Redux/CartSlice";
 import { BsGeoAltFill } from "react-icons/bs";
 import toast from "react-hot-toast";
+import { GetRestaurantReviews } from "../../Redux/ReviewSlice";
 
 export const RestaurantDetails = () => {
 
@@ -19,6 +20,7 @@ export const RestaurantDetails = () => {
     const {category} = useSelector((state) => state.category)
     const {cart, success} = useSelector((state) => state.cart)
     const {isAuthenticated} = useSelector((state) => state.user)
+    const {restaurantReviews, restaurantReviewCount } = useSelector((state) => state.review)
     const [search, setSearch] = useState("")
 
     const {id} = useParams()
@@ -54,6 +56,7 @@ export const RestaurantDetails = () => {
 
     useEffect(() => {
         dispatch(GetSingleRestaurant(id))
+        dispatch(GetRestaurantReviews(id))
         dispatch(GetRestaurantFoods(id))
         dispatch(GetCategory())
     }, [dispatch, id])
@@ -117,6 +120,7 @@ export const RestaurantDetails = () => {
         return data;
     }, [restaurantfood, search]);
 
+    console.log(restaurantReviews)
     return (
         <>
             <Navbar/>
@@ -141,29 +145,8 @@ export const RestaurantDetails = () => {
                         ))}
                     </div>
 
-                    {/* Restaurant Details */}
-                    {/* <div className="shadow rounded-4 bg-white p-4 mt-4">
-                        <div className="d-flex justify-content-between gap-2 flex-wrap">
-                            <div>
-                                <h2 className="fw-bold">{restaurant.name}</h2>
-                                <p className="text-muted mb-2 text-truncate" style={{width:"400px"}}>{restaurant.foods ?.slice(0, 3).map((food) => food.name).join(",")}</p>
-                            </div>
-                            <div className="text-center">
-                                <div className="bg-success text-white rounded p-2" style={{ width: 70 }}>
-                                {restaurant.rating} ⭐ 
-                                </div>
-                                <small>{restaurant.totalReviews} Reviews</small>
-                            </div>
-                        </div>
-                        <div className="d-flex flex-column gap-1">
-                            <span><BsGeoAltFill className="text-danger fs-5"/> {restaurant.address}, {restaurant.city}</span>
-                            <span>🕒 {restaurant?.deliveryTime}</span>
-                            </div>
-                    </div> */}
                     <div className="card border-0 shadow-sm rounded-4 p-3 mt-4">
-
                         <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
-
                             {/* Left */}
                             <div className="flex-grow-1">
                             <h4 className="fw-bold mb-1">
@@ -192,13 +175,11 @@ export const RestaurantDetails = () => {
                                 </small>
                             </div>
                             </div>
-
                         </div>
 
                         <hr className="my-3" />
 
                         <div className="d-flex flex-column gap-2">
-
                             <div className="d-flex align-items-start">
                             <BsGeoAltFill className="text-danger me-2 mt-1 flex-shrink-0" />
                             <small className="text-muted">
@@ -212,9 +193,71 @@ export const RestaurantDetails = () => {
                                 {restaurant.deliveryTime}
                             </small>
                             </div>
+                        </div>
+                    </div>
+
+                    {/* Restaurant Reviews */}
+                    <div className="card border-0 shadow-sm rounded-4 mt-4">
+                        <div className="card-body p-4">
+
+                            <div className="d-flex justify-content-between align-items-center mb-4">
+                                <h4 className="fw-bold mb-0">
+                                    ⭐ Customer Reviews
+                                </h4>
+
+                                {restaurantReviews?.length > 3 && (
+                                    <button className="btn btn-outline-dark btn-sm rounded-pill">
+                                        View All
+                                    </button>
+                                )}
+                            </div>
+
+                            {restaurantReviews?.length > 0 ? (
+                                restaurantReviews.slice(0, 3).map((item) => (
+                                    <div key={item._id} className="border-bottom pb-3 mb-3">
+                                        <div className="d-flex justify-content-between align-items-start">
+                                            <div className="d-flex align-items-center gap-3">
+                                                <img
+                                                    src={item?.user?.image?.url}
+                                                    alt={item?.user?.name}
+                                                    className="rounded-circle"
+                                                    style={{
+                                                        width: "50px",
+                                                        height: "50px",
+                                                        objectFit: "cover"
+                                                    }}
+                                                />
+                                                <div>
+                                                    <h6 className="fw-bold mb-1">
+                                                        {item?.user?.name}
+                                                    </h6>
+                                                    <div className="text-warning">
+                                                        {Array.from({ length: 5 }, (_, index) => (
+                                                            <span key={index}>
+                                                                {index < item.rating ? "⭐" : "☆"}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <small className="text-muted">
+                                                {new Date(item.createdAt).toLocaleDateString()}
+                                            </small>
+                                        </div>
+                                        <p className="text-secondary mt-3 mb-0">
+                                            {item.comment}
+                                        </p>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-center py-4">
+                                    <h6 className="text-muted">
+                                        No reviews yet.
+                                    </h6>
+                                </div>
+                            )}
 
                         </div>
-
                     </div>
 
                     {/* Search bar */}

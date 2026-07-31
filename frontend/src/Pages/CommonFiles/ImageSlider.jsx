@@ -27,7 +27,7 @@ export const ImageSlider = () => {
   return (
     <div className="position-relative" style={{ width: "100%", overflow: "hidden" }}>
       <div
-        style={{ display: "flex", transform: `translateX(-${current * 100}%)`, transition: "transform 2s ease-in-out" }}>
+        style={{ display: "flex", transform: `translateX(-${current * 100}%)`, transition: "transform 1.5s ease-in-out" }}>
         {images.map((image, index) => (
           <img key={index} src={image} alt={`slide-${index}`} className="w-100 flex-shrink-0"style={{height: "clamp(250px, 35vw, 400px)", objectFit: "cover"}}/>
         ))}

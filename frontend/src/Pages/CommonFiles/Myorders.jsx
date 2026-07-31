@@ -4,13 +4,13 @@ import {
     CheckCircle, XCircle, Clock, Trash2, ChefHat, Home, CreditCard,
     Star
 } from "lucide-react";
-import EmptyOrders from "../../assets/cart.webp";
+import EmptyOrders from "../../assets/order.png";
 import { Navbar } from "../../Components/Navbar";
 import { Footer } from "../../Components/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { GetMyOrder, CancelOrder } from "../../Redux/OrderSlice";
 import { useNavigate } from "react-router-dom";
-import { CreateRestaurantReview } from "../../Redux/ReviewSlice";
+import { CreateFoodReview, CreateRestaurantReview } from "../../Redux/ReviewSlice";
 import toast from "react-hot-toast";
 
 
@@ -61,7 +61,8 @@ export const MyOrders = () => {
     const navigate = useNavigate();
 
     const [expandedId, setExpandedId] = useState(null);
-    const [reviewId, setReviewId] = useState(null)
+    const [reviewId, setReviewId] = useState(null);         // order id whose "review restaurant" panel is open
+    const [foodReview, setFoodReview] = useState(null);     // { orderId, item } for whichever food item's panel is open, or null
     const [filter, setFilter] = useState("All");
     const [cancellingId, setCancellingId] = useState(null);
     const [rating, setRating] = useState(0);
@@ -72,12 +73,34 @@ export const MyOrders = () => {
         dispatch(GetMyOrder());
     }, [dispatch]);
 
+    const resetReviewForm = () => {
+        setRating(0);
+        setHover(0);
+        setComment("");
+    };
+
     const toggleExpand = (id) => {
         setExpandedId(expandedId === id ? null : id);
     };
+
+    // Opens/closes the restaurant review panel; always closes whichever food-item panel was open
     const toggleReview = (id) => {
-        setReviewId(reviewId === id ? null : id)
-    }
+        const opening = reviewId !== id;
+        setReviewId(opening ? id : null);
+        setFoodReview(null);
+        resetReviewForm();
+    };
+
+    // Opens the review panel for a specific food item; closes the restaurant panel.
+    // Clicking the same item again closes it; clicking a different item switches to that item.
+    const toggleFoodReview = (o, item) => {
+        const alreadyOpenForThisItem = foodReview?.item?._id === item?._id;
+        setFoodReview(alreadyOpenForThisItem ? null : { orderId: o._id, item });
+        setReviewId(null);
+        resetReviewForm();
+    };
+
+
     const filteredOrders = order?.filter((o) => {
         if (filter === "All") return true;
         if (filter === "Active") return !["Delivered", "Cancelled"].includes(o?.orderStatus);
@@ -98,6 +121,7 @@ export const MyOrders = () => {
         setCancellingId(null);
     };
 
+    // Submits a review for the RESTAURANT tied to this order
     const submitReview = async (o) => {
         const result = await dispatch(
             CreateRestaurantReview({
@@ -109,11 +133,33 @@ export const MyOrders = () => {
         );
         if (CreateRestaurantReview.fulfilled.match(result)) {
             toast.success(result.payload.message);
-            setReviewId(null)
         } else {
             toast.error(result.payload?.message || "Something went wrong");
         }
+        setReviewId(null);
+        resetReviewForm();
     };
+
+    // Submits a review for the food item currently open in the panel
+    const submitFoodHandler = async () => {
+        const result = await dispatch(
+            CreateFoodReview({
+                food: foodReview?.item?.menuItem,
+                order: foodReview?.orderId,
+                rating,
+                comment,
+            })
+        );
+        if (CreateFoodReview.fulfilled.match(result)) {
+            toast.success(result.payload.message);
+        } else {
+            toast.error(result.payload?.message || "Something went wrong");
+        }
+        setFoodReview(null);
+        resetReviewForm();
+    };
+
+
 
     return (
         <div>
@@ -189,11 +235,7 @@ export const MyOrders = () => {
                         const extraCount = (o?.items?.length || 0) - visibleItems.length;
 
                         return (
-                            <div
-                                key={o._id}
-                                className="card border-0 shadow-sm rounded-4 mb-4 order-card"
-                                style={{ borderLeft: `5px solid ${meta.accent}` }}
-                            >
+                            <div key={o._id} className="card border-0 shadow-sm rounded-4 mb-4 order-card" style={{ borderLeft: `5px solid ${meta.accent}` }}>
                                 <div className="card-body">
 
                                     {/* Order Header */}
@@ -202,13 +244,11 @@ export const MyOrders = () => {
                                             <h5 className="fw-bold mb-1">{o?.restaurant?.name}</h5>
                                             <small className="text-secondary d-flex align-items-center gap-1">
                                                 <Clock size={14} />
-                                                {new Date(o?.createdAt).toLocaleDateString("en-IN", {
-                                                    day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit"
-                                                })}
+                                                {new Date(o?.createdAt).toLocaleDateString("en-IN", {day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit"})}
                                             </small>
                                         </div>
                                         <div className="d-flex align-items-center gap-2">
-                                            <button className="btn btn-primary rounded btn-sm" onClick={() => navigate(`/orderdetails/${o._id}`)}><small>View Order</small></button>
+                                            <button className="btn btn-primary rounded btn-sm flex-shrink-0" onClick={() => navigate(`/orderdetails/${o._id}`)}><small>View Order</small></button>
                                             <span className={`badge rounded-pill px-2 py-1 ${meta.badge}`}>
                                                 {o?.orderStatus}
                                             </span>
@@ -229,9 +269,10 @@ export const MyOrders = () => {
                                     </div>
 
                                     {/* Items Preview */}
-                                    <div className="d-md-flex gap-2 overflow-auto pb-2 mb-3">
+                                    <div className="overflow-auto pb-2 mb-3">
                                         {visibleItems.map((item) => (
-                                            <div key={item?._id} className="d-flex align-items-center gap-2 flex-shrink-0 my-2">
+                                            <div key={item?._id} className="d-flex align-items-center gap-2 flex-shrink-0 my-2" 
+                                            onClick={() => navigate(`/fooddetails/${item.menuItem}`)}>
                                                 <img
                                                     src={item?.image?.url}
                                                     alt={item?.name}
@@ -242,6 +283,10 @@ export const MyOrders = () => {
                                                     <h6 className="fw-semibold mb-0 small">{item?.name}</h6>
                                                     <small className="text-secondary">x{item?.quantity}</small>
                                                 </div>
+                                                {o?.orderStatus === "Delivered" && (
+                                                <div className="ms-auto">
+                                                    <button className="btn btn-dark rounded btn-sm" onClick={(e) => {e.stopPropagation(); toggleFoodReview(o, item)}}>Review</button>
+                                                </div>)}
                                             </div>
                                         ))}
                                         {extraCount > 0 && (
@@ -376,9 +421,11 @@ export const MyOrders = () => {
                                         </div>
                                     )}
 
+                                    {/* Review the RESTAURANT */}
                                     {reviewId === o?._id && (
                                         <div>
                                             <hr/>
+                                            <small className="fw-bold">{o?.restaurant?.name}</small>
                                             <div className="my-3">
                                                 <label className="form-label"><small>Rating</small></label>
                                                 <div className="d-flex align-items-center gap-1">
@@ -392,7 +439,6 @@ export const MyOrders = () => {
                                             </div>
                                             <div className="mb-3">
                                                 <label className="form-label">Comment</label>
-
                                                 <textarea
                                                     className="form-control"
                                                     rows={2}
@@ -402,6 +448,36 @@ export const MyOrders = () => {
                                                 />
                                             </div>
                                             <button className="btn btn-warning btn-sm float-end" onClick={() => submitReview(o)}>Submit Review</button>
+                                        </div>
+                                    )}
+
+                                    {/* Review a FOOD ITEM */}
+                                    {foodReview?.orderId === o?._id && (
+                                        <div>
+                                            <hr/>
+                                            <small className="fw-bold">{foodReview?.item?.name}</small>
+                                            <div className="my-3">
+                                                <label className="form-label"><small>Rating</small></label>
+                                                <div className="d-flex align-items-center gap-1">
+                                                {[1, 2, 3, 4, 5].map((star) => (
+                                                    <Star key={star}
+                                                    size={20} fill={(hover || rating) >= star ? "#ffc107" : "none"} color={(hover || rating) >= star ? "#ffc107" : "#ced4da"}
+                                                    style={{ cursor: "pointer" }} onClick={() => setRating(star)} onMouseEnter={() => setHover(star)} onMouseLeave={() => setHover(0)}/>
+                                                ))}
+                                                <small className="ms-2 text-muted"> {rating > 0 ? `${rating}/5` : "Select Rating"} </small>
+                                                </div>
+                                            </div>
+                                            <div className="mb-3">
+                                                <label className="form-label">Comment</label>
+                                                <textarea
+                                                    className="form-control"
+                                                    rows={2}
+                                                    value={comment}
+                                                    onChange={(e) => setComment(e.target.value)}
+                                                    placeholder="Share your experience..."
+                                                />
+                                            </div>
+                                            <button className="btn btn-warning btn-sm float-end" onClick={submitFoodHandler}>Submit Review</button>
                                         </div>
                                     )}
                                 </div>

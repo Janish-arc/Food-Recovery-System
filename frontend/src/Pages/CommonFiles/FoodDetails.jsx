@@ -19,6 +19,7 @@ import {
 
 import { GetSingleFood } from "../../Redux/FoodSlice";
 import { CreateCart } from "../../Redux/CartSlice";
+import { GetFoodReviews } from "../../Redux/ReviewSlice";
 
 export const FoodDetails = () => {
 
@@ -27,12 +28,18 @@ export const FoodDetails = () => {
   const navigate = useNavigate()
   const { SingleFood, loading } = useSelector((state) => state.food);
   const { success, error } = useSelector((state) => state.cart)
+  const { foodReviews, foodReviewCount } = useSelector((state) => state.review)
   const [quantity, setQuantity] = useState(1);
   const [liked, setLiked] = useState(false);
 
   useEffect(() => {
     dispatch(GetSingleFood(id));
   }, [dispatch, id]);
+
+  
+  useEffect(() => {
+    dispatch(GetFoodReviews(id))
+  }, [dispatch, id])
 
   const increase = () => {setQuantity((prev) => prev + 1);};
   const decrease = () => {
@@ -63,6 +70,7 @@ export const FoodDetails = () => {
       </>
     );
   }
+
 
   return (
     <>
@@ -141,199 +149,92 @@ export const FoodDetails = () => {
                 <hr />
 
                 {/* Description */}
-                {/* <div className="mb-4">
-                  <h4 className="fw-bold mb-3">Description</h4>
-                  <p className="text-secondary" style={{lineHeight: "30px"}}>{SingleFood?.description}</p>
-                </div> */}
+                <div className="mb-3">
+                    <h5 className="fw-bold mb-2">🍽 About this dish</h5>
+                    <p className="text-secondary mb-0" style={{lineHeight: "26px",fontSize: "15px"}}>
+                        {SingleFood?.description}
+                    </p>
+                </div>
 
-                {/* Availability */}
-                {/* <div className="d-flex flex-wrap gap-2 mb-4">
-                  <span className={`badge fs-6 px-3 py-2 ${SingleFood?.isAvailable ? "bg-success" : "bg-danger"}`}>{SingleFood?.isAvailable ? "Available" : "Out of Stock"}</span>
-                  <span className="badge bg-warning text-dark fs-6 px-3 py-2">Bestseller</span>
-                  <span className="badge bg-primary fs-6 px-3 py-2">Freshly Prepared</span>
-                </div> */}
+                {/* Badges */}
+                <div className="d-flex flex-wrap gap-2 mb-3">
+                    <span className="badge rounded-pill bg-success-subtle text-success px-3 py-2">
+                        🟢 Available
+                    </span>
+                    <span className="badge rounded-pill bg-warning-subtle text-warning-emphasis px-3 py-2">
+                        🔥 Bestseller
+                    </span>
+                    <span className="badge rounded-pill bg-primary-subtle text-primary px-3 py-2">
+                        👨‍🍳 Fresh
+                    </span>
+                </div>
 
                 {/* Quantity */}
-                {/* <div className="mb-4">
-                  <h5 className="fw-bold mb-3">Quantity</h5>
-                  <div className="d-inline-flex align-items-center border rounded-pill overflow-hidden">
-                    <button className="btn" onClick={decrease}><BsDash size={22} /></button>
-                    <span className="px-4 fw-bold">{quantity}</span>
-                    <button className="btn" onClick={increase}><BsPlus size={22} /></button>
-                  </div>
-                </div> */}
+                <div className="mb-3">
+                    <h6 className="fw-bold mb-2">
+                        Quantity
+                    </h6>
+                    <div className="d-inline-flex align-items-center border rounded-pill px-1">
+                        <button className="btn btn-sm" onClick={decrease}>
+                            <BsDash size={18}/>
+                        </button>
+                        <span className="px-3 fw-bold">
+                            {quantity}
+                        </span>
+                        <button className="btn btn-sm" onClick={increase}>
+                            <BsPlus size={18}/>
+                        </button>
+                    </div>
+                </div>
 
                 {/* Total */}
-                {/* <div className="mb-4">
-                  <div className="bg-light rounded-4 p-3 d-flex justify-content-between align-items-center">
-                    <h5 className="mb-0">Total</h5>
-                    <h3 className="fw-bold text-danger mb-0">₹ {SingleFood?.price * quantity}</h3>
-                  </div>
-                </div> */}
+                <div className="bg-light rounded-4 p-3 mb-3 d-flex justify-content-between align-items-center">
+                    <small className="fw-semibold text-secondary">
+                        Total
+                    </small>
+                    <h4 className="fw-bold text-danger mb-0">
+                        ₹ {SingleFood?.price * quantity}
+                    </h4>
+                </div>
 
                 {/* Buttons */}
-                {/* <div className="row">
-                  <div className="col-6 mb-3">
-                    <button className="btn btn-outline-danger btn-sm w-100 py-1 rounded-pill fw-bold" onClick={() => addToCartHandler(SingleFood._id)}>🛒 Add To Cart</button>
-                  </div>
-                  <div className="col-6 mb-3">
-                    <button className="btn btn-danger btn-sm w-100 py-1 rounded-pill fw-bold">Buy Now</button>
-                  </div>
-                </div> */}
+                <div className="row g-2 mb-3">
+                    <div className="col-6">
+                        <button className="btn btn-outline-danger rounded-pill w-100 fw-semibold py-2" onClick={() => addToCartHandler(SingleFood._id)}>
+                            🛒 Add
+                        </button>
+                    </div>
+                    <div className="col-6">
+                        <button className="btn btn-danger rounded-pill w-100 fw-semibold py-2">
+                            Buy
+                        </button>
+                    </div>
+                </div>
 
-                {/* Highlights */}
-                {/* <div className="mt-3">
-                  <div className="row">
-                    <div className="col-6 mb-3">
-                      <div className="border rounded-4 text-center p-3 h-100">
-                        <h4 className="fw-bold text-danger">25+</h4>
-                        <small className="text-secondary">Orders Today</small>
-                      </div>
+                {/* Stats */}
+                <div className="row g-2">
+                    <div className="col-6">
+                        <div className="border rounded-4 text-center py-3">
+                            <h5 className="fw-bold text-danger mb-1">
+                                🔥 25+
+                            </h5>
+                            <small className="text-secondary">
+                                Orders
+                            </small>
+                        </div>
                     </div>
 
-                    <div className="col-6  mb-3">
-                      <div className="border rounded-4 text-center p-3 h-100">
-                        <h4 className="fw-bold text-danger">{SingleFood.rating} ⭐</h4>
-                        <small className="text-secondary">Customer Rating</small>
-                      </div>
+                    <div className="col-6">
+                        <div className="border rounded-4 text-center py-3">
+                            <h5 className="fw-bold text-warning mb-1">
+                                ⭐ {SingleFood?.rating}
+                            </h5>
+                            <small className="text-secondary">
+                                Rating
+                            </small>
+                        </div>
                     </div>
-                  </div>
-                </div> */}
-
-
-                {/* Description */}
-<div className="mb-3">
-    <h5 className="fw-bold mb-2">
-        🍽 About this dish
-    </h5>
-
-    <p
-        className="text-secondary mb-0"
-        style={{
-            lineHeight: "26px",
-            fontSize: "15px"
-        }}
-    >
-        {SingleFood?.description}
-    </p>
-</div>
-
-{/* Badges */}
-<div className="d-flex flex-wrap gap-2 mb-3">
-
-    <span className="badge rounded-pill bg-success-subtle text-success px-3 py-2">
-        🟢 Available
-    </span>
-
-    <span className="badge rounded-pill bg-warning-subtle text-warning-emphasis px-3 py-2">
-        🔥 Bestseller
-    </span>
-
-    <span className="badge rounded-pill bg-primary-subtle text-primary px-3 py-2">
-        👨‍🍳 Fresh
-    </span>
-
-</div>
-
-{/* Quantity */}
-<div className="mb-3">
-
-    <h6 className="fw-bold mb-2">
-        Quantity
-    </h6>
-
-    <div
-        className="d-inline-flex align-items-center border rounded-pill px-1"
-    >
-        <button className="btn btn-sm" onClick={decrease}>
-            <BsDash size={18}/>
-        </button>
-
-        <span className="px-3 fw-bold">
-            {quantity}
-        </span>
-
-        <button className="btn btn-sm" onClick={increase}>
-            <BsPlus size={18}/>
-        </button>
-
-    </div>
-
-</div>
-
-{/* Total */}
-<div className="bg-light rounded-4 p-3 mb-3 d-flex justify-content-between align-items-center">
-
-    <small className="fw-semibold text-secondary">
-        Total
-    </small>
-
-    <h4 className="fw-bold text-danger mb-0">
-        ₹ {SingleFood?.price * quantity}
-    </h4>
-
-</div>
-
-{/* Buttons */}
-<div className="row g-2 mb-3">
-
-    <div className="col-6">
-
-        <button
-            className="btn btn-outline-danger rounded-pill w-100 fw-semibold py-2"
-            onClick={() => addToCartHandler(SingleFood._id)}
-        >
-            🛒 Add
-        </button>
-
-    </div>
-
-    <div className="col-6">
-
-        <button className="btn btn-danger rounded-pill w-100 fw-semibold py-2">
-            Buy
-        </button>
-
-    </div>
-
-</div>
-
-{/* Stats */}
-<div className="row g-2">
-
-    <div className="col-6">
-
-        <div className="border rounded-4 text-center py-3">
-
-            <h5 className="fw-bold text-danger mb-1">
-                🔥 25+
-            </h5>
-
-            <small className="text-secondary">
-                Orders
-            </small>
-
-        </div>
-
-    </div>
-
-    <div className="col-6">
-
-        <div className="border rounded-4 text-center py-3">
-
-            <h5 className="fw-bold text-warning mb-1">
-                ⭐ {SingleFood?.rating}
-            </h5>
-
-            <small className="text-secondary">
-                Rating
-            </small>
-
-        </div>
-
-    </div>
-
-</div>
+                </div>
               </div>
             </div>
           </div>
@@ -347,15 +248,9 @@ export const FoodDetails = () => {
                 🏪 Restaurant
               </h3>
 
-              <button
-                className="btn btn-outline-danger rounded-pill px-4"
-                onClick={() =>
-                  navigate(`/restaurantdetails/${SingleFood?.restaurant?._id}`)
-                }
-              >
+              <button className="btn btn-outline-danger rounded-pill px-4" onClick={() => navigate(`/restaurantdetails/${SingleFood?.restaurant?._id}`)}>
                 Visit Restaurant
               </button>
-
             </div>
 
             <div
@@ -367,111 +262,68 @@ export const FoodDetails = () => {
             >
 
               {/* Restaurant Image */}
-
               <div className="col-md-2 col-4 text-center">
-
                 <img
                   src={SingleFood?.restaurant?.banner?.url}
                   alt={SingleFood?.restaurant?.name}
                   className="rounded-circle shadow"
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    objectFit: "cover",
-                  }}
+                  style={{width: "100px",height: "100px",objectFit: "cover"}}
                 />
-
               </div>
 
               {/* Details */}
-
               <div className="col-md-7 col-8">
-
                 <h4 className="fw-bold mb-2">
                   {SingleFood?.restaurant?.name}
                 </h4>
-
                 <p className="text-secondary mb-2">
                   <BsGeoAlt className="text-danger me-2" />
-                  {SingleFood?.restaurant?.address},
-                  {" "}
-                  {SingleFood?.restaurant?.city}
+                  {SingleFood?.restaurant?.address},{" "}{SingleFood?.restaurant?.city}
                 </p>
 
                 <div className="d-flex flex-wrap gap-2">
-
                   <span className="badge bg-success px-3 py-2">
                     ⭐ {SingleFood?.restaurant?.rating || 4.5}
                   </span>
-
                   <span className="badge bg-primary px-3 py-2">
                     🚴 {SingleFood?.restaurant?.deliveryTime}
                   </span>
-
                   <span className="badge bg-warning text-dark px-3 py-2">
                     💸 ₹{SingleFood?.restaurant?.deliveryFee}
                   </span>
-
-                  <span
-                    className={`badge px-3 py-2 ${
-                      SingleFood?.restaurant?.isOpen
-                        ? "bg-success"
-                        : "bg-danger"
-                    }`}
-                  >
-                    {SingleFood?.restaurant?.isOpen
-                      ? "🟢 Open"
-                      : "🔴 Closed"}
+                  <span className={`badge px-3 py-2 ${SingleFood?.restaurant?.isOpen ? "bg-success" : "bg-danger"}`}>
+                    {SingleFood?.restaurant?.isOpen ? "🟢 Open" : "🔴 Closed"}
                   </span>
-
                 </div>
 
               </div>
-
               {/* Right Stats */}
-
               <div className="col-md-3 mt-4 mt-md-0">
-
                 <div className="row g-2">
-
                   <div className="col-6 col-md-12">
-
                     <div className="border rounded-4 text-center p-3">
-
                       <h5 className="fw-bold text-danger mb-1">
                         25+
                       </h5>
-
                       <small className="text-secondary">
                         Orders Today
                       </small>
-
                     </div>
-
                   </div>
 
                   <div className="col-6 col-md-12">
-
                     <div className="border rounded-4 text-center p-3">
-
                       <h5 className="fw-bold text-success mb-1">
                         30-45m
                       </h5>
-
                       <small className="text-secondary">
                         Delivery
                       </small>
-
                     </div>
-
                   </div>
-
                 </div>
-
               </div>
-
             </div>
-
           </div>
         </div>
 
@@ -502,78 +354,34 @@ export const FoodDetails = () => {
 
         {/* Customer Reviews */}
         <div className="card border-0 shadow rounded-4">
-
           <div className="card-body p-4">
-
-            <h3 className="fw-bold mb-4">
-              Customer Reviews
-            </h3>
-
-            <div className="mb-4 border-bottom pb-3">
-
-              <div className="d-flex justify-content-between">
-
-                <h5 className="fw-bold mb-1">
-                  Rahul
-                </h5>
-
-                <span className="text-warning">
-                  ⭐⭐⭐⭐⭐
-                </span>
-
-              </div>
-
-              <p className="text-secondary mb-0">
-                Delicious food! The taste was amazing and
-                the delivery was very quick.
-              </p>
-
+            <div className="d-flex justify-content-between mx-2">
+              <h5 className="fw-bold mb-4">Customer Reviews</h5>
+              <h5>{foodReviewCount} Reviews</h5>
             </div>
 
-            <div className="mb-4 border-bottom pb-3">
-
-              <div className="d-flex justify-content-between">
-
-                <h5 className="fw-bold mb-1">
-                  Priya
-                </h5>
-
-                <span className="text-warning">
-                  ⭐⭐⭐⭐☆
-                </span>
-
+            {foodReviews && foodReviews.map((item) => 
+            <div className="mb-4 border-bottom pb-3" key={item._id}>
+              <div className="d-flex justify-content-between align-items-center">
+                <div className="d-flex align-items-center gap-2 mb-2">
+                  <img src={item?.user?.image?.url} alt={item?.user?.name} className="rounded-circle" style={{width:"60px", height:"60px", objectFit:"cover"}}/>
+                  <div>
+                  <h6 className="fw-bold mb-1">{item?.user?.name}</h6>
+                  <small className="text-secondary mb-0 mt-3 fs-6">{item.comment}</small>
+                  </div>
+                </div>
+                
+                <small className="text-warning">
+                  {Array.from({ length: 5 }, (_, index) => (
+                    <span key={index}>
+                      {index < item.rating ? "⭐" : "☆"}
+                    </span>
+                  ))}
+                </small>
               </div>
-
-              <p className="text-secondary mb-0">
-                Good quality food with generous quantity.
-                Would definitely order again.
-              </p>
-
-            </div>
-
-            <div>
-
-              <div className="d-flex justify-content-between">
-
-                <h5 className="fw-bold mb-1">
-                  Arjun
-                </h5>
-
-                <span className="text-warning">
-                  ⭐⭐⭐⭐⭐
-                </span>
-
-              </div>
-
-              <p className="text-secondary mb-0">
-                One of the best dishes from this restaurant.
-                Highly recommended.
-              </p>
-
-            </div>
-
+              
+            </div>)}
           </div>
-
         </div>
       </div>
       </div>

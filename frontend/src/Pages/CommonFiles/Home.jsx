@@ -17,9 +17,9 @@ export const Home = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const location = useLocation();
-    const sortedRestaurants = [...restaurants].sort((a, b) => b.rating - a.rating);
+    const sortedRestaurants = Array.isArray(restaurants) ? [...restaurants].sort((a, b) => b.rating - a.rating) : [];
     const sortedFoods = Array.isArray(food) ? [...food].sort((a, b) => b.rating - a.rating): [];
-    const latestRestaurants = [...restaurants].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const latestRestaurants = Array.isArray(restaurants) ? [...restaurants].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) : [];
 
     useEffect(() => {
         dispatch(GetCategory())
@@ -75,14 +75,14 @@ export const Home = () => {
                 <div className='container' id="restaurants">
                 <div className="row g-4">
                     <h4 className="fw-bold fs-4">Recommended for You</h4>
-                    {restaurants?.map((item) => (
+                    {restaurants && restaurants?.map((item) => (
                         <div className="col-6 col-md-4 col-lg-3 overflow-x-auto" style={{scrollbarWidth: "none"}} key={item._id} onClick={() => navigate(`/restaurantdetails/${item._id}`)}>
                             <div className="h-100 food">
                                 <img src={item.banner.url} alt={item.name} className="img-fluid shadow w-100" style={{height: "clamp(150px, 18vw, 230px)", objectFit: "cover", borderRadius: "15px"}}/>
                                 <h6 className="fw-bold mt-2 ms-2 text-truncate">{item.name}</h6>
                                 <div className="d-flex align-items-center gap-3 ms-2 flex-wrap">
                                     <small className="text-muted mb-0 flex-shrink-0">{item.deliveryTime}</small>
-                                    <small className="fw-semibold mb-0 flex-shrink-0">⭐ {item.rating} ({item.totalReviews} reviews)</small>
+                                    <small className="fw-semibold mb-0 flex-shrink-0">⭐ {item.rating} ({item.totalReviews})</small>
                                 </div>
                                 <h6 className="text-muted mt-2 ms-2 text-truncate"><small>{item.foods ?.slice(0, 3).map((food) => food.name).join(",")}</small></h6>
                             </div>
@@ -106,7 +106,7 @@ export const Home = () => {
                                 <h6 className="fw-bold mt-2 ms-2 text-truncate">{item.name}</h6>
                                 <div className="d-flex align-items-center gap-3 ms-2 flex-wrap">
                                     <small className="text-muted mb-0 flex-shrink-0">{item.deliveryTime}</small>
-                                    <small className="fw-semibold mb-0 flex-shrink-0">⭐ {item.rating} ({item.totalReviews} reviews)</small>
+                                    <small className="fw-semibold mb-0 flex-shrink-0">⭐ {item.rating} ({item.totalReviews})</small>
                                 </div>
                                 <h6 className="text-muted mt-2 ms-2 text-truncate">{item.foods ?.slice(0, 3).map((food) => food.name).join(",")}</h6>
                             </div>
@@ -127,15 +127,14 @@ export const Home = () => {
                         <div className="col-6 col-md-4 col-lg-3 overflow-x-auto" style={{scrollbarWidth: "none"}} key={item._id} onClick={() => navigate(`/fooddetails/${item._id}`)}>
                             <div className="h-100 food shadow overflow-x-auto" style={{scrollbarWidth: "none"}}>
                                 <img src={item.image.url} alt={item.name} className="img-fluid w-100 " style={{height: "clamp(150px, 18vw, 180px)", objectFit: "cover", borderRadius:"10px 10px 0px 0px"}}/>
-                                <h6 className='fw-bold  text-truncate mt-2 ms-3'>{item.name}</h6>
-                                <div className="d-flex justify-content-between align-items-center ms-3">
-                                    <small className='fw-semibold'>⭐ {item.rating} ({item.totalReviews} reviews)</small>
+                                <div className='d-flex justify-content-between align-items-center gap-3'>
+                                    <h6 className='fw-bold text-truncate mt-2 ms-3'>{item.name}</h6>
+                                    <small className='fw-semibold me-3 flex-shrink-0 '>⭐ {item.rating} ({item.totalReviews})</small>
+                                </div>
+                                <div className="d-flex justify-content-between align-items-center ms-3 mb-2">
                                     <small className='pe-3 fw-bold'>₹{item.price}</small>
+                                    <button className="btn btn-warning btn-sm flex-shrink-0 me-2"> Add to Cart</button>
                                 </div>
-                                <div className='d-flex justify-content-end mx-2 mb-2 mt-1'>
-                                    <button className="btn btn-warning w-50 btn-sm"> Add to Cart</button>
-                                </div>
-                         
                             </div>
                         </div>
                     ))}
@@ -201,7 +200,7 @@ export const Home = () => {
                                 <img src={item.banner.url} alt={item.name} className="img-fluid shadow w-100" style={{height: "clamp(150px, 18vw, 230px)", objectFit: "cover", borderRadius: "15px"}}/>
                                 <h6 className="fw-bold fs-5 mt-2 ms-2 text-truncate">{item.name}</h6>
                                 <div className="d-flex align-items-center gap-3 ms-2">
-                                    <h6 className="fw-semibold mb-0">⭐ {item.rating} ({item.totalReviews} reviews)</h6>
+                                    <h6 className="fw-semibold mb-0">⭐ {item.rating} ({item.totalReviews})</h6>
                                     <h6 className="text-muted mb-0">{item.deliveryTime}</h6>
                                 </div>
                                 <h6 className="text-muted mt-2 ms-2 text-truncate">{item.foods ?.slice(0, 3).map((food) => food.name).join(",")}</h6>

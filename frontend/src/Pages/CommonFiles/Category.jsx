@@ -172,8 +172,8 @@ export const Category = () => {
                 {/* Card Body */}
                 <div className="card-body">
                   <div className="d-flex justify-content-between align-items-start mb-1">
-                    <h5 className="fw-bold mb-0">{food?.name}</h5>
-                    <span className="badge bg-success text-white">⭐ {food?.rating || 4.5}</span>
+                    <h6 className="fw-semibold mb-0">{food?.name}</h6>
+                    <small className="badge bg-success text-white">⭐ {food?.rating || 4.5}</small>
                   </div>
                   <div className='d-flex justify-content-between align-items-center gap-2'>
                     <small className="mb-0 text-truncate">{food?.restaurant?.name}</small>

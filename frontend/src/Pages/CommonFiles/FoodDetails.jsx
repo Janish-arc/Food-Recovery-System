@@ -338,10 +338,10 @@ export const FoodDetails = () => {
                   <div className="card border-0 shadow-sm rounded-4 h-100">
                     <img src={food.image?.url} className="card-img-top rounded-top-4" style={{height: "180px", objectFit: "cover"}} alt={food.name}/>
                     <div className="card-body">
-                      <h5 className="fw-bold text-truncate">{food.name}</h5>
+                      <h6 className="fw-bold text-truncate">{food.name}</h6>
                       <div className="d-flex gap-2 justify-content-between">
                         <p className="text-secondary mb-2">₹ {food.price}</p>
-                        <p className="mb-2">⭐{food.rating} <span>({food.totalReviews} reviews)</span></p>
+                        <p className="mb-2">⭐{food.rating} <span>({food.totalReviews})</span></p>
                       </div>
                       <button className="btn btn-outline-danger w-100 rounded-pill" onClick={() => navigate(`/fooddetails/${food._id}`)}>View Food</button>
                     </div>

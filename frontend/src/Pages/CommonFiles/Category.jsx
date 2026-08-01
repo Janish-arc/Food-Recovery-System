@@ -162,7 +162,7 @@ export const Category = () => {
 
                 {/* Food Image */}
                 <div className="position-relative">
-                  <img src={food?.image?.url} alt={food?.name} className="card-img-top" style={{height: "220px", objectFit: "cover"}}/>
+                  <img src={food?.image?.url} alt={food?.name} className="card-img-top" style={{height: "clamp(150px, 18vw, 180px)", objectFit: "cover"}}/>
                   <span className={`badge position-absolute top-0 start-0 m-3 ${food?.category?.name === "Vegeterian" ? "bg-success" : "bg-danger"}`}>
                     {food?.category?.name}
                   </span>

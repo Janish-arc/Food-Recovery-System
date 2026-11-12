@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import logo from '../assets/image.avif'
+import logo from "../assets/Logo.png"
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../Redux/UserSlice'
@@ -26,7 +26,7 @@ export const Navbar = () => {
   return (
     <>
       {open && (
-        <div className="shadow px-3 py-3 position-fixed bg-white overflow-y auto navbar"  style={{ top: 0, left: 0, height: "100vh", overflowY: "auto", scrollbarWidth:"none", width: window.innerWidth < 768 ? "300px" : "350px"}}>
+        <div className="shadow px-3 py-3 position-fixed bg-white text-black overflow-y auto navbar"  style={{ top: 0, left: 0, height: "100vh", overflowY: "auto", scrollbarWidth:"none", width: window.innerWidth < 768 ? "300px" : "350px"}}>
           <div className='d-flex justify-content-between position-fixed p-1 shadow pt-2 bg-white' style={{top: 0, left: 0, width: window.innerWidth < 768 ? "300px" : "350px", zIndex: 1500}}>
             <div className='d-flex gap-2'><h4 className="fw-bold"><img src={logo} style={{width:"30px"}}/><span className='pt-2'> RecuPy</span></h4></div>
             <div className="ms-auto me-4" style={{fontSize:"20px"}} type="button" onClick={() => setOpen(false)}><i className="bi bi-x-circle-fill"></i></div>
@@ -70,11 +70,11 @@ export const Navbar = () => {
               <div className='d-flex flex-column gap-2 shadow-sm py-2 ps-3 rounded'>
                   <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/admin")}>📊 Dashboard</li>
                   <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/allusers")}>👥 Users</li>
-                  <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/alldonors")}>🏪 Restaurants</li>
-                  <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/allngos")}>🍔 Foods</li>
-                  <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/allvolunteers")}>📦 Orders</li>
-                  <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/allfoods")}>📂 Categories</li>
-                  <li className="list-group-item" style={{cursor:"pointer"}}>📈 Reports</li>
+                  <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/admin/allrestaurants")}>🏪 Restaurants</li>
+                  <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/allfoods")}>🍔 Foods</li>
+                  <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/admin/orders")}>📦 Orders</li>
+                  <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/admin/categories")}>📂 Categories</li>
+                  <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/admin/reports")}>📈 Reports</li>
                   <li className="list-group-item" style={{cursor:"pointer"}} onClick={() => navigate("/myprofile")}>🙍 Profile</li>
               </div>
               }
@@ -122,7 +122,7 @@ export const Navbar = () => {
         </div>
       )}
 
-      <div className='d-flex align-items-center px-3 sticky-top bg-white' style={{height:"60px", zIndex:'1000'}}>
+      <div className='d-flex align-items-center px-3 sticky-top bg-white text-black' style={{height:"60px", zIndex:'1000'}}>
         <div onClick={() => setOpen(true)}><i className="bi bi-list shadow rounded me-3 px-1" style={{fontSize:"30px", fontWeight:"700"}}></i></div>
         <div className='d-flex gap-2 mt-2'>
             <img src={logo} className='rounded-circle' style={{width: "40px", height:"40px", objectFit: "cover"}}/>
@@ -155,7 +155,10 @@ export const Navbar = () => {
               }
               {
                 user?.role === "admin" && 
-                <td onClick={logoutUser}>🔓 Logout</td>
+                <>
+                  <td style={{cursor: "pointer"}} onClick={() => navigate("/admin")}>Dashboard</td>
+                  <td style={{cursor: "pointer"}} onClick={logoutUser}>🔓 Logout</td>
+                </>
               }
               </tr>
           </tbody>

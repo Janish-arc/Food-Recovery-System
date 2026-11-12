@@ -6,7 +6,7 @@ const order = express.Router()
 
 order.route("/order/create").post(isAuthenticated, roleBasedAccess("customer"), CreateOrder)
 order.route("/order/get").get(isAuthenticated, roleBasedAccess("customer"), GetMyOrders)
-order.route("/order/get/:id").get(isAuthenticated, roleBasedAccess("customer"), GetSingleOrder)
+order.route("/order/get/:id").get(isAuthenticated, GetSingleOrder)
 order.route("/order/cancel/:id").delete(isAuthenticated, roleBasedAccess("customer"), CancelOrder)
 order.route("/order/restaurantOrders").get(isAuthenticated, roleBasedAccess("restaurant"), GetRestaurantOrders)
 order.route("/order/all/orders").get(isAuthenticated, roleBasedAccess("admin"), GetOrdersByAdmin)

@@ -152,7 +152,6 @@ const ReviewSlice = createSlice({
             state.success = action.payload.success;
             state.message = action.payload.message;
             state.restaurantReviews = action.payload?.reviews
-            console.log(action.payload?.reviews)
             state.restaurantReviewCount = action.payload?.count
         })
         .addCase(GetRestaurantReviews.rejected, (state, action) => {

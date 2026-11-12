@@ -6,9 +6,9 @@ export const Pagination = ({
     setCurrentPage,
 }) => {
     return (
-        <div className="d-flex justify-content-center gap-2 mt-4">
+        <div className="d-flex justify-content-center align-items-center gap-2 mt-4">
             <button
-                className="btn btn-outline-dark m-1"
+                className="btn btn-outline-dark my-3 btn-sm"
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage(currentPage - 1)}
             >
@@ -19,7 +19,7 @@ export const Pagination = ({
                 Array.from({ length: totalPages }, (_, i) => (
                     <div
                         key={i}
-                        className="d-inline-flex border border-primary border-2 rounded-circle p-1 m-1"
+                        className="d-inline-flex border border-primary border-2 rounded-circle p-1"
                     >
                         <button
                         className={`btn ${
@@ -36,7 +36,7 @@ export const Pagination = ({
             }
 
             <button
-                className="btn btn-outline-dark m-1"
+                className="btn btn-outline-dark my-3 "
                 disabled={currentPage === totalPages}
                 onClick={() => setCurrentPage(currentPage + 1)}
             >

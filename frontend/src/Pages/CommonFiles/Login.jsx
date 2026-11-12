@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import { removeError, removeSuccess, UserLogin } from '../../Redux/UserSlice'
 import toast from 'react-hot-toast'
 
+
 export const Login = () => {
 
   const {error, success, user} = useSelector((state) => state.user)
@@ -48,8 +49,8 @@ export const Login = () => {
   },[dispatch, success, navigate])
 
   return (
-    <div className='vh-100 d-flex flex-column align-items-center justify-content-center'>
-      <div className='col-10 col-md-6 col-lg-4 shadow-lg px-4 py-4 rounded-4'>
+    <div className='vh-100 d-flex flex-column align-items-center justify-content-center register'>
+      <div className='col-10 col-md-6 col-lg-4 px-4 py-4 rounded-4 shadow-lg bg-light text-black'>
         <h4 className='text-center'><b>LOGIN</b></h4>
       <form onSubmit={loginNow} className='d-flex flex-column gap-4'>
         <div >

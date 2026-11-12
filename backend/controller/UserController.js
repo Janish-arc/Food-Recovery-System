@@ -11,29 +11,16 @@ import crypto from "crypto";
 //Register User
 
 export const register = async (req, res, next) => {
-   console.log("Body:", req.body);
-    console.log("File:", req.file);
   try {
     const { name, email, password, phoneNo, address, state, country, pincode } = req.body;
-
     if (!name || !email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Please fill out all the fields",
-      });
+      return res.status(400).json({success: false, message: "Please fill out all the fields",});
     }
-
     const existingUser = await User.findOne({ email });
-
     if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        message: "User already exists",
-      });
+      return res.status(400).json({success: false, message: "User already exists",});
     }
-
     let imageData = {};
-
     if (req.file) {
       const base64 = `data:${req.file.mimetype};base64,${req.file.buffer.toString(
         "base64"
@@ -50,7 +37,6 @@ export const register = async (req, res, next) => {
         url: myCloud.secure_url,
       };
     }
-
     const user = await User.create({
       name,
       email,
@@ -62,13 +48,9 @@ export const register = async (req, res, next) => {
       country,
       pincode
     });
-
     sendToken(user, 201, res);
   } catch (error) {
-    return res.status(400).json({
-      success: false,
-      message: error.message,
-    });
+    return res.status(400).json({success: false, message: error.message});
   }
 };
 

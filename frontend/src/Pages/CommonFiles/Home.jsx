@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Navbar } from '../../Components/Navbar'
 import { Footer } from '../../Components/Footer'
 import { useDispatch, useSelector } from 'react-redux'
@@ -7,6 +7,7 @@ import { GetCategory } from '../../Redux/CategorySlice'
 import { GetRestaurant } from '../../Redux/RestaurantSlice'
 import { ImageSlider } from './ImageSlider';
 import { GetAllFoods } from '../../Redux/FoodSlice'
+import logo from "../../assets/Logo.png"
 
 export const Home = () => {
 
@@ -17,6 +18,7 @@ export const Home = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const location = useLocation();
+    const [loader, setLoader] = useState(true)
     const sortedRestaurants = Array.isArray(restaurants) ? [...restaurants].sort((a, b) => b.rating - a.rating) : [];
     const sortedFoods = Array.isArray(food) ? [...food].sort((a, b) => b.rating - a.rating): [];
     const latestRestaurants = Array.isArray(restaurants) ? [...restaurants].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) : [];
@@ -46,7 +48,22 @@ export const Home = () => {
     }
     }, [location]);
 
-  return (
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoader(false);
+        }, 1000);
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (loader) {
+        return (
+            <div className='vh-100 d-flex align-items-center justify-content-center'>
+                <img src={logo} style={{width:"200px", height:"200px"}}/>
+            </div>
+        );
+    }
+  
+    return (
     <>
         <Navbar/>
         <div className='home pb-4'>
@@ -73,40 +90,43 @@ export const Home = () => {
 
                 {/* Restaurant Section */}
                 <div className='container' id="restaurants">
-                <div className="row g-4">
-                    <h4 className="fw-bold fs-4">Recommended for You</h4>
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                        <h4 className='fw-bold fs-4'>Recommended for you</h4>
+                        <button className="btn btn-outline-primary btn-sm rounded-pill" onClick={() => navigate("/all/restaurants")}><small className='fw-semibold'>See All</small></button>
+                    </div>
+                    <div className="d-flex overflow-x-auto gap-3 mt-3" style={{scrollbarWidth: "none", whiteSpace: "nowrap"}}>
                     {restaurants && restaurants?.map((item) => (
-                        <div className="col-6 col-md-4 col-lg-3 overflow-x-auto" style={{scrollbarWidth: "none"}} key={item._id} onClick={() => navigate(`/restaurantdetails/${item._id}`)}>
+                        <div key={item._id} onClick={() => navigate(`/restaurantdetails/${item._id}`)} style={{minWidth: "250px", maxWidth:"250px",}}>
                             <div className="h-100 food">
-                                <img src={item.banner.url} alt={item.name} className="img-fluid shadow w-100" style={{height: "clamp(150px, 18vw, 230px)", objectFit: "cover", borderRadius: "15px"}}/>
+                                <img src={item.banner.url} alt={item.name} className="img-fluid shadow w-100" style={{ height: "clamp(150px, 18vw, 230px)", objectFit: "cover", borderRadius: "15px"}}/>
                                 <h6 className="fw-bold mt-2 ms-2 text-truncate">{item.name}</h6>
-                                <div className="d-flex align-items-center gap-3 ms-2 flex-wrap">
+                                <div className="d-flex align-items-center justify-content-between gap-3 ms-2 flex-wrap">
                                     <small className="text-muted mb-0 flex-shrink-0">{item.deliveryTime}</small>
-                                    <small className="fw-semibold mb-0 flex-shrink-0">⭐ {item.rating} ({item.totalReviews})</small>
+                                    <small className="fw-semibold mb-0 me-2 flex-shrink-0">⭐ {item.rating} ({item.totalReviews})</small>
                                 </div>
                                 <h6 className="text-muted mt-2 ms-2 text-truncate"><small>{item.foods ?.slice(0, 3).map((food) => food.name).join(",")}</small></h6>
                             </div>
                         </div>
                     ))}
-                </div>
+                    </div>
                 <hr />
                 </div>
 
                 {/* Top Rated Restaurants */}
                 <div className='container' id="Top-restaurants">
-                <div className='row g-4 '>
-                    <div className="d-flex justify-content-between align-items-center">
+                    <div className="d-flex justify-content-between align-items-center mb-3">
                         <h4 className='fw-bold fs-4'>Customer Favourites</h4>
                         <button className="btn btn-outline-primary btn-sm rounded-pill" onClick={() => navigate("/all/restaurants")}><small className='fw-semibold'>See All</small></button>
                     </div>
+                    <div className="d-flex overflow-x-auto gap-3" style={{scrollbarWidth: "none", whiteSpace: "nowrap"}}>
                     {sortedRestaurants?.map((item) => (
-                        <div className="col-6 col-md-4 col-lg-3 overflow-x-auto" style={{scrollbarWidth: "none"}} key={item._id} onClick={() => navigate(`/restaurantdetails/${item._id}`)}>
+                        <div style={{minWidth: "250px", maxWidth:"250px",}} key={item._id} onClick={() => navigate(`/restaurantdetails/${item._id}`)}>
                             <div className="h-100 food">
                                 <img src={item.banner.url} alt={item.name} className="img-fluid shadow w-100" style={{height: "clamp(150px, 18vw, 230px)", objectFit: "cover", borderRadius: "15px"}}/>
                                 <h6 className="fw-bold mt-2 ms-2 text-truncate">{item.name}</h6>
-                                <div className="d-flex align-items-center gap-3 ms-2 flex-wrap">
+                                <div className="d-flex align-items-center justify-content-between gap-3 ms-2 flex-wrap">
                                     <small className="text-muted mb-0 flex-shrink-0">{item.deliveryTime}</small>
-                                    <small className="fw-semibold mb-0 flex-shrink-0">⭐ {item.rating} ({item.totalReviews})</small>
+                                    <small className="fw-semibold me-2 mb-0 flex-shrink-0">⭐ {item.rating} ({item.totalReviews})</small>
                                 </div>
                                 <h6 className="text-muted mt-2 ms-2 text-truncate">{item.foods ?.slice(0, 3).map((food) => food.name).join(",")}</h6>
                             </div>
@@ -189,13 +209,13 @@ export const Home = () => {
                 
                 {/* New */}
                 <div className="container mt-5" id="new">
-                <div className="d-flex justify-content-between align-items-center">
+                <div className="d-flex justify-content-between align-items-center mb-3">
                     <h3 className="fw-bold">🆕 New on Recupy</h3>
-                    <button className="btn btn-outline-primary rounded-pill">See More</button>
+                    <button className="btn btn-outline-primary rounded-pill btn-sm flex-shrink-0">See More</button>
                 </div>
-                <div className="row g-4 mt-1">
+                <div className="d-flex overflow-x-auto gap-3" style={{scrollbarWidth: "none", whiteSpace: "nowrap"}}>
                     {latestRestaurants?.map((item) => (
-                        <div className="col-6 col-md-4 col-lg-3 overflow-x-auto" style={{scrollbarWidth: "none"}} key={item._id} onClick={() => navigate(`/restaurantdetails/${item._id}`)}>
+                        <div style={{minWidth: "250px", maxWidth:"250px",}} key={item._id} onClick={() => navigate(`/restaurantdetails/${item._id}`)}>
                             <div className="h-100 food">
                                 <img src={item.banner.url} alt={item.name} className="img-fluid shadow w-100" style={{height: "clamp(150px, 18vw, 230px)", objectFit: "cover", borderRadius: "15px"}}/>
                                 <h6 className="fw-bold fs-5 mt-2 ms-2 text-truncate">{item.name}</h6>

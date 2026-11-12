@@ -175,14 +175,10 @@ export const Category = () => {
                     <h6 className="fw-semibold mb-0">{food?.name}</h6>
                     <small className="badge bg-success text-white">⭐ {food?.rating || 4.5}</small>
                   </div>
-                  <div className='d-flex justify-content-between align-items-center gap-2'>
+                  <div className='d-flex justify-content-between align-items-center gap-2 mt-2'>
                     <small className="mb-0 text-truncate">{food?.restaurant?.name}</small>
-                    <button className="btn btn-danger btn-sm rounded-2 flex-shrink-0" onClick={(e)=> {e.stopPropagation(); createCart(food._id)}}><small>Add To Cart</small></button>
+                    <button className="btn btn-warning btn-sm rounded-2 flex-shrink-0" onClick={(e)=> {e.stopPropagation(); createCart(food._id)}}><small>Add To Cart</small></button>
                   </div>
-                  {/* <div className="mt-auto d-grid gap-2 d-flex justify-content-around">
-                    <button className="btn btn-outline-danger btn-sm rounded-pill" onClick={() => navigate(`/fooddetails/${food._id}`)}><small>View Details</small></button>
-                    
-                  </div> */}
                 </div>
               </div>
             </div>

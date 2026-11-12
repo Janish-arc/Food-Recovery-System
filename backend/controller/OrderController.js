@@ -63,9 +63,6 @@ export const GetSingleOrder = async(req, res) => {
         if(!order){
             return res.status(404).json({success: false, message: "Order not found"})
         }
-        if(order.user?._id.toString() !== req.user._id.toString()){
-            return res.status(400).json({success: false, message: "Not authorized"})
-        }
         return res.status(200).json({success: true, order})
     } catch (error) {
         return res.status(404).json({success: false, message: error.message})

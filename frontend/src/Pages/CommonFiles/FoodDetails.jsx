@@ -273,15 +273,15 @@ export const FoodDetails = () => {
 
               {/* Details */}
               <div className="col-md-7 col-8">
-                <h4 className="fw-bold mb-2">
+                <h5 className="fw-bold mb-2">
                   {SingleFood?.restaurant?.name}
-                </h4>
-                <p className="text-secondary mb-2">
+                </h5>
+                <small className="text-secondary mb-2">
                   <BsGeoAlt className="text-danger me-2" />
                   {SingleFood?.restaurant?.address},{" "}{SingleFood?.restaurant?.city}
-                </p>
+                </small>
 
-                <div className="d-flex flex-wrap gap-2">
+                <div className="d-flex flex-wrap gap-2 mt-2">
                   <span className="badge bg-success px-3 py-2">
                     ⭐ {SingleFood?.restaurant?.rating || 4.5}
                   </span>
@@ -302,9 +302,9 @@ export const FoodDetails = () => {
                 <div className="row g-2">
                   <div className="col-6 col-md-12">
                     <div className="border rounded-4 text-center p-3">
-                      <h5 className="fw-bold text-danger mb-1">
+                      <h6 className="fw-bold text-danger mb-1">
                         25+
-                      </h5>
+                      </h6>
                       <small className="text-secondary">
                         Orders Today
                       </small>
@@ -313,9 +313,9 @@ export const FoodDetails = () => {
 
                   <div className="col-6 col-md-12">
                     <div className="border rounded-4 text-center p-3">
-                      <h5 className="fw-bold text-success mb-1">
-                        30-45m
-                      </h5>
+                      <h6 className="fw-bold text-success mb-1">
+                        {SingleFood?.restaurant?.deliveryTime}
+                      </h6>
                       <small className="text-secondary">
                         Delivery
                       </small>
@@ -356,11 +356,12 @@ export const FoodDetails = () => {
         <div className="card border-0 shadow rounded-4">
           <div className="card-body p-4">
             <div className="d-flex justify-content-between mx-2">
-              <h5 className="fw-bold mb-4">Customer Reviews</h5>
-              <h5>{foodReviewCount} Reviews</h5>
+              <h5 className="fw-bold mb-4">⭐ Customer Reviews</h5>
+              <h6>{foodReviewCount} Reviews</h6>
             </div>
 
-            {foodReviews && foodReviews.map((item) => 
+            {foodReviews?.length > 0 ? 
+            (foodReviews.map((item) => 
             <div className="mb-4 border-bottom pb-3" key={item._id}>
               <div className="d-flex justify-content-between align-items-center">
                 <div className="d-flex align-items-center gap-2 mb-2">
@@ -380,6 +381,11 @@ export const FoodDetails = () => {
                 </small>
               </div>
               
+            </div>)) : ( 
+            <div className="text-center ">
+              <h6 className="text-muted">
+                  No reviews yet.
+              </h6>
             </div>)}
           </div>
         </div>

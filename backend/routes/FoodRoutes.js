@@ -15,6 +15,6 @@ food.route("/menu/get/allmenu").get(GetAllMenuItems)
 food.route("/menu/restaurant/foods").get(isAuthenticated, roleBasedAccess("restaurant"), GetMenuItemsOfRestaurant)
 food.route("/menu/restaurant/:restaurantId").get(isAuthenticated, GetRestaurantMenu)
 food.route("/menu/:id").get(isAuthenticated, GetSingleMenuItem)
-food.route("/menu/category/get/:id").get(isAuthenticated, roleBasedAccess("customer"), MenuByCategory)
+food.route("/menu/category/get/:id").get(isAuthenticated, MenuByCategory)
 food.route("/menu/toggle/availablity/:id").put(isAuthenticated, roleBasedAccess("restaurant"), ToggleFoodAvailability)
 export default food

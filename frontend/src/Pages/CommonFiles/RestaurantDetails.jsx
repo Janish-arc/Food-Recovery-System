@@ -120,7 +120,6 @@ export const RestaurantDetails = () => {
         return data;
     }, [restaurantfood, search]);
 
-    console.log(restaurantReviews)
     return (
         <>
             <Navbar/>
@@ -130,7 +129,7 @@ export const RestaurantDetails = () => {
                     {/* Banner */}
                     <div className="position-relative">
                         <img src={restaurant?.banner?.url} className="w-100 rounded-4" style={{height: "clamp(180px,30vw,320px)", objectFit: "cover"}}/>
-                        <button className="btn btn-light rounded-circle position-absolute" style={{ top: 20, left: 20 }}><ArrowLeft size={20} /></button>
+                        <button className="btn btn-light rounded-circle position-absolute" style={{ top: 20, left: 20 }} onClick={() => navigate(-1)}><ArrowLeft size={20} /></button>
                         <div className="position-absolute d-flex gap-2" style={{ top: 20, right: 20 }}>
                             <button className="btn btn-light rounded-circle"><Heart size={18} /></button>
                             <button className="btn btn-light rounded-circle"> <Share2 size={18} /></button>
@@ -198,13 +197,12 @@ export const RestaurantDetails = () => {
 
                     {/* Restaurant Reviews */}
                     <div className="card border-0 shadow-sm rounded-4 mt-4">
-                        <div className="card-body p-4">
+                        <div className="card-body p-3">
 
-                            <div className="d-flex justify-content-between align-items-center mb-4">
+                            <div className="d-flex justify-content-between align-items-center mb-3">
                                 <h4 className="fw-bold mb-0">
                                     ⭐ Customer Reviews
                                 </h4>
-
                                 {restaurantReviews?.length > 3 && (
                                     <button className="btn btn-outline-dark btn-sm rounded-pill">
                                         View All
@@ -218,19 +216,10 @@ export const RestaurantDetails = () => {
                                         <div className="d-flex justify-content-between align-items-start">
                                             <div className="d-flex align-items-center gap-3">
                                                 <img
-                                                    src={item?.user?.image?.url}
-                                                    alt={item?.user?.name}
-                                                    className="rounded-circle"
-                                                    style={{
-                                                        width: "50px",
-                                                        height: "50px",
-                                                        objectFit: "cover"
-                                                    }}
-                                                />
+                                                    src={item?.user?.image?.url} alt={item?.user?.name} className="rounded-circle"
+                                                    style={{width: "50px",height: "50px",objectFit: "cover"}}/>
                                                 <div>
-                                                    <h6 className="fw-bold mb-1">
-                                                        {item?.user?.name}
-                                                    </h6>
+                                                    <h6 className="fw-bold mb-1">{item?.user?.name}</h6>
                                                     <div className="text-warning">
                                                         {Array.from({ length: 5 }, (_, index) => (
                                                             <span key={index}>
@@ -244,13 +233,13 @@ export const RestaurantDetails = () => {
                                                 {new Date(item.createdAt).toLocaleDateString()}
                                             </small>
                                         </div>
-                                        <p className="text-secondary mt-3 mb-0">
+                                        <p className="text-secondary mt-2 mb-0">
                                             {item.comment}
                                         </p>
                                     </div>
                                 ))
                             ) : (
-                                <div className="text-center py-4">
+                                <div className="text-center ">
                                     <h6 className="text-muted">
                                         No reviews yet.
                                     </h6>
@@ -276,9 +265,9 @@ export const RestaurantDetails = () => {
                     <div className="mt-4">
                         <h4 className="fw-bold mb-3"> Offers</h4>
                         <div className="d-flex gap-3 overflow-auto pb-2" style={{ scrollbarWidth: "none" }}>
-                            <div className="border rounded-4 p-3 bg-warning-subtle">🎉 ₹100 OFF</div>
-                            <div className="border rounded-4 p-3 bg-danger-subtle">🍔 Buy 1 Get 1</div>
-                            <div className="border rounded-4 p-3 bg-success-subtle">🚚 Free Delivery</div>
+                            <small className="border rounded-4 p-3 bg-warning-subtle">🎉 ₹100 OFF</small>
+                            <small className="border rounded-4 p-3 bg-danger-subtle">🍔 Buy 1 Get 1</small>
+                            <small className="border rounded-4 p-3 bg-success-subtle">🚚 Free Delivery</small>
                         </div>
                     </div>
 
